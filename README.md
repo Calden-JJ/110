@@ -49,7 +49,6 @@ python -m unittest discover -s tests
 | `data/` | 密码表、协议表、频道应答、登录器补丁（`tables/` 与物品库需自备，见上） |
 | `tools/` | 提取与对拍工具（`diff_packets.py` 逐包对拍、`live_swap.py` 实时接管等） |
 | `tests/` | 347 条单测（`python -m unittest discover -s tests`） |
-| `PLAN.md` | 进度与设计记录（唯一进度源） |
 
 ## 已知限制
 
