@@ -1,0 +1,10 @@
+# 服务端本体（src/）与测试（tests/）只用标准库，无需任何依赖。
+# 下面这些只被 tools/ 下的逆向脚本使用：
+#   capstone  na_dis.py / rip_scan.py / extract_launcher_patches.py
+#   pefile    extract_launcher_patches.py
+#   dnfile    _ildump.py / extract_launcher_strings.py
+#   dncil     _ildump.py / extract_launcher_strings.py
+capstone==5.0.9
+dnfile==0.18.0
+dncil==1.0.2
+pefile==2024.8.26

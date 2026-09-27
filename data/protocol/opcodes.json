@@ -1,0 +1,2665 @@
+{
+ "generated_by": "tools/gen_opcodes.py",
+ "logs": [
+  "server-20260919.log",
+  "server-20260925.log",
+  "server-20260926.log"
+ ],
+ "game": {
+  "0,1": {
+   "main": 0,
+   "sub": 1,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,2": {
+   "main": 0,
+   "sub": 2,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 3
+   },
+   "handled": null
+  },
+  "0,13": {
+   "main": 0,
+   "sub": 13,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 8
+   },
+   "handled": null
+  },
+  "0,19": {
+   "main": 0,
+   "sub": 19,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,21": {
+   "main": 0,
+   "sub": 21,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,22": {
+   "main": 0,
+   "sub": 22,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,23": {
+   "main": 0,
+   "sub": 23,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 6
+   },
+   "handled": null
+  },
+  "0,24": {
+   "main": 0,
+   "sub": 24,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 6
+   },
+   "handled": null
+  },
+  "0,27": {
+   "main": 0,
+   "sub": 27,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "response": 23
+   },
+   "handled": null
+  },
+  "0,29": {
+   "main": 0,
+   "sub": 29,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "response": 444
+   },
+   "handled": null
+  },
+  "0,30": {
+   "main": 0,
+   "sub": 30,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "response": 1279
+   },
+   "handled": null
+  },
+  "0,34": {
+   "main": 0,
+   "sub": 34,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "response": 181
+   },
+   "handled": null
+  },
+  "0,35": {
+   "main": 0,
+   "sub": 35,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "response": 181
+   },
+   "handled": null
+  },
+  "0,36": {
+   "main": 0,
+   "sub": 36,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,37": {
+   "main": 0,
+   "sub": 37,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "response": 181
+   },
+   "handled": null
+  },
+  "0,53": {
+   "main": 0,
+   "sub": 53,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,105": {
+   "main": 0,
+   "sub": 105,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,108": {
+   "main": 0,
+   "sub": 108,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,124": {
+   "main": 0,
+   "sub": 124,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,173": {
+   "main": 0,
+   "sub": 173,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,291": {
+   "main": 0,
+   "sub": 291,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,342": {
+   "main": 0,
+   "sub": 342,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1,
+    "tagged": 35
+   },
+   "handled": null,
+   "logged_by": [
+    "TOWN-QUEST-STATE"
+   ]
+  },
+  "0,376": {
+   "main": 0,
+   "sub": 376,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1,
+    "tagged": 35
+   },
+   "handled": null,
+   "logged_by": [
+    "TOWN-QUICKSLOT"
+   ]
+  },
+  "0,440": {
+   "main": 0,
+   "sub": 440,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,889": {
+   "main": 0,
+   "sub": 889,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,1280": {
+   "main": 0,
+   "sub": 1280,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,1361": {
+   "main": 0,
+   "sub": 1361,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,1370": {
+   "main": 0,
+   "sub": 1370,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,2082": {
+   "main": 0,
+   "sub": 2082,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,2318": {
+   "main": 0,
+   "sub": 2318,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,2431": {
+   "main": 0,
+   "sub": 2431,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,2432": {
+   "main": 0,
+   "sub": 2432,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,2443": {
+   "main": 0,
+   "sub": 2443,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0,2463": {
+   "main": 0,
+   "sub": 2463,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "1,1": {
+   "main": 1,
+   "sub": 1,
+   "name": null,
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 23
+   },
+   "handled": true,
+   "responses": {
+    "2": 1
+   }
+  },
+  "1,2": {
+   "main": 1,
+   "sub": 2,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 23
+   },
+   "handled": null
+  },
+  "1,3": {
+   "main": 1,
+   "sub": 3,
+   "name": "EXIT",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 22
+   },
+   "handled": true,
+   "responses": {
+    "1": 1
+   },
+   "named_by": [
+    "EXIT-3"
+   ]
+  },
+  "1,4": {
+   "main": 1,
+   "sub": 4,
+   "name": "SELECTION",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 19
+   },
+   "handled": true,
+   "responses": {
+    "4": 1
+   },
+   "named_by": [
+    "SELECTION-4"
+   ]
+  },
+  "1,5": {
+   "main": 1,
+   "sub": 5,
+   "name": "CREATE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2
+   },
+   "handled": null,
+   "named_by": [
+    "CREATE-5"
+   ]
+  },
+  "1,7": {
+   "main": 1,
+   "sub": 7,
+   "name": "RETURN",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 5
+   },
+   "handled": null,
+   "named_by": [
+    "RETURN-7"
+   ]
+  },
+  "1,8": {
+   "main": 1,
+   "sub": 8,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "seen": 17
+   },
+   "handled": true,
+   "responses": {
+    "1": 1
+   }
+  },
+  "1,12": {
+   "main": 1,
+   "sub": 12,
+   "name": "ADVANCED-PARTY",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 4
+   },
+   "handled": null,
+   "named_by": [
+    "ADVANCED-PARTY-12",
+    "DCOD-PARTY-12",
+    "ISPINS-PARTY-12"
+   ]
+  },
+  "1,13": {
+   "main": 1,
+   "sub": 13,
+   "name": "PARTY-LEAVE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2
+   },
+   "handled": null,
+   "named_by": [
+    "PARTY-LEAVE-13"
+   ]
+  },
+  "1,15": {
+   "main": 1,
+   "sub": 15,
+   "name": "DUNGEON-SELECT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 9
+   },
+   "handled": null,
+   "named_by": [
+    "DUNGEON-SELECT-15"
+   ]
+  },
+  "1,16": {
+   "main": 1,
+   "sub": 16,
+   "name": "DUNGEON-ENTER",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 9
+   },
+   "handled": null,
+   "named_by": [
+    "DUNGEON-ENTER-16"
+   ]
+  },
+  "1,17": {
+   "main": 1,
+   "sub": 17,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3,
+    "unhandled": 29
+   },
+   "handled": false
+  },
+  "1,18": {
+   "main": 1,
+   "sub": 18,
+   "name": "CUBE-MATERIAL",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 9
+   },
+   "handled": null,
+   "named_by": [
+    "CUBE-MATERIAL-18",
+    "DISCARD-18",
+    "SKILL-MATERIAL-18"
+   ]
+  },
+  "1,19": {
+   "main": 1,
+   "sub": 19,
+   "name": "ITEM-MOVE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 13
+   },
+   "handled": null,
+   "named_by": [
+    "ITEM-MOVE-19",
+    "TALISMAN-MOVE-19"
+   ]
+  },
+  "1,20": {
+   "main": 1,
+   "sub": 20,
+   "name": "SORT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2
+   },
+   "handled": null,
+   "named_by": [
+    "SORT-20"
+   ]
+  },
+  "1,21": {
+   "main": 1,
+   "sub": 21,
+   "name": "NPC-BUY",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 6
+   },
+   "handled": null,
+   "named_by": [
+    "NPC-BUY-21"
+   ]
+  },
+  "1,26": {
+   "main": 1,
+   "sub": 26,
+   "name": "DISJOINT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 8
+   },
+   "handled": null,
+   "named_by": [
+    "DISJOINT-26"
+   ]
+  },
+  "1,28": {
+   "main": 1,
+   "sub": 28,
+   "name": "SKILL-SLOT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3
+   },
+   "handled": null,
+   "named_by": [
+    "SKILL-SLOT-28"
+   ]
+  },
+  "1,29": {
+   "main": 1,
+   "sub": 29,
+   "name": "SKILL-BUY",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 5
+   },
+   "handled": null,
+   "named_by": [
+    "SKILL-BUY-29"
+   ]
+  },
+  "1,31": {
+   "main": 1,
+   "sub": 31,
+   "name": "QUEST-ACCEPT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 6
+   },
+   "handled": null,
+   "named_by": [
+    "QUEST-ACCEPT-31"
+   ]
+  },
+  "1,33": {
+   "main": 1,
+   "sub": 33,
+   "name": "QUEST-TRIGGER",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 6
+   },
+   "handled": null,
+   "named_by": [
+    "QUEST-TRIGGER-33"
+   ]
+  },
+  "1,34": {
+   "main": 1,
+   "sub": 34,
+   "name": "QUEST-FINISH",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 6
+   },
+   "handled": null,
+   "named_by": [
+    "QUEST-FINISH-34"
+   ]
+  },
+  "1,35": {
+   "main": 1,
+   "sub": 35,
+   "name": "TOWN-MOVE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 15,
+    "seen": 18
+   },
+   "handled": null,
+   "named_by": [
+    "TOWN-MOVE-35"
+   ]
+  },
+  "1,36": {
+   "main": 1,
+   "sub": 36,
+   "name": "TOWN-AREA",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "dispatch": 5,
+    "packet-c2s": 5,
+    "seen": 18
+   },
+   "handled": true,
+   "responses": {
+    "2": 5
+   },
+   "named_by": [
+    "TOWN-AREA-36"
+   ]
+  },
+  "1,37": {
+   "main": 1,
+   "sub": 37,
+   "name": "DUNGEON-LOADED",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "response": 1279,
+    "seen": 11
+   },
+   "handled": null,
+   "named_by": [
+    "DUNGEON-LOADED-37"
+   ]
+  },
+  "1,38": {
+   "main": 1,
+   "sub": 38,
+   "name": "COMBAT-SKILL",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 11
+   },
+   "handled": null,
+   "named_by": [
+    "COMBAT-SKILL-38"
+   ]
+  },
+  "1,39": {
+   "main": 1,
+   "sub": 39,
+   "name": "COMBAT-DIE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 11
+   },
+   "handled": null,
+   "named_by": [
+    "COMBAT-DIE-39"
+   ]
+  },
+  "1,40": {
+   "main": 1,
+   "sub": 40,
+   "name": "DUNGEON-DEATH",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3
+   },
+   "handled": null,
+   "named_by": [
+    "DUNGEON-DEATH-40"
+   ]
+  },
+  "1,41": {
+   "main": 1,
+   "sub": 41,
+   "name": "DUNGEON-REVIVE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3
+   },
+   "handled": null,
+   "named_by": [
+    "DUNGEON-REVIVE-41"
+   ]
+  },
+  "1,42": {
+   "main": 1,
+   "sub": 42,
+   "name": "SETTLEMENT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 6
+   },
+   "handled": null,
+   "named_by": [
+    "SETTLEMENT-42"
+   ]
+  },
+  "1,43": {
+   "main": 1,
+   "sub": 43,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 11
+   },
+   "handled": null
+  },
+  "1,44": {
+   "main": 1,
+   "sub": 44,
+   "name": "ITEM-USE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2
+   },
+   "handled": null,
+   "named_by": [
+    "ITEM-USE-44"
+   ]
+  },
+  "1,45": {
+   "main": 1,
+   "sub": 45,
+   "name": "DUNGEON-MOVE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 11
+   },
+   "handled": null,
+   "named_by": [
+    "DUNGEON-MOVE-45",
+    "ISPINS-MOVE-45"
+   ]
+  },
+  "1,46": {
+   "main": 1,
+   "sub": 46,
+   "name": "DUNGEON-CLEAR",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 10
+   },
+   "handled": null,
+   "named_by": [
+    "DUNGEON-CLEAR-46"
+   ]
+  },
+  "1,48": {
+   "main": 1,
+   "sub": 48,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 10,
+    "unhandled": 221
+   },
+   "handled": false
+  },
+  "1,63": {
+   "main": 1,
+   "sub": 63,
+   "name": "CERA-REQUEST",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 7
+   },
+   "handled": null,
+   "named_by": [
+    "CERA-REQUEST-63"
+   ]
+  },
+  "1,64": {
+   "main": 1,
+   "sub": 64,
+   "name": "SHOP-BUY",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 7
+   },
+   "handled": null,
+   "named_by": [
+    "SHOP-BUY-64"
+   ]
+  },
+  "1,69": {
+   "main": 1,
+   "sub": 69,
+   "name": null,
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "response": 181,
+    "seen": 9
+   },
+   "handled": null
+  },
+  "1,70": {
+   "main": 1,
+   "sub": 70,
+   "name": null,
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "response": 181,
+    "seen": 9
+   },
+   "handled": null
+  },
+  "1,71": {
+   "main": 1,
+   "sub": 71,
+   "name": "DUNGEON-CARD",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 9
+   },
+   "handled": null,
+   "named_by": [
+    "DUNGEON-CARD-71"
+   ]
+  },
+  "1,72": {
+   "main": 1,
+   "sub": 72,
+   "name": "SETTLEMENT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 10
+   },
+   "handled": null,
+   "named_by": [
+    "SETTLEMENT-72"
+   ]
+  },
+  "1,80": {
+   "main": 1,
+   "sub": 80,
+   "name": "UPGRADE-TICKET",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 5
+   },
+   "handled": null,
+   "named_by": [
+    "UPGRADE-TICKET-80"
+   ]
+  },
+  "1,81": {
+   "main": 1,
+   "sub": 81,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 4
+   },
+   "handled": null
+  },
+  "1,95": {
+   "main": 1,
+   "sub": 95,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 6
+   },
+   "handled": null
+  },
+  "1,96": {
+   "main": 1,
+   "sub": 96,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 6
+   },
+   "handled": null
+  },
+  "1,117": {
+   "main": 1,
+   "sub": 117,
+   "name": "BOSS-CHECK",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 11
+   },
+   "handled": null,
+   "named_by": [
+    "BOSS-CHECK-117"
+   ]
+  },
+  "1,120": {
+   "main": 1,
+   "sub": 120,
+   "name": "REENTRY",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 19
+   },
+   "handled": null,
+   "named_by": [
+    "REENTRY-120"
+   ]
+  },
+  "1,132": {
+   "main": 1,
+   "sub": 132,
+   "name": "DUNGEON-LEAVE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 7
+   },
+   "handled": null,
+   "named_by": [
+    "DUNGEON-LEAVE-132"
+   ]
+  },
+  "1,134": {
+   "main": 1,
+   "sub": 134,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 6,
+    "unhandled": 66
+   },
+   "handled": false
+  },
+  "1,140": {
+   "main": 1,
+   "sub": 140,
+   "name": "SELECTION",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 19
+   },
+   "handled": true,
+   "responses": {
+    "1": 1
+   },
+   "named_by": [
+    "SELECTION-140"
+   ]
+  },
+  "1,143": {
+   "main": 1,
+   "sub": 143,
+   "name": "TUTORIAL-FLAG",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 17
+   },
+   "handled": true,
+   "responses": {
+    "33": 1
+   },
+   "named_by": [
+    "TUTORIAL-FLAG-143"
+   ]
+  },
+  "1,160": {
+   "main": 1,
+   "sub": 160,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 7
+   },
+   "handled": null
+  },
+  "1,166": {
+   "main": 1,
+   "sub": 166,
+   "name": "DCOD-PARTY",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3
+   },
+   "handled": null,
+   "named_by": [
+    "DCOD-PARTY-166"
+   ]
+  },
+  "1,171": {
+   "main": 1,
+   "sub": 171,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 23,
+    "unhandled": 23
+   },
+   "handled": false
+  },
+  "1,191": {
+   "main": 1,
+   "sub": 191,
+   "name": "STORY-EDGE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 7
+   },
+   "handled": null,
+   "named_by": [
+    "STORY-EDGE-191"
+   ]
+  },
+  "1,194": {
+   "main": 1,
+   "sub": 194,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 17,
+    "unhandled": 33
+   },
+   "handled": false
+  },
+  "1,197": {
+   "main": 1,
+   "sub": 197,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 12
+   },
+   "handled": null
+  },
+  "1,198": {
+   "main": 1,
+   "sub": 198,
+   "name": "HOTKEY",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2
+   },
+   "handled": null,
+   "named_by": [
+    "HOTKEY-198"
+   ]
+  },
+  "1,201": {
+   "main": 1,
+   "sub": 201,
+   "name": "EMBLEM",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3
+   },
+   "handled": null,
+   "named_by": [
+    "EMBLEM-201"
+   ]
+  },
+  "1,202": {
+   "main": 1,
+   "sub": 202,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 2
+   },
+   "handled": false
+  },
+  "1,205": {
+   "main": 1,
+   "sub": 205,
+   "name": "INVEST-AMPLIFY",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 4
+   },
+   "handled": null,
+   "named_by": [
+    "INVEST-AMPLIFY-205"
+   ]
+  },
+  "1,250": {
+   "main": 1,
+   "sub": 250,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 16,
+    "unhandled": 16
+   },
+   "handled": false
+  },
+  "1,272": {
+   "main": 1,
+   "sub": 272,
+   "name": "ENCHANT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 5
+   },
+   "handled": null,
+   "named_by": [
+    "ENCHANT-272"
+   ]
+  },
+  "1,279": {
+   "main": 1,
+   "sub": 279,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 16,
+    "unhandled": 16
+   },
+   "handled": false
+  },
+  "1,283": {
+   "main": 1,
+   "sub": 283,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 11,
+    "unhandled": 1733
+   },
+   "handled": false
+  },
+  "1,295": {
+   "main": 1,
+   "sub": 295,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2
+   },
+   "handled": null
+  },
+  "1,305": {
+   "main": 1,
+   "sub": 305,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,306": {
+   "main": 1,
+   "sub": 306,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,309": {
+   "main": 1,
+   "sub": 309,
+   "name": "NPC-REDEEM",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 13
+   },
+   "handled": null,
+   "named_by": [
+    "NPC-REDEEM-309"
+   ]
+  },
+  "1,316": {
+   "main": 1,
+   "sub": 316,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 2
+   },
+   "handled": false
+  },
+  "1,331": {
+   "main": 1,
+   "sub": 331,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,368": {
+   "main": 1,
+   "sub": 368,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2,
+    "unhandled": 30
+   },
+   "handled": false
+  },
+  "1,390": {
+   "main": 1,
+   "sub": 390,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 14,
+    "unhandled": 397
+   },
+   "handled": false
+  },
+  "1,393": {
+   "main": 1,
+   "sub": 393,
+   "name": "MAGIC-UNSEAL",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 5
+   },
+   "handled": null,
+   "named_by": [
+    "MAGIC-UNSEAL-393"
+   ]
+  },
+  "1,417": {
+   "main": 1,
+   "sub": 417,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2,
+    "unhandled": 33
+   },
+   "handled": false
+  },
+  "1,430": {
+   "main": 1,
+   "sub": 430,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3
+   },
+   "handled": null
+  },
+  "1,433": {
+   "main": 1,
+   "sub": 433,
+   "name": "SELECTION",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 3,
+    "packet-c2s": 3,
+    "packet-s2c": 3,
+    "seen": 23
+   },
+   "handled": true,
+   "responses": {
+    "1": 3
+   },
+   "named_by": [
+    "SELECTION-433"
+   ]
+  },
+  "1,439": {
+   "main": 1,
+   "sub": 439,
+   "name": "CHARACTER-SETTINGS",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 10
+   },
+   "handled": null,
+   "named_by": [
+    "CHARACTER-SETTINGS-439"
+   ]
+  },
+  "1,468": {
+   "main": 1,
+   "sub": 468,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 23,
+    "unhandled": 23
+   },
+   "handled": false
+  },
+  "1,469": {
+   "main": 1,
+   "sub": 469,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 8,
+    "unhandled": 21
+   },
+   "handled": false
+  },
+  "1,475": {
+   "main": 1,
+   "sub": 475,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2,
+    "unhandled": 2
+   },
+   "handled": false
+  },
+  "1,495": {
+   "main": 1,
+   "sub": 495,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 2,
+    "seen": 18,
+    "unhandled": 50
+   },
+   "handled": false
+  },
+  "1,498": {
+   "main": 1,
+   "sub": 498,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 6
+   },
+   "handled": false
+  },
+  "1,510": {
+   "main": 1,
+   "sub": 510,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,527": {
+   "main": 1,
+   "sub": 527,
+   "name": "CUBE-CONTRACT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 5
+   },
+   "handled": null,
+   "named_by": [
+    "CUBE-CONTRACT-527"
+   ]
+  },
+  "1,585": {
+   "main": 1,
+   "sub": 585,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 5,
+    "seen": 23
+   },
+   "handled": null
+  },
+  "1,637": {
+   "main": 1,
+   "sub": 637,
+   "name": "SELECTION",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 23
+   },
+   "handled": true,
+   "responses": {
+    "1": 1
+   },
+   "named_by": [
+    "SELECTION-637"
+   ]
+  },
+  "1,666": {
+   "main": 1,
+   "sub": 666,
+   "name": "SELECTION",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 19
+   },
+   "handled": true,
+   "responses": {
+    "1": 1
+   },
+   "named_by": [
+    "SELECTION-666"
+   ]
+  },
+  "1,684": {
+   "main": 1,
+   "sub": 684,
+   "name": "NAMECHECK",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2
+   },
+   "handled": null,
+   "named_by": [
+    "NAMECHECK-684"
+   ]
+  },
+  "1,693": {
+   "main": 1,
+   "sub": 693,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 17,
+    "unhandled": 34
+   },
+   "handled": false
+  },
+  "1,705": {
+   "main": 1,
+   "sub": 705,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2,
+    "unhandled": 13
+   },
+   "handled": false
+  },
+  "1,707": {
+   "main": 1,
+   "sub": 707,
+   "name": "SELECTION",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 19
+   },
+   "handled": true,
+   "responses": {
+    "1": 1
+   },
+   "named_by": [
+    "SELECTION-707"
+   ]
+  },
+  "1,781": {
+   "main": 1,
+   "sub": 781,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2,
+    "unhandled": 3
+   },
+   "handled": false
+  },
+  "1,782": {
+   "main": 1,
+   "sub": 782,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 11,
+    "unhandled": 26
+   },
+   "handled": false
+  },
+  "1,845": {
+   "main": 1,
+   "sub": 845,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "1,848": {
+   "main": 1,
+   "sub": 848,
+   "name": "SELECTION",
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 23
+   },
+   "handled": true,
+   "responses": {
+    "1": 1
+   },
+   "named_by": [
+    "SELECTION-848"
+   ]
+  },
+  "1,857": {
+   "main": 1,
+   "sub": 857,
+   "name": "SKIN-SLOT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null,
+   "named_by": [
+    "SKIN-SLOT-857"
+   ]
+  },
+  "1,863": {
+   "main": 1,
+   "sub": 863,
+   "name": "QUERY",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null,
+   "named_by": [
+    "QUERY-863"
+   ]
+  },
+  "1,1280": {
+   "main": 1,
+   "sub": 1280,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 16,
+    "unhandled": 16
+   },
+   "handled": false
+  },
+  "1,1281": {
+   "main": 1,
+   "sub": 1281,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2,
+    "unhandled": 2
+   },
+   "handled": false
+  },
+  "1,1302": {
+   "main": 1,
+   "sub": 1302,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 16,
+    "unhandled": 16
+   },
+   "handled": false
+  },
+  "1,1346": {
+   "main": 1,
+   "sub": 1346,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,1356": {
+   "main": 1,
+   "sub": 1356,
+   "name": "UDP-STAT",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 22
+   },
+   "handled": null,
+   "named_by": [
+    "UDP-STAT-1356"
+   ]
+  },
+  "1,1360": {
+   "main": 1,
+   "sub": 1360,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 16,
+    "unhandled": 16
+   },
+   "handled": false
+  },
+  "1,1395": {
+   "main": 1,
+   "sub": 1395,
+   "name": "EXPLORER",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 4
+   },
+   "handled": null,
+   "named_by": [
+    "EXPLORER-1395"
+   ]
+  },
+  "1,1396": {
+   "main": 1,
+   "sub": 1396,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3,
+    "unhandled": 41
+   },
+   "handled": false
+  },
+  "1,1417": {
+   "main": 1,
+   "sub": 1417,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 5
+   },
+   "handled": null
+  },
+  "1,1418": {
+   "main": 1,
+   "sub": 1418,
+   "name": "PREV-VILLAGE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 8
+   },
+   "handled": null,
+   "named_by": [
+    "PREV-VILLAGE-1418"
+   ]
+  },
+  "1,1421": {
+   "main": 1,
+   "sub": 1421,
+   "name": "BUFF-SWAP",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 6
+   },
+   "handled": null,
+   "named_by": [
+    "BUFF-SWAP-1421"
+   ]
+  },
+  "1,1422": {
+   "main": 1,
+   "sub": 1422,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,1424": {
+   "main": 1,
+   "sub": 1424,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3,
+    "unhandled": 6
+   },
+   "handled": false
+  },
+  "1,1426": {
+   "main": 1,
+   "sub": 1426,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 9
+   },
+   "handled": null
+  },
+  "1,1438": {
+   "main": 1,
+   "sub": 1438,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3
+   },
+   "handled": null
+  },
+  "1,1449": {
+   "main": 1,
+   "sub": 1449,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,1499": {
+   "main": 1,
+   "sub": 1499,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 18,
+    "unhandled": 35
+   },
+   "handled": false
+  },
+  "1,1526": {
+   "main": 1,
+   "sub": 1526,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2,
+    "unhandled": 8
+   },
+   "handled": false
+  },
+  "1,1532": {
+   "main": 1,
+   "sub": 1532,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 7,
+    "unhandled": 29
+   },
+   "handled": false
+  },
+  "1,1554": {
+   "main": 1,
+   "sub": 1554,
+   "name": null,
+   "directions": [
+    "c2s",
+    "s2c"
+   ],
+   "evidence": {
+    "dispatch": 1,
+    "packet-c2s": 1,
+    "packet-s2c": 1,
+    "seen": 23
+   },
+   "handled": true,
+   "responses": {
+    "1": 1
+   }
+  },
+  "1,1563": {
+   "main": 1,
+   "sub": 1563,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 17,
+    "unhandled": 17
+   },
+   "handled": false
+  },
+  "1,1565": {
+   "main": 1,
+   "sub": 1565,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 1
+   },
+   "handled": false
+  },
+  "1,1566": {
+   "main": 1,
+   "sub": 1566,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 16,
+    "unhandled": 16
+   },
+   "handled": false
+  },
+  "1,1590": {
+   "main": 1,
+   "sub": 1590,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,1592": {
+   "main": 1,
+   "sub": 1592,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1,
+    "seen": 23,
+    "unhandled": 23
+   },
+   "handled": false
+  },
+  "1,1645": {
+   "main": 1,
+   "sub": 1645,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,1651": {
+   "main": 1,
+   "sub": 1651,
+   "name": "RUNE",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null,
+   "named_by": [
+    "RUNE-1651"
+   ]
+  },
+  "1,1721": {
+   "main": 1,
+   "sub": 1721,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 4
+   },
+   "handled": null
+  },
+  "1,1722": {
+   "main": 1,
+   "sub": 1722,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3,
+    "unhandled": 6
+   },
+   "handled": false
+  },
+  "1,1733": {
+   "main": 1,
+   "sub": 1733,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 1
+   },
+   "handled": false
+  },
+  "1,1800": {
+   "main": 1,
+   "sub": 1800,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 1
+   },
+   "handled": false
+  },
+  "1,1805": {
+   "main": 1,
+   "sub": 1805,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 1
+   },
+   "handled": false
+  },
+  "1,1907": {
+   "main": 1,
+   "sub": 1907,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,1921": {
+   "main": 1,
+   "sub": 1921,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 3
+   },
+   "handled": false
+  },
+  "1,1927": {
+   "main": 1,
+   "sub": 1927,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 1
+   },
+   "handled": false
+  },
+  "1,1938": {
+   "main": 1,
+   "sub": 1938,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 3
+   },
+   "handled": false
+  },
+  "1,2007": {
+   "main": 1,
+   "sub": 2007,
+   "name": "DCOD-START",
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3
+   },
+   "handled": null,
+   "named_by": [
+    "DCOD-START-2007"
+   ]
+  },
+  "1,2008": {
+   "main": 1,
+   "sub": 2008,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2
+   },
+   "handled": null
+  },
+  "1,2012": {
+   "main": 1,
+   "sub": 2012,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 3
+   },
+   "handled": null
+  },
+  "1,2035": {
+   "main": 1,
+   "sub": 2035,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 7,
+    "unhandled": 34
+   },
+   "handled": false
+  },
+  "1,2042": {
+   "main": 1,
+   "sub": 2042,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,2044": {
+   "main": 1,
+   "sub": 2044,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,2045": {
+   "main": 1,
+   "sub": 2045,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,2046": {
+   "main": 1,
+   "sub": 2046,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,2058": {
+   "main": 1,
+   "sub": 2058,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1,
+    "unhandled": 8
+   },
+   "handled": false
+  },
+  "1,2078": {
+   "main": 1,
+   "sub": 2078,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2
+   },
+   "handled": null
+  },
+  "1,2089": {
+   "main": 1,
+   "sub": 2089,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 4,
+    "unhandled": 9
+   },
+   "handled": false
+  },
+  "1,2126": {
+   "main": 1,
+   "sub": 2126,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 162,
+    "seen": 23,
+    "unhandled": 3437
+   },
+   "handled": false
+  },
+  "1,2134": {
+   "main": 1,
+   "sub": 2134,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,2172": {
+   "main": 1,
+   "sub": 2172,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 1
+   },
+   "handled": null
+  },
+  "1,2174": {
+   "main": 1,
+   "sub": 2174,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 2,
+    "unhandled": 13
+   },
+   "handled": false
+  },
+  "1,2176": {
+   "main": 1,
+   "sub": 2176,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "seen": 5,
+    "unhandled": 96
+   },
+   "handled": false
+  }
+ },
+ "channel": {
+  "0x0001": {
+   "main": 0,
+   "sub": 1,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1
+   },
+   "handled": null
+  },
+  "0x0009": {
+   "main": 0,
+   "sub": 9,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1
+   },
+   "handled": null
+  },
+  "0x000b": {
+   "main": 0,
+   "sub": 11,
+   "name": null,
+   "directions": [
+    "c2s"
+   ],
+   "evidence": {
+    "packet-c2s": 1
+   },
+   "handled": null
+  },
+  "0x7c03": {
+   "main": 124,
+   "sub": 3,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0x7c0a": {
+   "main": 124,
+   "sub": 10,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  },
+  "0x7c0c": {
+   "main": 124,
+   "sub": 12,
+   "name": null,
+   "directions": [
+    "s2c"
+   ],
+   "evidence": {
+    "packet-s2c": 1
+   },
+   "handled": null
+  }
+ },
+ "tagged_tags": [
+  "TOWN-QUEST-STATE",
+  "TOWN-QUICKSLOT"
+ ],
+ "uncorroborated_tags": [
+  "HOTKEY-440"
+ ]
+}

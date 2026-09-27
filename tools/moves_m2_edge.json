@@ -1,0 +1,9 @@
+[
+  {"src": [0, 7, 0], "dst": [0, 7, 0], "count": 0, "note": "src == dst, both empty"},
+  {"src": [0, 1, 0], "dst": [0, 1, 0], "count": 0, "note": "src == dst, virtual slot"},
+  {"src": [0, 9, 668198703], "dst": [0, 1, 0], "count": 0, "note": "dst is a virtual slot, src filled"},
+  {"src": [0, 1, 0], "dst": [0, 9, 668198703], "count": 0, "note": "src is a virtual slot, dst filled"},
+  {"src": [0, 7, 0], "dst": [3, 11, 0], "count": 0, "note": "cross-container, both ends empty"},
+  {"src": [3, 11, 0], "dst": [0, 7, 0], "count": 0, "note": "cross-container, both ends empty, reversed"},
+  {"src": [0, 9, 668198703], "dst": [0, 9, 668198703], "count": 5, "note": "src == dst with count=5"}
+]

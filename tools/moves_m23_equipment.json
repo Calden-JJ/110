@@ -1,0 +1,86 @@
+[
+  {
+    "src": [
+      0,
+      6,
+      0
+    ],
+    "dst": [
+      3,
+      19,
+      0
+    ],
+    "count": 0,
+    "note": "unequip slot 19 into bag 6 (dst filled, src empty)"
+  },
+  {
+    "src": [
+      0,
+      6,
+      0
+    ],
+    "dst": [
+      3,
+      19,
+      0
+    ],
+    "count": 0,
+    "note": "re-equip: move back into 19"
+  },
+  {
+    "src": [
+      0,
+      7,
+      0
+    ],
+    "dst": [
+      3,
+      35,
+      0
+    ],
+    "count": 0,
+    "note": "sealed dst 3/35"
+  },
+  {
+    "src": [
+      0,
+      7,
+      0
+    ],
+    "dst": [
+      3,
+      35,
+      0
+    ],
+    "count": 0,
+    "note": "sealed dst 3/35 again"
+  },
+  {
+    "src": [
+      0,
+      8,
+      0
+    ],
+    "dst": [
+      3,
+      13,
+      0
+    ],
+    "count": 0,
+    "note": "unequip slot 13 into bag 8"
+  },
+  {
+    "src": [
+      0,
+      8,
+      0
+    ],
+    "dst": [
+      3,
+      13,
+      0
+    ],
+    "count": 0,
+    "note": "re-equip: move back into 13"
+  }
+]

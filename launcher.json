@@ -1,0 +1,7 @@
+{
+ "clientDir": "E:\\DFO_2.31.1.117",
+ "serverAddress": "192.168.1.6",
+ "bindHost": "0.0.0.0",
+ "saveDb": "E:\\DFO_2.31.1.117\\DFO110-0.3.6\\Server\\uslocalserver.db",
+ "quiet": false
+}

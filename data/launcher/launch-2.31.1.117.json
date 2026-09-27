@@ -1,0 +1,45 @@
+{
+  "client_version": "2.31.1.117",
+  "note": "How the reference launcher (USLocalServer.Launcher.dll) hands the endpoint to DFO.exe.  There is no endpoint memory patch: the address+port travel inside the command-line passport below.  Recovered from IL + the Obfuscar string blob; see references/launcher.md.",
+  "client": {
+    "file": "DFO.exe",
+    "size": 212122032,
+    "sha256": "FFC90F9400AB3F937AE54DAE57B9845FF9146CA7FC39C4A65B085150A2754922",
+    "machine": "x64 (0x8664)",
+    "requires_compatibility_hook": true
+  },
+  "rebuilt_client": {
+    "size": 212135936,
+    "sha256": "038ABA1EAA3E580289A6F72FEBB7CABD7AFD87D8FCA145E48CC2C249A974132B",
+    "requires_compatibility_hook": false,
+    "note": "Pre-patched build the reference treats as needing no hook; sizes/hashes are hard-coded in DfoProcessLauncher.RequiresCompatibilityHook"
+  },
+  "hook": {
+    "path": "Runtime\\Dll1.dll",
+    "sha256": "CD6DB6FE8E1B3A4BF39814CA0852738BC65789DD5C5B53923BCF43F75B5BAEA0",
+    "status_log": "hook path with extension replaced by .status.log",
+    "note": "Only active module is ngs_startup_compat, i.e. the two patches in patches-2.31.1.117.json"
+  },
+  "launch": {
+    "create_flags": ["CREATE_SUSPENDED"],
+    "working_directory": "<client directory>",
+    "command_line": "\"<client dir>\\DFO.exe\" \"<passport>\"",
+    "passport": "99?{address}?{port}?0?de509f65e9ccaae621cb7278fc2b8e6c?01?1?0?0?0?0?1?9n2b1c8r3w7y?0?0?19847",
+    "passport_sample": "99?127.0.0.1?7001?0?de509f65e9ccaae621cb7278fc2b8e6c?01?1?0?0?0?0?1?9n2b1c8r3w7y?0?0?19847",
+    "address_rule": "IPAddress.TryParse must succeed and AddressFamily == 2 (IPv4); otherwise throw",
+    "port_rule": "1 <= port <= 65535; otherwise throw",
+    "evidence": "LauncherSelfTest.Run asserts A.C::A('127.0.0.1', 7001) == passport_sample (label 'launch argument'); DfoProcessLauncher.Launch appends A.C::A(ServerAddress, ChannelPort) as the only argument after the quoted exe path, then CreateProcessW(..., CREATE_SUSPENDED, cwd=client dir), injects the hook, then resumes"
+  },
+  "resume_after": [
+    "hook injection (manual map of Dll1, InitializeDfo110) when requires_compatibility_hook",
+    "QoL client-memory patches (Check*Patch; out of MVP scope)"
+  ],
+  "source_assembly": {
+    "name": "USLocalServer.Launcher.dll",
+    "sha256": "A45CCC6EB723161436249A23E220D0DB"
+  },
+  "recovered_with": [
+    "tools/_ildump.py",
+    "tools/extract_launcher_strings.py"
+  ]
+}

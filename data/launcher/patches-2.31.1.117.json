@@ -1,0 +1,62 @@
+{
+  "format": 1,
+  "generated_by": "tools/extract_launcher_patches.py",
+  "client_version": "2.31.1.117",
+  "client": {
+    "size": 212122032,
+    "sha256": "ffc90f9400ab3f937ae54dae57b9845ff9146ca7fc39c4a65b085150a2754922"
+  },
+  "source": {
+    "dll": "Dll1.dll",
+    "size": 194048,
+    "sha256": "cd6db6fe8e1b3a4bf39814ca0852738bc65789dd5c5b53923bcf43f75b5baea0",
+    "status_log": "PATCH_RVA=0x0497564A, ngs_startup_compat"
+  },
+  "modules": [
+    {
+      "name": "ngs_startup_compat",
+      "result": "NGS initialization fast-success and success branch installed",
+      "signature": {
+        "rva": "0x4975631",
+        "size": 39,
+        "bytes": "e800000000488bc8410fb6d4e8000000008bd88944245085c000000000000033d241b800040000",
+        "mask": [
+          [
+            "0x1",
+            "0x4"
+          ],
+          [
+            "0xc",
+            "0x10"
+          ],
+          [
+            "0x19",
+            "0x1e"
+          ]
+        ]
+      },
+      "fingerprint": {
+        "rva": "0x497563e",
+        "value": "0xfe0e37ee"
+      },
+      "patches": [
+        {
+          "name": "ngs_init_fast_success",
+          "rva": "0x497563d",
+          "size": 5,
+          "expect": "e8ee370efe",
+          "bytes": "31c0909090",
+          "note": "call -> xor eax,eax + 3 nops (NGS init reports success)"
+        },
+        {
+          "name": "ngs_success_branch",
+          "rva": "0x497564a",
+          "size": 6,
+          "expect": "0f84e6000000",
+          "bytes": "e9e700000090",
+          "note": "je +0xE6 -> jmp +0xE7 + nop (always take the success path)"
+        }
+      ]
+    }
+  ]
+}

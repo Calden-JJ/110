@@ -1,0 +1,3465 @@
+{
+ "generated_by": "tools/extract_game_replies.py",
+ "source": "Logs/server-20260926.log, the game session with packetHexLog on (conn=2, port 10013); the four bodies its 4096B dump cap cut are completed from reference-replay-20260927.log, a replay of the same session at the reference with packetHexMaxBytes raised",
+ "note": "Bodies are stored decrypted.  At send time the server must re-encrypt with tiles.encrypt_body(sub % 14, plain), recompute tag over the ciphertext and rebuild the 16B header with the stored nonce.  (0,1) is generated from inputs, not replayed -- see tools/probe_chaninfo_build.py.",
+ "connect_frames": [
+  {
+   "main": 0,
+   "sub": 1,
+   "transform": "rol8xor",
+   "plain_hex": null,
+   "body_len": 511,
+   "wire_body_len": 511,
+   "nonce": "02e76e",
+   "truncated": false,
+   "missing_bytes": 0
+  }
+ ],
+ "scripts": [
+  {
+   "request_main": 1,
+   "request_sub": 1554,
+   "runs": [
+    {
+     "state": [
+      "Connected",
+      "Handshaken"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "HANDSHAKE",
+       "conn={conn} client probe -> built success response"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 1554,
+       "transform": "tile0",
+       "plain_hex": "0100000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "2e540f",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 1,
+   "runs": [
+    {
+     "state": [
+      "Handshaken",
+      "Authenticated"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "LOGIN",
+       "conn={conn} client account_id=0"
+      ],
+      [
+       "INFO",
+       "LOGIN",
+       "conn={conn} account=0 created_at=1789824022 -> built LOGIN_OK + 73-slot selection state"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 1,
+       "transform": "tile1",
+       "plain_hex": "01e3001600000000000b0000003139322e3136382e312e36201c0000201c0000010100000000000000000000000000000000000000000000",
+       "body_len": 56,
+       "wire_body_len": 56,
+       "nonce": "da12ea",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 1,
+       "sub": 845,
+       "transform": "tile5",
+       "plain_hex": "01ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000000000",
+       "body_len": 296,
+       "wire_body_len": 296,
+       "nonce": "3ee43c",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 1592,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,1592) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 171,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,171) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 468,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,468) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 585,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "LEGACY-QUERY",
+       "conn={conn} consumed {n}B; no response by design"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "LEGACY-QUERY",
+       "conn={conn} consumed {n}B; no response by design"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "LEGACY-QUERY",
+       "conn={conn} consumed {n}B; no response by design"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "LEGACY-QUERY",
+       "conn={conn} consumed {n}B; no response by design"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "LEGACY-QUERY",
+       "conn={conn} consumed {n}B; no response by design"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 8,
+   "runs": [
+    {
+     "state": [
+      "Authenticated",
+      "RosterReady"
+     ],
+     "notes": [
+      [
+       "WARN",
+       "STUN",
+       "port 2311 dropped a non-Binding datagram from 192.168.1.6:5063: len=1B head=01"
+      ],
+      [
+       "INFO",
+       "GET_USERINFO",
+       "conn={conn} built S2C (0,2) subtype-2 role list count=2 for account 0"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 0,
+       "sub": 2,
+       "transform": "tile2",
+       "plain_hex": "0200002000200002000000000002000000080000005852656e59696e67000b356e00001f009265b506000000000000000000000000000000000000000000000000000001348cb50600000000000000000000000000000000000000000000000000000218b3b5060000000000000000000000000000000000000000000000000000032da2b406000000000000000000000000000000000000000000000000000004f3c8b406000000000000000000000000000000000000000000000000000005453eb506000000000000000000000000000000000000000000000000000006f1efb406000000000000000000000000000000000000000000000000000007f116b506000000000000000000000000000000000000000000000000000008a1598d1e000000000000000000000000000000000000000000000000000009d5a9e51d00000000000000000000000000000000000000000000000000000a6da88d1e00000000000000000000000000000000000000000000000000000c324f0506000000001b0000000000000000000000000000000000000000000dd270d21d00000000000000000000000000000000000000000000000000000f5a7cf805000000001b00000000000000000000000000000000000000000010d006f805000000001b00000000000000000000000000000000000000000011af50fa05000000001b00000000000000000000000000000000000000000012ebf1f805000000001b000000000000000000000000000000000000000000131a7bfa05000000001b00000000000000000000000000000000000000000014c3a8fa05000000001b0000000000000000000000000000000000000000001575cffa05000000001b000000000000000000000000000000000000000000167727fb05000000001b000000000000000000000000000000000000000000172b47fb05000000001b000000000000000000000000000000000000000000195bd7fb05000000001b0000000000000000000000000000000000000000001a3f83dc1d00000000000000000000000000000000000000000000000000001b07e4db1d00000000000000000000000000000000000000000000000000001c140bdc1d00000000000000000000000000000000000000000000000000001d1b32dc1d000000000000000000000000000000000000000000000000000020a883dc1d000000000000000000000000000000000000000000000000000021939edd17000000000000000000000000000000000000000000000000000022969edd17000000000000000000000000000000000000000000000000000023979edd170000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010000010000000000000000000000000000000000010000dd880000000000009c000000000000000100070000004c526f7544616f0101143700001200ffa80000000000000000000000000000000000000000000000000000000001a1aa0000000000000000000000000000000000000000000000000000000002efab000000000000000000000000000000000000000000000000000000000371af0000000000000000000000000000000000000000000000000000000004f8b0000000000000000000000000000000000000000000000000000000000506b40000000000000000000000000000000000000000000000000000000006575c1c060000000000000000000000000000000000000000000000000000071f831c06000000000000000000000000000000000000000000000000000008a6b4000000000000000000000000000000000000000000000000000000000c7802150600000000000000000000000000000000000000000000000000000ed241f70500000000000000000000000000000000000000000000000000000fc279f8050000000000000000000000000000000000000000000000000000107cb6f7050000000000000000000000000000000000000000000000000000117ddaf9050000000000000000000000000000000000000000000000000000120b3df905000000000000000000000000000000000000000000000000000013674e0000000000000000000000000000000000000000000000000000000014409efa0500000000000000000000000000000000000000000000000000001594c5fa0500000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200002b030000000000009c0000000000000001000000000000000000000000000000000000",
+       "body_len": 1776,
+       "wire_body_len": 1776,
+       "nonce": "49927a",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 848,
+   "runs": [
+    {
+     "state": [
+      "RosterReady",
+      "RosterReady"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-848",
+       "conn={conn} built S2C (1,848) success"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 848,
+       "transform": "tile8",
+       "plain_hex": "010000000000000000000000000000000000000000000000",
+       "body_len": 24,
+       "wire_body_len": 24,
+       "nonce": "f69fc5",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 433,
+   "runs": [
+    {
+     "state": [
+      "RosterReady",
+      "RosterReady"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-433",
+       "conn={conn} accepted 6 request entries -> built S2C success with zero entries"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 433,
+       "transform": "tile13",
+       "plain_hex": "0100000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "c6c8ed",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    },
+    {
+     "state": [
+      "RosterReady",
+      "RosterReady"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-433",
+       "conn={conn} accepted 6 request entries -> built S2C success with zero entries"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 433,
+       "transform": "tile13",
+       "plain_hex": "0100000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "d6fb01",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    },
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-433",
+       "conn={conn} accepted 6 request entries -> built S2C success with zero entries"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 433,
+       "transform": "tile13",
+       "plain_hex": "0100000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "c59d6f",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 637,
+   "runs": [
+    {
+     "state": [
+      "RosterReady",
+      "RosterReady"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-637",
+       "conn={conn} built S2C (1,637) success"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 637,
+       "transform": "tile7",
+       "plain_hex": "0100000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "27ec45",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 2126,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "STUN",
+       "port 2312 dropped a non-Binding datagram from 192.168.1.6:5063: len=1B head=00"
+      ],
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,2126) body={n}B has no handler"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 782,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,782) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 4,
+   "runs": [
+    {
+     "state": [
+      "RosterReady",
+      "CharacterSelected"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-4",
+       "conn={conn} built 1286B role-selection response for account 0: slot=0 key=1 name='XRenYing' job=11 level=110 cera=96500 privileges=5/12 contracts=92:10769910"
+      ],
+      [
+       "INFO",
+       "TUTORIAL-FLAGS",
+       "conn={conn} key=1 sent 89 seen flag(s) max=88 (baseline 89 + reported 4)"
+      ],
+      [
+       "INFO",
+       "CLIENT-SETTINGS",
+       "conn={conn} S0/173 504B recommendedGuideShown=1"
+      ],
+      [
+       "INFO",
+       "STORY-DIGEST",
+       "conn={conn} S0/1370 character=1 lastLevel=110"
+      ],
+      [
+       "INFO",
+       "DNL-DIALOGUE",
+       "conn={conn} N2082 account=0 restored=1 NPC progress rows before town entry"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 0,
+       "sub": 173,
+       "transform": "tile5",
+       "plain_hex": "ec01000001000100010002004600190000000000000000000000f801010001000100ff7f000001000b0000000100ff7f6400ff7f01004600ff7f00000000000000000000010001000100000046000000000000000000ff7f0100000000000000ff7fff7f0000ff7f0000ff7f00000000000001000100ff7f0100200000000000ff7fff7f0000010001000100640000000100640001000100010000000000000001000000010001000000ff7f6400000032004b00ff7f6400000001000100010000000000ff7f010000000000000000000100ff7f000001000000ff7fff7fff7fff7fff7fff7fff7f640000000000000000000000ff7f02000000020003000400010005000900060007000000000000000000000000000000000000000000000000000000000000000000ffffff8015feff80180102801000008001ffff8020feff800000000080feff8041feff8000000000350041086401380000003500110364014a00ff7fff7fff7fff7f000000000000000000000000000000000100ff7f010001feff81080000000000000001000100ff7f0100000001000000000000000100000000000100b40064000000b40064000000000000000000ff7fff7fff7f00000000020001000100d10da8210100010002000100ff006400ff7fff7fff7fff7f0200ff7f01000100ff7f0100ff7f0000000000000000",
+       "body_len": 504,
+       "wire_body_len": 504,
+       "nonce": "cbca9f",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 1,
+       "sub": 4,
+       "transform": "tile4",
+       "plain_hex": "01168cae6ac2d3b76a010000009c0000000305005786f4000000000c005786f4000000005cf655a40000000000f4780100ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff000000000000000000000000000000000000000000000000280000000059000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758000000000000009bffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff000000000000000000000000000000000000",
+       "body_len": 1296,
+       "wire_body_len": 1296,
+       "nonce": "c46262",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 1370,
+       "transform": "tile12",
+       "plain_hex": "6e000000000000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "68239c",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2082,
+       "transform": "tile10",
+       "plain_hex": "011689d7170000000000000000000000000000000000000001000000",
+       "body_len": 28,
+       "wire_body_len": 28,
+       "nonce": "be5754",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 143,
+   "runs": [
+    {
+     "state": [
+      "CharacterSelected",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "TUTORIAL-FLAGS",
+       "conn={conn} key=1 client reported flag=36 (raw=36 prefix=0 reward=1) already stored"
+      ],
+      [
+       "INFO",
+       "TOWN-CARGO",
+       "conn={conn} key=1 list2 capacity=88 items=10; initialized before first area render"
+      ],
+      [
+       "INFO",
+       "EQUIPMENT-SPECIFICITY",
+       "conn={conn} character=1 converted=0 points=101 group=0 options=0"
+      ],
+      [
+       "INFO",
+       "TOWN-TALISMAN",
+       "conn={conn} enabled=True; storedRunes=9; list43Rows=20; runeVector=10617119,10617135,10617127,10617119,10617127,10617135,10617135,10617127,10617119"
+      ],
+      [
+       "INFO",
+       "TUTORIAL-FLAG-143",
+       "conn={conn} town entry for key=1 tutorialAck=True; built 143 -> 2443 -> subtype-0 self -> 13(main) -> 13(worn) -> 21/23/24/22 -> 124"
+      ],
+      [
+       "INFO",
+       "TOWN-ITEMS",
+       "conn={conn} main inventory 76 row(s), (0,13) body={n}B: slot=0 id=0 count=995793376 dur=0, slot=1 id=1 count=99 dur=0, slot=3 id=2660671 count=495 dur=0, slot=4 id=590704000 count=61 dur=0, slot=5 id=50051742 count=61 dur=0, slot=9 id=101011203 seed=668198703 dur=45, slot=10 id=101011025 seed=704166429 dur=45, slot=17 id=100080936 seed=353764666 dur=60, slot=20 id=100051121 seed=326026281 dur=60, slot=22 id=100080937 seed=876099816 dur=60, slot=40 id=500330437 count=1 dur=0, slot=45 id=400320504 count=1 dur=0, slot=46 id=400310503 count=1 dur=0, slot=47 id=400300509 count=1 dur=0, slot=48 id=400260193 seed=519748210 dur=40, slot=53 id=400110187 seed=635565332 dur=50, slot=54 id=400210187 seed=880859644 dur=40, slot=55 id=400160186 seed=312832569 dur=48, slot=56 id=400060192 seed=889921480 dur=60, slot=61 id=101011245 seed=794523203 dur=45, slot=62 id=400390375 count=1 dur=0, slot=63 id=400340593 count=1 dur=0, slot=64 id=400350513 count=1 dur=0, slot=65 id=1001 count=5 dur=0, slot=66 id=50080317 count=971 dur=0, slot=67 id=896 count=4 dur=0, slot=68 id=15 count=247 dur=0, slot=71 id=24 count=988 dur=0, slot=72 id=1111 count=15 dur=0, slot=73 id=1117 count=13 dur=0, slot=121 id=10000912 count=2 dur=0, slot=122 id=10000911 count=4 dur=0, slot=123 id=3156 count=12 dur=0, slot=124 id=10313056 count=199 dur=0, slot=125 id=3166 count=8 dur=0, slot=126 id=3221 count=2 dur=0, slot=127 id=3027 count=27 dur=0, slot=128 id=3151 count=13 dur=0, slot=129 id=3052 count=10 dur=0, slot=130 id=3142 count=20 dur=0, slot=131 id=3167 count=815 dur=0, slot=132 id=3326 count=7229 dur=0, slot=133 id=10325138 count=300 dur=0, slot=134 id=3028 count=15 dur=0, slot=135 id=10312874 count=1592 dur=0, slot=136 id=10313459 count=529 dur=0, slot=137 id=3019 count=2 dur=0, slot=138 id=3332 count=1787 dur=0, slot=139 id=3030 count=23 dur=0, slot=140 id=10307438 count=24900 dur=0, slot=141 id=10308622 count=1 dur=0, slot=142 id=3022 count=2 dur=0, slot=143 id=3023 count=4 dur=0, slot=144 id=10327283 count=650 dur=0, slot=145 id=3021 count=3 dur=0, slot=146 id=10347751 count=9 dur=0, slot=147 id=10347745 count=1 dur=0, slot=153 id=10327281 count=400 dur=0, slot=289 id=590713959 count=37 dur=0, slot=290 id=590714156 count=6 dur=0, slot=291 id=590713729 count=7 dur=0, slot=292 id=590713951 count=392 dur=0, slot=293 id=590713967 count=396 dur=0, slot=295 id=590713961 count=193 dur=0, slot=363 id=3033 count=170010 dur=0, slot=364 id=3034 count=170710 dur=0, slot=365 id=3035 count=170228 dur=0, slot=366 id=3036 count=169747 dur=0, slot=367 id=3037 count=221730 dur=0, slot=368 id=3262 count=169900 dur=0, slot=369 id=10100115 count=116 dur=0, slot=370 id=10100116 count=53 dur=0, slot=371 id=10099773 count=166 dur=0, slot=372 id=10099774 count=156 dur=0, slot=373 id=10099775 count=116 dur=0, slot=374 id=10158124 count=19 dur=0"
+      ],
+      [
+       "INFO",
+       "TOWN-WORN",
+       "conn={conn} slot=0 id=512550176 seed=0 dur=1 avatar, slot=1 id=512560176 seed=0 dur=1 avatar, slot=2 id=512570176 seed=0 dur=2 avatar, slot=3 id=512500176 seed=0 dur=101 avatar, slot=4 id=512510176 seed=0 dur=0 avatar, slot=5 id=512540176 seed=0 dur=0 avatar, slot=6 id=512520176 seed=0 dur=2 avatar, slot=7 id=512530176 seed=0 dur=4 avatar, slot=8 id=512580001 seed=0 dur=0 avatar, slot=9 id=501590485 seed=0 dur=0 avatar, slot=10 id=512600185 seed=0 dur=0 avatar, slot=12 id=101011250 seed=175501053 dur=45, slot=13 id=500330706 seed=1 dur=0, slot=15 id=100170842 seed=762749451 dur=48, slot=16 id=100140752 seed=949137879 dur=50, slot=17 id=100290735 seed=131363455 dur=40, slot=18 id=100200939 seed=325323101 dur=40, slot=19 id=100301594 seed=2111652581 dur=0, slot=20 id=100313283 seed=1588635579 dur=0, slot=21 id=100323189 seed=1908991146 dur=0, slot=22 id=100345719 seed=1044905344 dur=0, slot=23 id=100353835 seed=458373792 dur=0, slot=25 id=100390747 seed=1965987385 dur=0, slot=26 id=500990783 seed=3 dur=0, slot=27 id=500950023 seed=46115 dur=0, slot=28 id=500960020 seed=46115 dur=0, slot=29 id=500970011 seed=46115 dur=0, slot=32 id=500990888 seed=1 dur=0, slot=33 id=400400019 seed=1 dur=0, slot=34 id=400400022 seed=1 dur=0, slot=35 id=400400023 seed=1 dur=0"
+      ],
+      [
+       "INFO",
+       "TOWN-QUEST-STATE",
+       "conn={conn} (0,342) finished=814 (0,291) in-progress=1 (of 11 ever accepted); finished=3145,3146,3147,3148,3149,3150,3151,3154,3155,3156,3160,3168,3169,3170,3171,3172,3173,3175,3176,3178,3179,3180,3181,3184,3185,3189,3190,3191,3192,3193,3194,3195,3196,3197,3199,3201,3204,3206,3207,3208,3211,3214,3215,3216,3217,3218,3219,3220,3221,3223,3226,3227,3230,3231,3232,3240,3243,3244,3246,3247,3248,3250,3252,3253,3257,3259,3271,3273,3274,3275,3277,3278,3279,3281,3283,3285,3286,3287,3288,3289,3292,3293,3295,3296,3298,3319,3322,3323,3324,3325,3327,3328,3329,3330,3331,3332,3333,3334,3337,3340,3341,3344,3348,3350,3352,3354,3355,3513,3514,3516,3520,3521,3522,3525,3526,3529,3530,3531,3534,3537,3538,3540,3543,3546,3548,3549,3551,3553,3554,3570,3571,3573,3575,3578,3579,3580,3581,3582,3584,3585,3586,3587,3594,3596,3598,3599,3601,3603,3604,3605,3616,3617,3618,3623,3625,3627,3628,3629,3631,3633,3634,3636,3637,3639,3640,3641,3642,3644,3645,3647,3648,3649,3650,3652,3654,3656,3658,3660,3662,3663,3667,3668,3670,3674,3675,3676,3677,3678,3697,3698,3708,3732,3737,3740,3741,3742,3746,3749,3750,3752,3753,3754,3757,3767,3768,3769,3770,3772,3773,3774,3775,3777,3778,3779,3830,3833,3835,3836,3838,3840,3843,3844,3846,3849,3851,3861,3864,3865,3866,3867,3868,3870,3871,3873,3875,3881,3883,3923,3926,3934,3939,3941,3942,3944,3945,3947,3950,3952,3958,3960,3961,3963,3967,3970,3971,3975,3981,3984,3985,3986,3989,3990,4831,4832,4841,4843,4847,4851,4855,4858,4859,4861,4864,4865,4866,4869,4870,4873,5923,5930,5931,5932,5933,5935,5939,5942,5945,5955,5958,5962,5967,5971,5976,5977,5980,6012,6017,6019,6020,6022,6028,6030,6032,6035,6037,6038,6039,6041,6043,6045,6170,6200,6201,6202,6203,6204,6205,6206,6207,6208,6209,6210,6211,6220,6221,6222,6223,6224,6300,6301,6302,6303,6305,6306,6307,6308,6330,6331,6332,6335,6336,6337,6338,6339,6340,6344,6345,6346,6347,6348,6349,6350,6351,6352,6356,6357,6358,10100,12122,12123,12124,12125,12126,12128,12129,12130,12131,12132,12134,12135,12137,12138,12139,12140,12141,12142,12143,12144,12145,12147,12148,12149,12150,12151,12152,12153,12154,12155,12157,12158,12159,12160,12161,12162,12163,12165,12166,12167,12173,12174,12175,12176,12177,12301,12302,12303,12305,12306,12307,12308,12309,12310,12312,12350,12351,12353,12354,12355,12356,12357,12359,12360,12361,12380,12382,12383,12384,12385,12386,12389,12390,12391,12392,12411,12412,12413,12414,12415,12416,12417,12419,12420,12421,12422,12462,12711,12713,12714,12715,12716,12717,12718,12876,12877,12879,12880,12881,12882,12883,12884,12885,12887,12890,12891,12893,12895,12896,12898,12900,12902,12904,12907,12908,12909,12911,12930,12931,12932,12933,12934,12936,12937,12939,12940,12941,12942,12943,12945,12950,12951,12952,12954,12956,12957,12959,12960,12961,12963,12969,12970,12971,12973,12977,12982,12983,12984,12985,12986,12987,12988,12989,12990,12991,13111,13112,13115,13116,13117,13118,13121,13124,13126,13128,13130,13132,13133,13134,13135,13136,13140,13141,13142,13146,13147,13148,13149,13150,13152,13153,13154,13155,13157,13160,13161,13162,13165,13166,13167,13168,13169,13170,13432,13433,13434,13435,13436,13437,13438,13439,13441,13442,13443,13444,13448,13449,13451,13452,13453,13454,13456,13458,13461,13462,13463,13465,13467,13469,13471,13473,13476,13477,13479,13480,13481,13483,13485,13487,13488,13550,13551,13554,13555,13557,13558,13559,13560,13561,13562,13563,13564,13565,13566,13567,13568,13570,13572,13573,13574,13575,13576,13579,13580,13581,13582,13583,13584,13586,13587,13588,13589,13590,13591,13592,13593,13594,13595,13614,13715,13716,13717,13718,13719,13721,13722,13723,13724,13725,13726,13727,13728,13729,13730,13731,13732,13733,13734,13748,13749,13750,13751,13752,13753,13754,13755,13756,13757,13758,13759,13760,13761,13762,13763,13764,13780,13781,13782,13784,13785,13786,21001,21004,21005,21006,21007,21008,21009,21010,21011,21012,21013,21014,21015,21016,21017,21018,21019,21027,21028,21029,21046,21047,21048,21049,21050,21051,21052,21054,21055,21056,21057,21058,21059,21060,21061,21062,21091,21092,21094,21095,21160,21161,21162,21163,21164,21166,21167,21171,21172,21173,21174,21176,21177,21179,21180,21184,21185,21186,21191,21192,21193,21194,21197,21198,21199,21201,21202,21203,21204,21205,21206,21207,21208,21210,21212,21213,21221,21222,21224,21225,21227,21228,21229,21230,21231,21232,21234,21235,21236,21237,21271,21272,21273,21274,21275,21276,21277,21278,21279,21280,21281,21282,21283,21284,21290,22136,22137,22138,22139,22212,22397,22398,22399,22400,22473,22545,22546,22547,22548,22549,22550,22551,22552,22553,22554,22555,22556,22557,22558,22568,22569,22570,22571,22572,22574,22575,22576,22577,22578,22579,22580,22581,22603,22752,22753; in-progress=13615"
+      ],
+      [
+       "INFO",
+       "TOWN-QUICKSLOT",
+       "conn={conn} (0,376) restoring 1028B of character options"
+      ],
+      [
+       "INFO",
+       "HOTKEY-440",
+       "conn={conn} account=0 character=1 type=0 restoring 791B effective keyboard bindings"
+      ],
+      [
+       "INFO",
+       "TOWN-APPEARANCE",
+       "conn={conn} slot=0 id=512550176 value=0 avatar, slot=1 id=512560176 value=0 avatar, slot=2 id=512570176 value=0 avatar, slot=3 id=512500176 value=0 avatar, slot=4 id=512510176 value=0 avatar, slot=5 id=512540176 value=0 avatar, slot=6 id=512520176 value=0 avatar, slot=7 id=512530176 value=0 avatar, slot=8 id=512580001 value=0 avatar, slot=9 id=501590485 value=0 avatar, slot=10 id=512600185 value=0 avatar, slot=12 id=101011250 value=175501053, slot=13 id=500330706 value=1, slot=15 id=100170842 value=762749451, slot=16 id=100140752 value=949137879, slot=17 id=100290735 value=131363455, slot=18 id=100200939 value=325323101, slot=19 id=100301594 value=2111652581, slot=20 id=100313283 value=1588635579, slot=21 id=100323189 value=1908991146, slot=22 id=100345719 value=1044905344, slot=23 id=100353835 value=458373792, slot=25 id=100390747 value=1965987385, slot=26 id=500990783 value=3 creature, slot=27 id=500950023 value=46115, slot=28 id=500960020 value=46115, slot=29 id=500970011 value=46115, slot=32 id=500990888 value=1 creature, slot=33 id=400400019 value=1, slot=34 id=400400022 value=1, slot=35 id=400400023 value=1"
+      ],
+      [
+       "INFO",
+       "TOWN-AVATAR",
+       "conn={conn} avatar bag 24 row(s), param=105: slot=0 id=112501293 avatar, slot=1 id=112511219 avatar, slot=2 id=112521201 avatar, slot=3 id=112531185 avatar, slot=4 id=112541253 avatar, slot=5 id=112551314 avatar, slot=6 id=112561204 avatar, slot=7 id=112571160 avatar, slot=8 id=112571374 avatar, slot=9 id=112501530 avatar, slot=10 id=512510176 avatar, slot=11 id=112521436 avatar, slot=12 id=112531400 avatar, slot=13 id=112541479 avatar, slot=14 id=112551571 avatar, slot=15 id=112561424 avatar, slot=16 id=512600173 avatar, slot=17 id=512600195 avatar, slot=18 id=512600132 avatar, slot=19 id=501590308 avatar, slot=20 id=501590472 avatar, slot=24 id=112581057 avatar, slot=62 id=512500176 avatar, slot=63 id=112511438 avatar"
+      ],
+      [
+       "INFO",
+       "TOWN-PET",
+       "conn={conn} pet bag 3 row(s): slot=0 id=500990882 value=2, slot=1 id=500990902 value=4, slot=143 id=500950023 value=46115"
+      ],
+      [
+       "INFO",
+       "TOWN-SKILLS",
+       "conn={conn} level=110 grow=5 awakening=3 sp=370/17670 tp=0/61 learnable=42 skills=45 288@0:36, 284@1:41, 287@2:38, 293@3:21, 296@4:16, 2@5:1, 297@6:6, 286@7:38, 289@8:33, 292@9:26, 295@10:18, 299@11:8, 291@13:1, 281@14:10, 274@15:1, 190@16:1, 169@17:1, 8@18:1, 1@19:1, 300@20:3, 96@102:1, 174@103:1, 179@104:7, 197@105:1, 273@106:1, 290@107:21, 294@108:12, 298@109:6, 495@110:1, 501@111:1, 511@112:1, 186@113:10, 285@114:10, 278@115:10, 315@116:5, 314@117:5, 312@118:5, 316@119:5, 317@120:5, 313@121:5, 311@123:1, 275@152:1, 282@153:1, 175@198:1, 277@199:1; sent as (0,19)"
+      ],
+      [
+       "INFO",
+       "TOWN-CERA",
+       "conn={conn} account 0 cera=96500; sent as (0,53)"
+      ],
+      [
+       "INFO",
+       "TOWN-SELF",
+       "conn={conn} self entity name='XRenYing' job=11 level=110 channel=(1,10,0,22)"
+      ],
+      [
+       "INFO",
+       "TOWN-SELF-DATA",
+       "conn={conn} job=11 level=110 exp=10790683707 hp=6910 mp=3900 str=749 vit=749 int=649 spr=649 chr='Character/Swordman/ATSwordman.chr' grow=5/3"
+      ],
+      [
+       "INFO",
+       "TOWN-SPAWN",
+       "conn={conn} town=40 area=1 pos=(1216,267) key=1"
+      ],
+      [
+       "INFO",
+       "TOWN-QUESTS",
+       "conn={conn} town=40 worldmap nodes=44 (0,21) available=137 active=[13615] finished=814 level=110"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 143,
+       "transform": "tile3",
+       "plain_hex": "01000000000000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "1c5404",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2443,
+       "transform": "tile7",
+       "plain_hex": "010000000a0000000000000016000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "06bbc9",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 889,
+       "transform": "tile7",
+       "plain_hex": "0003000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "2d609e",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2,
+       "transform": "tile2",
+       "plain_hex": "000100010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a883dc1d00000000000000000000000000000000000000000000000000000000000000000000000000dd880000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100080000005852656e59696e670b356e00001f009265b506000000000000000000000000000000000000000000000000000001348cb50600000000000000000000000000000000000000000000000000000218b3b5060000000000000000000000000000000000000000000000000000032da2b406000000000000000000000000000000000000000000000000000004f3c8b406000000000000000000000000000000000000000000000000000005453eb506000000000000000000000000000000000000000000000000000006f1efb406000000000000000000000000000000000000000000000000000007f116b506000000000000000000000000000000000000000000000000000008a1598d1e000000000000000000000000000000000000000000000000000009d5a9e51d00000000000000000000000000000000000000000000000000000a6da88d1e00000000000000000000000000000000000000000000000000000c324f0506000000001b0000000000000000000000000000000000000000000dd270d21d00000000000000000000000000000000000000000000000000000f5a7cf805000000001b00000000000000000000000000000000000000000010d006f805000000001b00000000000000000000000000000000000000000011af50fa05000000001b00000000000000000000000000000000000000000012ebf1f805000000001b000000000000000000000000000000000000000000131a7bfa05000000001b00000000000000000000000000000000000000000014c3a8fa05000000001b0000000000000000000000000000000000000000001575cffa05000000001b000000000000000000000000000000000000000000167727fb05000000001b000000000000000000000000000000000000000000172b47fb05000000001b000000000000000000000000000000000000000000195bd7fb05000000001b0000000000000000000000000000000000000000001a3f83dc1d00000000000000000000000000000000000000000000000000001b07e4db1d00000000000000000000000000000000000000000000000000001c140bdc1d00000000000000000000000000000000000000000000000000001d1b32dc1d000000000000000000000000000000000000000000000000000020a883dc1d000000000000000000000000000000000000000000000000000021939edd17000000000000000000000000000000000000000000000000000022969edd17000000000000000000000000000000000000000000000000000023979edd170000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f83dc1d000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 1296,
+       "wire_body_len": 1296,
+       "nonce": "67e61b",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 19,
+       "transform": "tile5",
+       "plain_hex": "4c030000081312a20308f20210001a07080010a00218241a070801109c0218291a070802109f0218261a07080310a50218151a07080410a80218101a060805100218011a07080610a90218061a070807109e0218261a07080810a10218211a07080910a402181a1a07080a10a70218121a07080b10ab0218081a07080d10a30218011a07080e109902180a1a07080f10920218011a07081010be0118011a07081110a90118011a0e08121008180120032000200120041a060813100118011a07081410ac0218031a060866106018011a07086710ae0118011a07086810b30118071a07086910c50118011a07086a10910218011a07086b10a20218151a07086c10a602180c1a07086d10aa0218061a07086e10ef0318011a07086f10f50318011a07087010ff0318011a07087110ba01180a1a070872109d02180a1a070873109602180a1a07087410bb0218051a07087510ba0218051a07087610b80218051a07087710bc0218051a07087810bd0218051a07087910b90218051a07087b10b70218011a0808980110930218011a08089901109a0218011a0808c60110af0118011a0808c701109502180112a20308f20210001a07080010a00218241a070801109c0218291a070802109f0218261a07080310a50218151a07080410a80218101a060805100218011a07080610a90218061a070807109e0218261a07080810a10218211a07080910a402181a1a07080a10a70218121a07080b10ab0218081a07080d10a30218011a07080e109902180a1a07080f10920218011a07081010be0118011a07081110a90118011a0e08121008180120032000200120041a060813100118011a07081410ac0218031a060866106018011a07086710ae0118011a07086810b30118071a07086910c50118011a07086a10910218011a07086b10a20218151a07086c10a602180c1a07086d10aa0218061a07086e10ef0318011a07086f10f50318011a07087010ff0318011a07087110ba01180a1a070872109d02180a1a070873109602180a1a07087410bb0218051a07087510ba0218051a07087610b80218051a07087710bc0218051a07087810bd0218051a07087910b90218051a07087b10b70218011a0808980110930218011a08089901109a0218011a0808c60110af0118011a0808c7011095021801",
+       "body_len": 848,
+       "wire_body_len": 848,
+       "nonce": "65d21c",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2,
+       "transform": "tile2",
+       "plain_hex": "010100010a00000000000000000000000000000000000000dd880000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001003bc42c830200000059000000ec0d010058980000461d461d6019601900000000c80038ff000000000000000000000000000000000000000000000000000000000000000000000000b0d50b000000990c282300002823401fae1f301120a1070064000000003b1f0020e58c1e000000000001000000000000000000000000009265b50600000000000000001e00000001005f94352301005f9435230000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001300c8d1e00000000000100000000000000000000000000348cb50600000000000000001e00000001005f94352301005f943523000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000240338d1e0000000000020000000000000000000000000018b3b50600000000000000001e0000000200679435230200679435230000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003d0218c1e000000000065000000000000000000000000002da2b40600000000000000001e0000001000819335230400699435230400699435230000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004e0488c1e00000000000000000000000000000000000000f3c8b40600000000000000001e000000100081933523040069943523040069943523000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000510be8c1e00000000000000000000000000000000000000453eb50600000000000000001e00000008006f94352308006f9435230000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006f06f8c1e00000000000200000000000000000000000000f1efb40600000000000000001e000000020067943523020067943523000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000700978c1e00000000000400000000000000000000000000f116b50600000000000000001e00000008006f94352308006f9435230000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008a1598d1e000000000000000000000000000000000000000000000000000000000000001e000000efffcd923523efffcd9235230000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009d5a9e51d000000000000000000000000000000000000000000000000000000000000001e000000100081933523efff5f943523efff69943523000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a79a88d1e000000000000000000000000000000000000006da88d1e00000000000000001e000000efff67943523efff67943523000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c324f0506fdee750a0d2d00000000000000000000000000000000001fea9d000003070000000000000000000000000000000000040000000000000008000000000000000000000000050000000000000000010000000001000000000100000000000000000400000000000000050000000000000000001500000000000000000000000000000000dfdb2a000000000000010000000003000000000000000dd270d21d0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f5a7cf8050ba2762d0d30000000000000000000000000000000000034ea9d000003070000000000000000000000000000000000040000000000000008000000000000000000000000050000000000000000010000000001000000000100000000000000000400000000000000050000000000000000001500000000000000000000000000000000b67c030000000000000100000000030000000000000010d006f805d7b192380d32000000000000000000000000000000000011ea9d0000030700000000000000000000000000000000000400000000000000080000000000000000000000000500000000000000000100000000010000000001000000000000000004000000000000000500000000000000000015000000000000000000000000000000005572000000000000000100000000030000000000000011af50fa057f72d4070d2800000000000000000000000000000000000fea9d0000030700000000000000000000000000000000000400000000000000080000000000000000000000000500000000000000000100000000010000000001000000000000000004000000000000000500000000000000000015000000000000000000000000000000004a0e010000000000000100000000030000000000000012ebf1f8055d0964130d28000000000000000000000000000000000031ea9d00000307000000000000000000000000000000000004000000000000000800000000000000000000000005000000000000000001000000000100000000010000000000000000040000000000000005000000000000000000150000000000000000000000000000000070a51200000000000001000000000300000000000000131a7bfa05e542dd7d0d000000000000000000000000000000000000f2e99d0000030700000000000000000000000000000000000400000000000000080000000000000000000000000500000000000000000100000000010000000001000000000000000004000000000000000500000000000000000015000000000000000000000000000000002926000000000000000100000000030000000000000014c3a8fa05bba7b05e0d000000000000000000000000000000000000fee99d000003070000000000000000000000000000000000040000000000000008000000000000000000000000050000000000000000010000000001000000000100000000000000000400000000000000050000000000000000001500000000000000000000000000000000b70e00000000000000010000000003000000000000001575cffa05aae4c8710d00000000000000000000000000000000000036ea9d00000307000000000000000000000000000000000004000000000000000800000000000000000000000005000000000000000001000000000100000000010000000000000000040000000000000005000000000000000000150000000000000000000000000000000099430000000000000001000000000300000000000000167727fb0580fd473e0d00000000000000000000000000000000000018ea9d00000307000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000172b47fb05a03a521b0d00000000000000000000000000000000000016ea9d00000307000000000000000000000000000000000004000000000000000800000000000000000000000005000000000000000001000000000100000000010000000000000000040000000000000005000000000000000000150000000000000000000000000000000097010000000000000001000000000300000000000000195bd7fb0539962e750d00000000000000000000000000000000000006ea9d000003070000000000000000000000000000000000040000000000000008000000000000000000000000050000000000000000010000000001000000000100000000000000000400000000000000050000000000000000001500000000000000000000000000000000100200000000000000010000000003000000000000001a3f83dc1d03000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b07e4db1d23b4000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c140bdc1d23b4000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d1b32dc1d23b40000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020a883dc1d010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000021939edd1701000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022969edd1701000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000023979edd1701000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000091f01a2002f01a2002701a2001f01a2002701a2002f01a2002f01a2002701a2001f01a20000000000000000000000000000000000000000ff000001000000000000000000000000000000000000000000000000000000",
+       "body_len": 4672,
+       "wire_body_len": 4672,
+       "nonce": "285549",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0010004c00000000000000e0995a3b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000100000063000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003003f992800ef01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400806d35233d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005009ebafb023d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000900034f05062fe7d3270d2d00001fea9d000003070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a00514e05061dbaf829002d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001100281df7053a0516150d3c00002cea9d000003070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000de3700000000000000000000000000000000000000000000001400b1a8f60529c46e13003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000559c97c3e4ab4c9c0000000000fad900000000000000000000000000000000000000000000001600291df705e8383834003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000fcab579c4f9ce4ab0000000000000000000000000000000000000000000000000000000000002800c56fd21d0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002d00f867dc170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002e00e740dc170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002f00dd19dc170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000617cdb1772bafa1e002800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035006b32d91714f5e125003200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000036000bb9da17fcd9803400280000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003700baf5d9173972a51200300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003800206fd817c81f0b35003c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003d002d4f050643765b2f002d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e00e778dd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f0071b6dc17010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400031dddc170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004100e903000005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000042003d2afc02cb030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000043008003000004000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044000f000000f70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000470018000000dc03000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004800570400000f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000049005d0400000d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007900109a98000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007a000f9a98000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007b00540c00000c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007c00605d9d00c700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007d005e0c00000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007e00950c00000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007f00d30b00001b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080004f0c00000d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008100ec0b00000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008200460c000014000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000083005f0c00002f03000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008400fe0c00003d1c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008500928c9d002c01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008600d40b00000f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008700aa5c9d003806000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008800f35e9d001102000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008900cb0b00000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008a00040d0000fb06000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008b00d60b00001700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008c006e479d004461000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008d000e4c9d000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008e00ce0b00000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008f00cf0b00000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009000f3949d008a02000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009100cd0b00000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009200e7e49d000900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009300e1e49d000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009900f1949d0090010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000021016794352325000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022012c95352306000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000023018193352307000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024015f94352388010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025016f9435238c0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000270169943523c100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006b01d90b00001a98020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006c01da0b0000d69a020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006d01db0b0000f498020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006e01dc0b00001397020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006f01dd0b00002262030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007001be0c0000ac97020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007101931d9a007400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007201941d9a0035000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000073013d1c9a00a6000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000074013e1c9a009c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000075013f1c9a0074000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000076012c009b0013000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 12552,
+       "wire_body_len": 12552,
+       "nonce": "b72aac",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "016900180000002da2b4060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000004000000000004000000000000000000000000000000000000000000000004000000000000000100f3c8b4060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000004000000000004000000000000000000000000000000000000000000000004000000000000000200f1efb4060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000002000000000002000000000000000000000000000000000000000000000004000000000000000300f116b5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000008000000000008000000000000000000000000000000000000000000000004000000000000000400453eb5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e000000080000000000080000000000000000000000000000000000000000000000040000000000000005009265b5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000001000000000001000000000000000000000000000000000000000000000004000000000000000600348cb5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e0000000100000000000100000000000000000000000000000000000000000000000400000000000000070018b3b5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000002000000000002000000000000000000000000000000000000000000000004000000000000000800eeb3b5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e000000020000000000020000000000000000000000000000000000000000000000040000000000000009001aa3b4060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000010002c95352304000000000004000000000000000000000000000000000004000000000000000a00e0488c1e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000010000000000004000000000004000000000000000000000000000000000004000000000000000b00dcf0b4060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000002000000000002000000000000000000000000000000000000000000000004000000000000000c00c817b5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000008000000000008000000000000000000000000000000000000000000000004000000000000000d00273fb5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000008000000000008000000000000000000000000000000000000000000000004000000000000000e009366b5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000001000000000001000000000000000000000000000000000000000000000004000000000000000f00108db5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e000000010000000000010000000000000000000000000000000000000000000000040000000000000010006da88d1e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110083a88d1e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000120044a88d1e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e000000efff00000000efff000000000000000000000000000000000000000000000400000000000000130024a9e51d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001400c8a9e51d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e000000efff00000000efff0000000000000000000000000000000000000000000004000000000000001800c1d9b5060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e000000efff00000000efff0000000000000000000000000000000000000000000004000000000000003e00d0218c1e0000000000650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000010002c95352304000000000004000000000000000000000000000000000004000000000000003f00cec9b4060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000010002c953523040000000000040000000000000000000000000000000000040000000000000000",
+       "body_len": 4872,
+       "wire_body_len": 4872,
+       "nonce": "fb82b2",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "2d08000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "3e39df",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0268000a00000069a3f8058b7bab320d30000034ea9d0000030700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f2ab489c469c4b9c0000000000030000000000000000000000000000000000000000000000000100b37afa059550e72c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000539c419cceb3479c0000000000fad900000000000000000000000000000000000000000000000300172afa05dc2d9b0f0d2800000fea9d000003070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002acfbab469c449c00000000000300000000000000000000000000000000000000000000000004001293f70555547907003200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000bc0bbd0bbe0bbf0b0000000000999f010000000000000000000000000000000000000000000008008e6bf70572742006003200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000eaabe6abf6abf3ab0000000000570302000000000000000000000000000000000000000000002000c0d5fb05498b29050d00000006ea9d0000030800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000021005129351d1300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003b005827351d6400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003c001e6635235800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004f00faab9d00c4020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 1656,
+       "wire_body_len": 1656,
+       "nonce": "92aa50",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0703000000a283dc1d0200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100b683dc1d0400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008f0007e4db1d23b400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 504,
+       "wire_body_len": 504,
+       "nonce": "0ea5ea",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "2b14000100969edd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200969edd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000300969edd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400969edd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000500969edd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600969edd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000700969edd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800969edd1701000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050002b01a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000051002b01a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000052002b01a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040011f01a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041012f01a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000042012701a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000043011f01a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044012701a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000045012f01a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000046012f01a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000047012701a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000048011f01a20001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 3304,
+       "wire_body_len": 3304,
+       "nonce": "2fa058",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "031f00000020e58c1e0000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000001005f94352301005f94352300000000000000000000000000000000000004000000000000000100300c8d1e0000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000001005f94352301005f9435230000000000000000000000000000000000000400000000000000020040338d1e0000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000002006794352302006794352300000000000000000000000000000000000004000000000000000300d0218c1e0000000000650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000010008193352304006994352304006994352300000000000000000000000004000000000000000400e0488c1e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e0000001000819335230400699435230400699435230000000000000000000000000400000000000000050010be8c1e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000008006f94352308006f94352300000000000000000000000000000000000004000000000000000600f06f8c1e0000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e0000000200679435230200679435230000000000000000000000000000000000000400000000000000070000978c1e0000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e00000008006f94352308006f94352300000000000000000000000000000000000004000000000000000800a1598d1e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e000000efffcd923523efffcd92352300000000000000000000000000000000000004000000000000000900d5a9e51d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e000000100081933523efff5f943523efff6994352300000000000000000000000004000000000000000a0079a88d1e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e000000efff67943523efff6794352300000000000000000000000000000000000004000000000000000c00324f0506fdee750a0d2d00001fea9d000003070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000dfdb2a000000000000000000000000000000000000000000000d00d270d21d0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f005a7cf8050ba2762d0d30000034ea9d000003070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b67c03000000000000000000000000000000000000000000001000d006f805d7b192380d32000011ea9d000003070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000557200000000000000000000000000000000000000000000001100af50fa057f72d4070d2800000fea9d0000030700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004a0e01000000000000000000000000000000000000000000001200ebf1f8055d0964130d28000031ea9d00000307000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070a5120000000000000000000000000000000000000000000013001a7bfa05e542dd7d0d000000f2e99d000003070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000292600000000000000000000000000000000000000000000001400c3a8fa05bba7b05e0d000000fee99d000003070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b70e0000000000000000000000000000000000000000000000150075cffa05aae4c8710d00000036ea9d0000030700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009943000000000000000000000000000000000000000000000016007727fb0580fd473e0d00000018ea9d0000030700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017002b47fb05a03a521b0d00000016ea9d0000030700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009701000000000000000000000000000000000000000000000019005bd7fb0539962e750d00000006ea9d000003070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100200000000000000000000000000000000000000000000001a003f83dc1d0300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b0007e4db1d23b4000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c00140bdc1d23b4000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d001b32dc1d23b4000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000a883dc1d0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002100939edd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002200969edd170100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002300979edd1701000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 5584,
+       "wire_body_len": 5584,
+       "nonce": "766a96",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 105,
+       "transform": "tile7",
+       "plain_hex": "040100000064000000000001000000000002000000640000000000010000000000030000006400000000000100000000000400000064000000000001000000000000000000000000",
+       "body_len": 72,
+       "wire_body_len": 72,
+       "nonce": "e61d9f",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 53,
+       "transform": "tile11",
+       "plain_hex": "01f47801000100000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "c089b8",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 376,
+       "transform": "tile12",
+       "plain_hex": "0004000001000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000ffffffff6400ffff0000ffff0100ffff0100ffff2301ffffffffffff0000fffffffffffffffff1ff0000ffff00000100ffffffffffffffffffffffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0100ffffffffffffffffffffffff0100ffff0000ffffffffffffffffffff0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000",
+       "body_len": 1040,
+       "wire_body_len": 1040,
+       "nonce": "d46e40",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 440,
+       "transform": "tile6",
+       "plain_hex": "001703000049303109320a49303209300a49303309330a49303409310a4930350937380a4930360935370a4930370938300a4930380931330a4930390937360a4931300936370a4931310936350a4931320936330a4931330936390a4931350937350a4931360938350a4931370936380a4931380938360a4931390938340a4932300938310a4932310935350a4932320937330a4932330935380a4932340936300a4932350936310a4932360936320a4932370937310a4932380937370a4932390935390a4933300937320a4933310937340a4933320937390a4933330934360a4933340934370a4933350934380a4933360934390a4933370935300a4933380935310a493339093133340a4934300932380a4934310938330a4934320938370a493434093130380a4934390932360a4935300937300a493531093130340a493532093130350a4935330936360a4935340932370a4935390935360a493630093133340a493631093133340a493635093133340a493637093133340a493639093133340a49373009360a49373109390a493732093133340a493733093133340a493734093133340a493735093133340a493736093133340a493737093133340a493738093133340a493739093133340a4938300938380a4938310938390a4938320939300a4938330939310a4938340939320a4938350936340a493836093133340a493838093133340a4939310933340a4939350932340a4939360931330a493938093133340a4939390933320a4b30320933310a4b3034093133340a4b3036093133340a4b3038093133340a4b3039093133340a4b31300931300a4b313109340a4b31330932390a4b3132093130390a4b31340938320a4b31350933330a4b3136093133340a4b3137093133340a4b3138093133340a4b3139093133340a4b3230093133340a4b3231093133340a4b3232093133340a4b3233093133340a4b3234093133340a4b3235093133340a4b3236093133340a4b3237093133340a4b3238093133340a4b32390935340a4b3330093133340a4b3331093133340a4b3332093133340a4b3333093133340a4b3334093133340a4b333509370a00000000",
+       "body_len": 800,
+       "wire_body_len": 800,
+       "nonce": "9b8aa1",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 342,
+       "transform": "tile6",
+       "plain_hex": "2e030000490c00004a0c00004b0c00004c0c00004d0c00004e0c00004f0c0000520c0000530c0000540c0000580c0000600c0000610c0000620c0000630c0000640c0000650c0000670c0000680c00006a0c00006b0c00006c0c00006d0c0000700c0000710c0000750c0000760c0000770c0000780c0000790c00007a0c00007b0c00007c0c00007d0c00007f0c0000810c0000840c0000860c0000870c0000880c00008b0c00008e0c00008f0c0000900c0000910c0000920c0000930c0000940c0000950c0000970c00009a0c00009b0c00009e0c00009f0c0000a00c0000a80c0000ab0c0000ac0c0000ae0c0000af0c0000b00c0000b20c0000b40c0000b50c0000b90c0000bb0c0000c70c0000c90c0000ca0c0000cb0c0000cd0c0000ce0c0000cf0c0000d10c0000d30c0000d50c0000d60c0000d70c0000d80c0000d90c0000dc0c0000dd0c0000df0c0000e00c0000e20c0000f70c0000fa0c0000fb0c0000fc0c0000fd0c0000ff0c0000000d0000010d0000020d0000030d0000040d0000050d0000060d0000090d00000c0d00000d0d0000100d0000140d0000160d0000180d00001a0d00001b0d0000b90d0000ba0d0000bc0d0000c00d0000c10d0000c20d0000c50d0000c60d0000c90d0000ca0d0000cb0d0000ce0d0000d10d0000d20d0000d40d0000d70d0000da0d0000dc0d0000dd0d0000df0d0000e10d0000e20d0000f20d0000f30d0000f50d0000f70d0000fa0d0000fb0d0000fc0d0000fd0d0000fe0d0000000e0000010e0000020e0000030e00000a0e00000c0e00000e0e00000f0e0000110e0000130e0000140e0000150e0000200e0000210e0000220e0000270e0000290e00002b0e00002c0e00002d0e00002f0e0000310e0000320e0000340e0000350e0000370e0000380e0000390e00003a0e00003c0e00003d0e00003f0e0000400e0000410e0000420e0000440e0000460e0000480e00004a0e00004c0e00004e0e00004f0e0000530e0000540e0000560e00005a0e00005b0e00005c0e00005d0e00005e0e0000710e0000720e00007c0e0000940e0000990e00009c0e00009d0e00009e0e0000a20e0000a50e0000a60e0000a80e0000a90e0000aa0e0000ad0e0000b70e0000b80e0000b90e0000ba0e0000bc0e0000bd0e0000be0e0000bf0e0000c10e0000c20e0000c30e0000f60e0000f90e0000fb0e0000fc0e0000fe0e0000000f0000030f0000040f0000060f0000090f00000b0f0000150f0000180f0000190f00001a0f00001b0f00001c0f00001e0f00001f0f0000210f0000230f0000290f00002b0f0000530f0000560f00005e0f0000630f0000650f0000660f0000680f0000690f00006b0f00006e0f0000700f0000760f0000780f0000790f00007b0f00007f0f0000820f0000830f0000870f00008d0f0000900f0000910f0000920f0000950f0000960f0000df120000e0120000e9120000eb120000ef120000f3120000f7120000fa120000fb120000fd120000001300000113000002130000051300000613000009130000231700002a1700002b1700002c1700002d1700002f17000033170000361700003917000043170000461700004a1700004f1700005317000058170000591700005c1700007c170000811700008317000084170000861700008c1700008e1700009017000093170000951700009617000097170000991700009b1700009d1700001a18000038180000391800003a1800003b1800003c1800003d1800003e1800003f180000401800004118000042180000431800004c1800004d1800004e1800004f180000501800009c1800009d1800009e1800009f180000a1180000a2180000a3180000a4180000ba180000bb180000bc180000bf180000c0180000c1180000c2180000c3180000c4180000c8180000c9180000ca180000cb180000cc180000cd180000ce180000cf180000d0180000d4180000d5180000d6180000742700005a2f00005b2f00005c2f00005d2f00005e2f0000602f0000612f0000622f0000632f0000642f0000662f0000672f0000692f00006a2f00006b2f00006c2f00006d2f00006e2f00006f2f0000702f0000712f0000732f0000742f0000752f0000762f0000772f0000782f0000792f00007a2f00007b2f00007d2f00007e2f00007f2f0000802f0000812f0000822f0000832f0000852f0000862f0000872f00008d2f00008e2f00008f2f0000902f0000912f00000d3000000e3000000f300000113000001230000013300000143000001530000016300000183000003e3000003f30000041300000423000004330000044300000453000004730000048300000493000005c3000005e3000005f300000603000006130000062300000653000006630000067300000683000007b3000007c3000007d3000007e3000007f300000803000008130000083300000843000008530000086300000ae300000a7310000a9310000aa310000ab310000ac310000ad310000ae3100004c3200004d3200004f320000503200005132000052320000533200005432000055320000573200005a3200005b3200005d3200005f32000060320000623200006432000066320000683200006b3200006c3200006d3200006f320000823200008332000084320000853200008632000088320000893200008b3200008c3200008d3200008e3200008f320000913200009632000097320000983200009a3200009c3200009d3200009f320000a0320000a1320000a3320000a9320000aa320000ab320000ad320000b1320000b6320000b7320000b8320000b9320000ba320000bb320000bc320000bd320000be320000bf32000037330000383300003b3300003c3300003d3300003e330000413300004433000046330000483300004a3300004c3300004d3300004e3300004f330000503300005433000055330000563300005a3300005b3300005c3300005d3300005e330000603300006133000062330000633300006533000068330000693300006a3300006d3300006e3300006f33000070330000713300007233000078340000793400007a3400007b3400007c3400007d3400007e3400007f3400008134000082340000833400008434000088340000893400008b3400008c3400008d3400008e3400009034000092340000953400009634000097340000993400009b3400009d3400009f340000a1340000a4340000a5340000a7340000a8340000a9340000ab340000ad340000af340000b0340000ee340000ef340000f2340000f3340000f5340000f6340000f7340000f8340000f9340000fa340000fb340000fc340000fd340000fe340000ff340000003500000235000004350000053500000635000007350000083500000b3500000c3500000d3500000e3500000f3500001035000012350000133500001435000015350000163500001735000018350000193500001a3500001b3500002e3500009335000094350000953500009635000097350000993500009a3500009b3500009c3500009d3500009e3500009f350000a0350000a1350000a2350000a3350000a4350000a5350000a6350000b4350000b5350000b6350000b7350000b8350000b9350000ba350000bb350000bc350000bd350000be350000bf350000c0350000c1350000c2350000c3350000c4350000d4350000d5350000d6350000d8350000d9350000da350000095200000c5200000d5200000e5200000f520000105200001152000012520000135200001452000015520000165200001752000018520000195200001a5200001b520000235200002452000025520000365200003752000038520000395200003a5200003b5200003c5200003e5200003f5200004052000041520000425200004352000044520000455200004652000063520000645200006652000067520000a8520000a9520000aa520000ab520000ac520000ae520000af520000b3520000b4520000b5520000b6520000b8520000b9520000bb520000bc520000c0520000c1520000c2520000c7520000c8520000c9520000ca520000cd520000ce520000cf520000d1520000d2520000d3520000d4520000d5520000d6520000d7520000d8520000da520000dc520000dd520000e5520000e6520000e8520000e9520000eb520000ec520000ed520000ee520000ef520000f0520000f2520000f3520000f4520000f55200001753000018530000195300001a5300001b5300001c5300001d5300001e5300001f53000020530000215300002253000023530000245300002a53000078560000795600007a5600007b560000c45600007d5700007e5700007f57000080570000c95700001158000012580000135800001458000015580000165800001758000018580000195800001a5800001b5800001c5800001d5800001e58000028580000295800002a5800002b5800002c5800002e5800002f5800003058000031580000325800003358000034580000355800004b580000e0580000e158000000000000",
+       "body_len": 3264,
+       "wire_body_len": 3264,
+       "nonce": "042b60",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 291,
+       "transform": "tile11",
+       "plain_hex": "01002f35010000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "e3dbc6",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 21,
+       "transform": "tile7",
+       "plain_hex": "b4010000106e18890120a20520a30520d20f20cb1420ee1420f31420fb14208e1520941520961520981520c81620d41620d51620d61620d71620d91620da1620db1620f11620fd16209c18209d18209e18209f1820a01820a11820a21820a31820a41820a51820a61820a71820a81820a91820aa1820ab1820ac1820ad1820ae1820af1820b01820b11820b21820b31820b41820b51820b61820b71820b81820b91820ba1820bb1820bc1820bd1820be1820bf1820c01820c11820c21820c31820c41820c51820c61820c71820c81820ee1d20a72220bb2320ff2c20802d20a72e20ad2f20b52f20c02f20c22f20e42f20e52f20e72f20fd2f20fe2f20ff2f208030208d3020d13020db3020dd3020de3020803220843220e03520c14320cd4320ad4420a34e20945f20985f20995f20a45f20aa6020d46020f860208e6120926120936120bb6120c26120c065209067209e6a209f6a20a06a20a16a20926b20ad6b20b36b20817d20a7a40120e2a40120e5a40120eba40120faa40120fca501208fa6012090a6012091a60120a7a6012098a9012099a901209aa90120d0af0120d1af0120a6b00120c7b00120e0b00120e1b00120bab101",
+       "body_len": 440,
+       "wire_body_len": 440,
+       "nonce": "2d2d93",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 23,
+       "transform": "tile9",
+       "plain_hex": "01002800000001000000c0040b010501",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "76588f",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 24,
+       "transform": "tile10",
+       "plain_hex": "280000000100000001000100c0040b0105010100",
+       "body_len": 20,
+       "wire_body_len": 20,
+       "nonce": "81c03c",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 22,
+       "transform": "tile8",
+       "plain_hex": "0100c0040b0105640000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "1b189f",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 36,
+       "transform": "tile8",
+       "plain_hex": "00009c00000000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "0775ba",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2463,
+       "transform": "tile13",
+       "plain_hex": "0000000000004e00",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "55d859",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 124,
+       "transform": "tile12",
+       "plain_hex": "",
+       "body_len": 0,
+       "wire_body_len": 0,
+       "nonce": "c1937e",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0c200000000000030000008a6435232c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100fbab9d0062050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002004c6cfb02d70300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 504,
+       "wire_body_len": 504,
+       "nonce": "92ae55",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 1361,
+       "transform": "tile3",
+       "plain_hex": "1901100103013e000104013f00010c003d00010d002800010e003800010f0037000110003500011100300001120036000113002f000114002e000115002d000116003f0001170040000119003e00011a07010000000000000000000000000000",
+       "body_len": 96,
+       "wire_body_len": 96,
+       "nonce": "e5f8c2",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 1280,
+       "transform": "tile6",
+       "plain_hex": "0200000104000000007945fb050000000004a7fa05000000",
+       "body_len": 24,
+       "wire_body_len": 24,
+       "nonce": "dc3370",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2432,
+       "transform": "tile10",
+       "plain_hex": "65000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 208,
+       "wire_body_len": 208,
+       "nonce": "ae3a71",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2431,
+       "transform": "tile9",
+       "plain_hex": "00000000000000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "a10ec0",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2318,
+       "transform": "tile8",
+       "plain_hex": "0000000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "a194f3",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 108,
+       "transform": "tile10",
+       "plain_hex": "05008002008102000803006d0200820200000000",
+       "body_len": 20,
+       "wire_body_len": 20,
+       "nonce": "e9b398",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 140,
+   "runs": [
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-140",
+       "conn={conn} built S2C (1,140) 1B reply (request body 16B)"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 140,
+       "transform": "tile0",
+       "plain_hex": "0000000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "2ea684",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 707,
+   "runs": [
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-707",
+       "conn={conn} built S2C (1,707) 1B reply (request body 8B)"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 707,
+       "transform": "tile7",
+       "plain_hex": "0000000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "8762de",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 666,
+   "runs": [
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-666",
+       "conn={conn} built S2C (1,666) 1B reply (request body 0B)"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 666,
+       "transform": "tile8",
+       "plain_hex": "0000000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "e7cd41",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 120,
+   "runs": [
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 693,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,693) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 390,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,390) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 35,
+   "runs": [
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "TOWN-MOVE-35",
+       "conn={conn} town=76 area=0 pos=(1553,344) dir=6 param=190 persisted"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "TOWN-MOVE-35",
+       "conn={conn} town=76 area=0 pos=(1288,325) dir=4 param=190 persisted"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "TOWN-MOVE-35",
+       "conn={conn} town=76 area=0 pos=(1494,285) dir=6 param=190 persisted"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "TOWN-MOVE-35",
+       "conn={conn} town=76 area=0 pos=(1583,341) dir=6 param=190 persisted"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 495,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,495) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    },
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,495) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 1499,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,1499) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 1563,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,1563) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 36,
+   "runs": [
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "TOWN-AREA-36",
+       "conn={conn} key=1 from=(40,1) to=(40,1) pos=(1216,267) dir=1 trailer=2800000001000000000000 persisted; answered with (0,23) + (0,24)"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 0,
+       "sub": 23,
+       "transform": "tile9",
+       "plain_hex": "01002800000001000000c0040b010101",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "880c76",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 24,
+       "transform": "tile10",
+       "plain_hex": "280000000100000001000100c0040b0101010100",
+       "body_len": 20,
+       "wire_body_len": 20,
+       "nonce": "4a2be1",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    },
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "TOWN-AREA-36",
+       "conn={conn} key=1 from=(40,1) to=(40,0) pos=(525,477) dir=5 trailer=2800000001000000000000 persisted; answered with (0,23) + (0,24)"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 0,
+       "sub": 23,
+       "transform": "tile9",
+       "plain_hex": "010028000000000000000d02dd010501",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "ca3e8e",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 24,
+       "transform": "tile10",
+       "plain_hex": "2800000000000000010001000d02dd0105010100",
+       "body_len": 20,
+       "wire_body_len": 20,
+       "nonce": "5cc1c4",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    },
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "TOWN-AREA-36",
+       "conn={conn} key=1 from=(40,0) to=(38,1) pos=(544,311) dir=5 trailer=2800000000000000000000 persisted; answered with (0,23) + (0,24)"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 0,
+       "sub": 23,
+       "transform": "tile9",
+       "plain_hex": "01002600000001000000200237010501",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "ac9d8c",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 24,
+       "transform": "tile10",
+       "plain_hex": "2600000001000000010001002002370105010100",
+       "body_len": 20,
+       "wire_body_len": 20,
+       "nonce": "388fee",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    },
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "TOWN-AREA-36",
+       "conn={conn} key=1 from=(38,1) to=(76,0) pos=(1540,300) dir=5 trailer=2600000001000006000000 persisted; answered with (0,23) + (0,24)"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 0,
+       "sub": 23,
+       "transform": "tile9",
+       "plain_hex": "01004c0000000000000004062c010501",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "a63ce3",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 24,
+       "transform": "tile10",
+       "plain_hex": "4c000000000000000100010004062c0105010100",
+       "body_len": 20,
+       "wire_body_len": 20,
+       "nonce": "9c51e0",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    },
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "TOWN-AREA-36",
+       "conn={conn} key=1 from=(76,0) to=(38,1) pos=(450,210) dir=5 trailer=4c00000000000000000000 persisted; answered with (0,23) + (0,24)"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 0,
+       "sub": 23,
+       "transform": "tile9",
+       "plain_hex": "01002600000001000000c201d2000501",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "751555",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 24,
+       "transform": "tile10",
+       "plain_hex": "260000000100000001000100c201d20005010100",
+       "body_len": 20,
+       "wire_body_len": 20,
+       "nonce": "0da8a8",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 2,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "LEGACY-QUERY",
+       "conn={conn} consumed {n}B; no response by design"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 1302,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,1302) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 1566,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,1566) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 1356,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "INFO",
+       "UDP-STAT-1356",
+       "conn={conn} consumed 2 record(s) ids=[178, 203]; no response"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 194,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,194) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 1280,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,1280) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 250,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,250) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 279,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,279) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 1360,
+   "runs": [
+    {
+     "state": null,
+     "notes": [
+      [
+       "WARN",
+       "UNHANDLED",
+       "conn={conn} (1,1360) body={n}B has no handler plain={plain}"
+      ]
+     ],
+     "replies": []
+    }
+   ]
+  },
+  {
+   "request_main": 1,
+   "request_sub": 3,
+   "runs": [
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "notes": [
+      [
+       "INFO",
+       "EXIT-3",
+       "conn={conn} exit-game acknowledged with a (1,3) success response; client owns the close of this connection"
+      ],
+      [
+       "INFO",
+       "DISCONNECT",
+       "conn={conn} socket error ConnectionReset"
+      ],
+      [
+       "INFO",
+       "GAME",
+       "conn={conn} connection protocol state released; handshake=True login=True roster=True selected=1 town=True seen=[(1,1), (1,2), (1,3), (1,4), (1,8), (1,35), (1,36), (1,120), (1,140), (1,143), (1,171), (1,194), (1,250), (1,279), (1,390), (1,433), (1,468), (1,495), (1,585), (1,637), (1,666), (1,693), (1,707), (1,782), (1,848), (1,1280), (1,1302), (1,1356), (1,1360), (1,1499), (1,1554), (1,1563), (1,1566), (1,1592), (1,2126)]"
+      ],
+      [
+       "INFO",
+       "DISCONNECT",
+       "conn={conn} after 438.4s rx=68793B tx=47679B frames=221 session=192.168.1.6 state=InTown conns_on_session=0"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 3,
+       "transform": "tile3",
+       "plain_hex": "01000000000000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "fe84ca",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
