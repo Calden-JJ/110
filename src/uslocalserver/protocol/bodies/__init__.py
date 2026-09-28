@@ -47,8 +47,11 @@ class SelectDungeonRequest:
     `DungeonId` reaches 291100268 in one day's logs, so it is wider than
     `u16`; `Difficulty` runs 0-2, `EntryOption` is 0 in every sample, `Mode`
     and `HellDifficulty` are 0-1.  Five `u32le` is 20 bytes, and no logged
-    C->S body is 20 bytes -- but the hex log only covers 221 of the day's
-    packets, so that is an absence of evidence, not evidence of absence.
+    C->S body is 20 bytes.  The one `(1,16)` dump that does exist
+    (`server-20260927.log:2553`, 32 bytes, logged beside `DungeonId = 81,
+    Difficulty = 2`) starts `51 00 00 00 02 00 00 00 00 ff ff 00 ...`, so the
+    first two fields read as declared and the third does not -- the layout is
+    wrong somewhere past `Difficulty`, and nothing is generated from it yet.
     """
     dungeon_id: int
     difficulty: int
@@ -131,7 +134,7 @@ REGISTRY: dict[tuple[int, int], BodySpec] = {
                  "all 23 logged bodies are byte-identical"),
         BodySpec((1, 16), SelectDungeonRequest, _parse_select_dungeon,
                  "assumed 5 x u32le", False,
-                 "no C->S hex has ever been logged for (1,16)"),
+                 "the one 32B dump agrees up to Difficulty and then diverges"),
         BodySpec((1, 33), TownPlacement, _parse_town_placement,
                  "assumed 5 x u32le", False,
                  "may not be a packet body at all"),

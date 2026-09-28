@@ -8,7 +8,8 @@ machine with a captured script behind each C->S opcode:
     Authenticated --(1,8)-->  RosterReady    role list, 1792B
     RosterReady --(1,4)-->    CharacterSelected
     CharacterSelected --(1,143)--> InTown    33 frames, 42464B -- the town entry
-    InTown     --(1,848) / (1,433) / (1,637) / (1,36) / (1,140) / ... keep it
+    RosterReady --(1,848)/(1,433)/(1,637)--> RosterReady, and the same opcodes
+    plus (1,140)/(1,707)/(1,666), (1,36), (1,35) keep InTown at InTown
 
 Every transition above is read off the capture's `DEBUG DISPATCH` lines, not
 guessed.  `(1,2126)` is the loud exception: sent 162 times in one session and
@@ -46,8 +47,11 @@ from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from .. import paths
-from ..game.item import inventory, refresh
-from ..game.town import movement
+from ..game.account import clientsettings
+from ..game.character import roleselection, selection
+from ..game.item import cargo, inventory, refresh, use
+from ..game.shop import buy, redeem
+from ..game.town import charsettings, movement, queststate
 from ..persistence import accounts, characters, schema
 from ..protocol import channelinfo, frame
 from ..protocol.crypto import tiles
@@ -332,6 +336,22 @@ class GameServer:
                     if key == inventory.OPCODE.key() and character is not None:
                         tx += await self._item_move(writer, conn, f.body, character, state)
                         continue
+                    if (key == clientsettings.SAVE_OPCODE.key()
+                            and self._account is not None):
+                        tx += await self._client_settings_save(writer, conn,
+                                                               f.body, state)
+                        continue
+                    if key == use.OPCODE.key() and character is not None:
+                        tx += await self._item_use(writer, conn, f.body,
+                                                   character, state)
+                        continue
+                    if key == buy.OPCODE.key() and character is not None:
+                        tx += await self._npc_buy(writer, conn, f.body,
+                                                  character, state)
+                        continue
+                    if key == redeem.OPCODE.key():
+                        tx += await self._npc_redeem(writer, conn, state)
+                        continue
                     if town is not None:
                         if key == movement.MOVE_OPCODE.key():
                             await self._town_move(conn, f.body, town)
@@ -339,16 +359,24 @@ class GameServer:
                         if key == movement.AREA_OPCODE.key():
                             tx += await self._town_area(writer, conn, f.body, town, state)
                             continue
-                    script = self.script.match(*key)
-                    if script is None:
-                        self.log.warn("GAME", f"conn={conn} no script for {f.opcode}; "
-                                              f"no response")
-                        continue
-                    nth = cursors.get(key, 0)
-                    cursors[key] = nth + 1
-                    run = script.run(nth)
-                    if key == movement.ENTRY_OPCODE.key() and character is not None:
-                        run = self._town_entry(run, character)
+                    if self._db is not None and selection.handles(key):
+                        # The roster/town acks: constants, no state change --
+                        # `game.character.selection` has the evidence.
+                        run = self._selection_ack(key, f.body, state)
+                    else:
+                        script = self.script.match(*key)
+                        if script is None:
+                            self.log.warn("GAME", f"conn={conn} no script for "
+                                                  f"{f.opcode}; no response")
+                            continue
+                        nth = cursors.get(key, 0)
+                        cursors[key] = nth + 1
+                        run = script.run(nth)
+                        if (key == movement.ENTRY_OPCODE.key()
+                                and character is not None):
+                            run = self._town_entry(conn, run, character)
+                        elif key == (1, 4) and character is not None:
+                            run = self._selection(conn, run, character)
                     self._log_notes(conn, f, run)
                     sent = nbytes = 0
                     for reply in run.replies:
@@ -385,6 +413,21 @@ class GameServer:
 
     # ------------------------------------------------------------ handlers
 
+    def _selection_ack(self, key: tuple[int, int], body: bytes, state: str) -> Run:
+        """A roster/town ack: one constant frame, the state unchanged.
+
+        `(1,433)`'s note prints how many entries its request carried, so the
+        body is decrypted for the family even though five of the six ignore
+        it.
+        """
+        ack = selection.ack(key, tiles.decrypt_body(tiles.algo_id(key[1]), body))
+        return Run(state=(state, state),
+                   notes=(("INFO", ack.tag, ack.note),),
+                   replies=(Reply(ack.opcode.main, ack.opcode.sub,
+                                  f"tile{tiles.algo_id(ack.opcode.sub)}",
+                                  ack.body, b"", False, 0),))
+
+
     def _select_character(self, plain: bytes) -> int | None:
         """The slot comes first in the decrypted body; the ciphertext's first
         byte is *not* it (that misread picks slot 28 and strands the session)."""
@@ -397,19 +440,91 @@ class GameServer:
             return None
         return summary.character_id
 
-    def _town_entry(self, run: Run, character: int) -> Run:
-        """The `(1,143)` run with its three row-built frames regenerated.
+    def _selection(self, conn: int, run: Run, character: int) -> Run:
+        """The `(1,4)` run with its `(0,173)` push and `(1,4)` body regenerated.
 
-        The capture's copies carry the coordinates of the session that was
-        captured; the reference reads the row as it enters, which is what makes
-        a character that walked first spawn where it walked to.  Everything
-        else in the 33-frame burst is replayed as captured.
+        The push is a pure function of the account's settings row --
+        `u32le(492)` + the row + 8 zero bytes.  The 1296B body is the captured
+        template with its six regions written from the selected row, the
+        account's contracts and the clock (`game.character.roleselection`).
+        The other two frames (`(0,1370)`, `(0,2082)`) are replayed as
+        captured.
+        """
+        if self._account is None:
+            return run
+        summary = characters.by_id(self._db, character)
+        if summary is None:
+            self.log.warn("SELECTION-4",
+                          f"conn={conn} character={character} is not in the "
+                          f"save; replaying the captured body")
+            return run
+        # One `now` for both the body and its line, the way the reference
+        # builds a run in one pass.
+        pick = roleselection.Pick.of(self._db, self._account, summary,
+                                     int(time.time()))
+        built = {roleselection.RUN_AT: (roleselection.OPCODE, pick.body())}
+        lines = {"SELECTION-4": f"conn={{conn}} {pick.note()}"}
+        options = clientsettings.load(self._db, self._account)
+        if options is None:
+            self.log.warn("CLIENT-SETTINGS",
+                          f"conn={conn} account={self._account} has no "
+                          f"account_client_settings row; replaying the captured "
+                          f"push")
+        else:
+            push = clientsettings.push_body(options)
+            built[clientsettings.SELECTION_AT] = (clientsettings.PUSH_OPCODE, push)
+            lines["CLIENT-SETTINGS"] = (
+                f"conn={{conn}} {clientsettings.push_line(options, len(push))}")
+        for at, (opcode, _) in built.items():
+            reply = run.replies[at]
+            if (reply.main, reply.sub) != (opcode.main, opcode.sub):
+                raise ValueError(f"(1,4) frame {at} is ({reply.main},{reply.sub}), "
+                                 f"not {opcode}")
+        return Run(state=run.state,
+                   notes=tuple((level, tag, lines.get(tag, template))
+                               for level, tag, template in run.notes),
+                   replies=tuple(replace(reply, plain=built[i][1], nonce=b"")
+                                 if i in built else reply
+                                 for i, reply in enumerate(run.replies)))
+
+    def _town_entry(self, conn: int, run: Run, character: int) -> Run:
+        """The `(1,143)` run with its seven row-built frames regenerated.
+
+        The capture's copies carry the state of the session that was captured;
+        the reference reads the row as it enters, which is what makes a
+        character that walked first spawn where it walked to, a quickbar the
+        client saved come back (`(0,376)`), and the quest trio at 17/18/19
+        reflect what this character has finished, is doing, and can take on.
+        The notes that describe those frames are rewritten the same way.
+        Everything else in the 33-frame burst is replayed as captured.
         """
         summary = characters.by_id(self._db, character)
         location = movement.Location.of(summary)
         pair = movement.area_pair(location.town, location.area, location.x,
                                   location.y, location.direction)
-        built = {movement.ENTRY_PAIR_AT: pair[0],
+        payload = charsettings.load(self._db, character)
+        if payload is None:
+            self.log.warn("TOWN-QUICKSLOT",
+                          f"conn={conn} character={character} has no "
+                          f"character_quickslots row; pushing defaults")
+            payload = charsettings.default_payload()
+        finished = queststate.finished_ids(self._db, character)
+        in_progress = queststate.in_progress(self._db, character)
+        accepted = queststate.accepted_count(self._db, character)
+        active = [q for q, _ in in_progress]
+        available = queststate.available_ids(queststate.Seeker.of(summary),
+                                             finished, active)
+        nodes = queststate.worldmap_nodes(summary.town_id)
+        built = {charsettings.ENTRY_AT: (charsettings.PUSH_OPCODE,
+                                         charsettings.push_body(payload)),
+                 queststate.FINISHED_AT: (queststate.FINISHED_OPCODE,
+                                          queststate.finished_body(finished)),
+                 queststate.IN_PROGRESS_AT: (queststate.IN_PROGRESS_OPCODE,
+                                             queststate.in_progress_body(in_progress)),
+                 queststate.AVAILABLE_AT: (queststate.AVAILABLE_OPCODE,
+                                           queststate.available_body(summary.level,
+                                                                     available)),
+                 movement.ENTRY_PAIR_AT: pair[0],
                  movement.ENTRY_PAIR_AT + 1: pair[1],
                  movement.ENTRY_SPAWN_AT: (movement.SPAWN_OPCODE,
                                            movement.spawn_body(location))}
@@ -418,9 +533,17 @@ class GameServer:
             if (reply.main, reply.sub) != (opcode.main, opcode.sub):
                 raise ValueError(f"(1,143) frame {at} is ({reply.main},{reply.sub}), "
                                  f"not {opcode}")
-        spawn = f"conn={{conn}} {location.describe()} key={summary.slot_index + 1}"
+        quests = queststate.quests_line(summary.town_id, nodes, len(available),
+                                        active, len(finished), summary.level)
+        lines = {
+            "TOWN-SPAWN":
+                f"conn={{conn}} {location.describe()} key={summary.slot_index + 1}",
+            "TOWN-QUEST-STATE":
+                f"conn={{conn}} {queststate.state_line(finished, in_progress, accepted)}",
+            "TOWN-QUESTS": f"conn={{conn}} {quests}",
+        }
         return Run(state=run.state,
-                   notes=tuple((level, tag, spawn if tag == "TOWN-SPAWN" else template)
+                   notes=tuple((level, tag, lines.get(tag, template))
                                for level, tag, template in run.notes),
                    replies=tuple(replace(reply, plain=built[i][1], nonce=b"")
                                  if i in built else reply
@@ -491,6 +614,9 @@ class GameServer:
         request = inventory.MoveRequest.parse(plain)
         self.log.info("ITEM-MOVE-19", f"conn={conn} {request.describe()} "
                                       f"plain={_dump_plain(plain)}")
+        if cargo.is_cargo(request):
+            return await self._cargo_move(writer, conn, request, character,
+                                          state)
         outcome = inventory.execute(self._db, character, request)
         frames = [(inventory.OPCODE, request.ack(ok=outcome.ok, code=outcome.code))]
         note = outcome.note
@@ -521,6 +647,156 @@ class GameServer:
         self.log.debug("DISPATCH", f"conn={conn} {inventory.OPCODE} -> {sent} frame(s) "
                                    f"{nbytes}B state={state}->{state}")
         return nbytes
+
+    async def _cargo_move(self, writer: asyncio.StreamWriter, conn: int,
+                          request: inventory.MoveRequest, character: int,
+                          state: str) -> int:
+        """`(1,19)` with a list 2 or 12 end: the CARGO-MOVE line, four frames.
+
+        No EQUIPMENT-SPECIFICITY line and no USERINFO resend come with it; the
+        first `(0,14)` is the emptied source, the second the moved row.  The
+        refusals have no sample -- `game.item.cargo` says which and why they
+        answer nothing.
+        """
+        outcome = cargo.execute(self._db, self._account, character, request)
+        if not outcome.ok:
+            self.log.warn(cargo.TAG, f"conn={conn} {request.describe()} "
+                                     f"refused: {outcome.reason}; not stored")
+            return 0
+        self.log.info(cargo.TAG, cargo.note_line(conn, self._account, character,
+                                                 request))
+        sent = nbytes = 0
+        for opcode, plain_body in cargo.frames(request, outcome):
+            wire = self._encode_generated(opcode, plain_body)
+            await sleep_gap(self.write_gap)
+            writer.write(wire)
+            await writer.drain()
+            sent += 1
+            nbytes += len(wire)
+            self.log.packet(conn, frame.Link.GAME_S2C, wire, from_client=False)
+        self.log.debug("DISPATCH", f"conn={conn} {inventory.OPCODE} -> {sent} "
+                                   f"frame(s) {nbytes}B state={state}->{state}")
+        return nbytes
+
+    async def _client_settings_save(self, writer: asyncio.StreamWriter, conn: int,
+                                    body: bytes, state: str) -> int:
+        """`(1,197)`: store the client's settings blob, answer `(0,343)` 8B.
+
+        The reply was invisible until 09-27: every `(1,197)` before that
+        login's dump sat outside a packet-dump window, and the reference's
+        `saved C1/197 492B` line says nothing about a reply.  The dump shows
+        one frame, `02 00 02 00 00 00 00 00`, and a DISPATCH line.
+        """
+        plain = tiles.decrypt_body(tiles.algo_id(clientsettings.SAVE_OPCODE.sub),
+                                   body)
+        options = clientsettings.parse_save(plain)
+        if options is None:
+            self.log.warn("CLIENT-SETTINGS",
+                          f"conn={conn} C1/197 body={len(plain)}B is not the "
+                          f"{clientsettings.ROW_SIZE}B blob; not stored "
+                          f"plain={_dump_plain(plain)}")
+            return 0
+        clientsettings.save(self._db, self._account, options)
+        self.log.info("CLIENT-SETTINGS",
+                      f"conn={conn} {clientsettings.save_line(options)}")
+        wire = self._encode_generated(clientsettings.SAVE_REPLY_OPCODE,
+                                      clientsettings.SAVE_REPLY_BODY)
+        await sleep_gap(self.write_gap)
+        writer.write(wire)
+        await writer.drain()
+        self.log.packet(conn, frame.Link.GAME_S2C, wire, from_client=False)
+        self.log.debug("DISPATCH", f"conn={conn} {clientsettings.SAVE_OPCODE} -> "
+                                   f"1 frame(s) {len(wire)}B state={state}->{state}")
+        return len(wire)
+
+    async def _item_use(self, writer: asyncio.StreamWriter, conn: int,
+                        body: bytes, character: int, state: str) -> int:
+        """`(1,44)`: one unit off the stack, three frames back.
+
+        Both refusals -- an address that holds nothing (or another item), and
+        the last unit -- write nothing and answer nothing; `game.item.use`
+        says which is which and why the second one is not guessed.
+        """
+        plain = tiles.decrypt_body(tiles.algo_id(use.OPCODE.sub), body)
+        request = use.UseRequest.parse(plain)
+        self.log.info(use.TAG, request.request_line(conn, plain))
+        outcome = use.execute(self._db, character, request)
+        if not outcome.ok:
+            self.log.warn(use.TAG, f"conn={conn} item {request.item_id} at "
+                                   f"slot {request.slot_index} "
+                                   f"(list={request.list_type}) refused: "
+                                   f"{outcome.reason}; not stored "
+                                   f"plain={_dump_plain(plain)}")
+            return 0
+        self.log.info(use.TAG, request.outcome_line(conn, outcome.before,
+                                                    outcome.after.count))
+        sent = nbytes = 0
+        for opcode, plain_body in use.frames(request, plain, outcome.after):
+            wire = self._encode_generated(opcode, plain_body)
+            await sleep_gap(self.write_gap)
+            writer.write(wire)
+            await writer.drain()
+            sent += 1
+            nbytes += len(wire)
+            self.log.packet(conn, frame.Link.GAME_S2C, wire, from_client=False)
+        self.log.debug("DISPATCH", f"conn={conn} {use.OPCODE} -> {sent} frame(s) "
+                                   f"{nbytes}B state={state}->{state}")
+        return nbytes
+
+    async def _npc_buy(self, writer: asyncio.StreamWriter, conn: int,
+                       body: bytes, character: int, state: str) -> int:
+        """`(1,21)`: charge the gold/materials, land the item, answer.
+
+        Two INFO lines under the tag, the request then the outcome, both the
+        reference's own wording.  A refusal writes nothing and answers
+        nothing; `game.shop.buy` says which and why.  So does a body of the
+        wrong size: the reference's own line for one is `rejected=malformed
+        request error=250`, with nothing built after it (09-25 19:39:31/42/49).
+        """
+        try:
+            plain = tiles.decrypt_body(tiles.algo_id(buy.OPCODE.sub), body)
+            request = buy.BuyRequest.parse(plain)
+        except ValueError:
+            self.log.info(buy.TAG,
+                          f"conn={conn} rejected=malformed request error=250")
+            return 0
+        self.log.info(buy.TAG, request.request_line(conn))
+        outcome = buy.execute(self._db, self._account, character, request)
+        if not outcome.ok:
+            self.log.warn(buy.TAG, f"conn={conn} shop={request.shop_id} "
+                                   f"item={request.item_id} refused: "
+                                   f"{outcome.reason}; not stored")
+            return 0
+        self.log.info(buy.TAG, buy.outcome_line(conn, request, outcome))
+        sent = nbytes = 0
+        for opcode, plain_body in buy.frames(outcome):
+            wire = self._encode_generated(opcode, plain_body)
+            await sleep_gap(self.write_gap)
+            writer.write(wire)
+            await writer.drain()
+            sent += 1
+            nbytes += len(wire)
+            self.log.packet(conn, frame.Link.GAME_S2C, wire, from_client=False)
+        self.log.debug("DISPATCH", f"conn={conn} {buy.OPCODE} -> {sent} frame(s) "
+                                   f"{nbytes}B state={state}->{state}")
+        return nbytes
+
+    async def _npc_redeem(self, writer: asyncio.StreamWriter, conn: int,
+                          state: str) -> int:
+        """`(1,309)`: the buyback list, empty because the reference's is.
+
+        No state is read and no body examined -- the reference's 129 lines all
+        say the storage behind this was never implemented.
+        """
+        self.log.info(redeem.TAG, f"conn={conn} {redeem.NOTE}")
+        wire = self._encode_generated(redeem.REPLY_OPCODE, redeem.REPLY_BODY)
+        await sleep_gap(self.write_gap)
+        writer.write(wire)
+        await writer.drain()
+        self.log.packet(conn, frame.Link.GAME_S2C, wire, from_client=False)
+        self.log.debug("DISPATCH", f"conn={conn} {redeem.OPCODE} -> "
+                                   f"1 frame(s) {len(wire)}B state={state}->{state}")
+        return len(wire)
 
     # ------------------------------------------------------------- sending
 

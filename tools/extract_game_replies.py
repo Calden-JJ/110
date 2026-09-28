@@ -38,8 +38,19 @@ corpus *did* write down, and opcode and declared length must agree too.  Any
 disagreement is an error, not a silently rewritten script.
 
     python tools/extract_game_replies.py             # report
-    python tools/extract_game_replies.py --json      # write data/game/replies.json
     python tools/extract_game_replies.py --json --completion Logs/reference-replay-20260927.log
+                                                     #  -> data/game/replies.json        (169511B)
+                                                     #   + data/game/selection4.bin      (1296B)
+
+**Always pass `--completion` when writing `--json`.**  Without it the four
+truncated bodies fall back to "prefix + missing count" and the file shrinks to
+146630B *without any error*, quietly gutting the `(0,2)` frames the M2.3
+diff is built on.  Check `git status data/game/` after a run.
+
+`--json` also writes `selection4.bin`, the `(1,4)` run's own 1296B body: it is
+the template `game.character.roleselection` ships as a constant and rewrites
+the six live regions of, so it has to come from the same corpus, not from a
+hand copy that could drift.
 """
 from __future__ import annotations
 
@@ -61,8 +72,29 @@ from uslocalserver.protocol.crypto import tiles  # noqa: E402
 import probe_game_session as P  # noqa: E402
 
 OUT = paths.DATA_DIR / "game" / "replies.json"
+SELECTION4 = paths.DATA_DIR / "game" / "selection4.bin"
+SELECTION4_SIZE = 1296
 CHANNELINFO = (0, 1)
 HDR = frame.header_len(frame.Link.GAME_S2C)
+
+
+def selection4_body(scripts) -> bytes:
+    """The 1296B body of the `(1,4)` run's own `(1,4)` reply.
+
+    The answer's opcode names the body, so the tool does not carry the index
+    `roleselection.RUN_AT` as well.
+    """
+    for s in scripts:
+        if (s["request_main"], s["request_sub"]) != (1, 4):
+            continue
+        for p in s["runs"][0]["replies"]:
+            plain = plaintext_of(p["main"], p["sub"], p["body"])
+            if (p["main"], p["sub"]) == (1, 4) and plain is not None:
+                if len(plain) != SELECTION4_SIZE:
+                    raise SystemExit(f"the (1,4) body is {len(plain)}B, "
+                                     f"expected {SELECTION4_SIZE}")
+                return plain
+    raise SystemExit("the corpus has no (1,4) reply body")
 
 
 def transform_of(main: int, sub: int) -> str:
@@ -383,6 +415,9 @@ def main(argv: list[str]) -> int:
         OUT.parent.mkdir(parents=True, exist_ok=True)
         OUT.write_text(json.dumps(doc, indent=1), encoding="utf-8")
         print(f"\nwrote {OUT.relative_to(paths.REPO_ROOT)} ({OUT.stat().st_size}B)")
+        blob = selection4_body(scripts)
+        SELECTION4.write_bytes(blob)
+        print(f"wrote {SELECTION4.relative_to(paths.REPO_ROOT)} ({len(blob)}B)")
     return 0
 
 

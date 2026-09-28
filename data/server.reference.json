@@ -1,0 +1,143 @@
+{
+  "totalWar": {
+    "weeklyEntryLimitEnabled": false,
+    "weeklyRewardLimitEnabled": false,
+    "equipmentRewardMinimum": 2,
+    "equipmentRewardMaximum": 5
+  },
+  // USLocalServer 服务端配置。允许 // 注释和尾随逗号。
+  //
+  // **这个文件必须是完整的。** 省略某个键<b>不会</b>回落到代码里写的默认值——反序列化
+  // 走的是源生成路径，不跑属性初始化器，省掉 "channelPort" 得到的是 0 而不是 7001。
+  // 好消息是不会带病运行：启动时的校验会直接报错（"channelPort 0 must be in 1..65535"）。
+  // 要精简就整段删（例如整个 "diagnostics" 对象），别删对象里的单个键。
+  // 用例：ConfigurationTests.RejectsAConfigFileThatOmitsKeysInsteadOfSilentlyZeroingThem。
+  //
+  // 三种地址必须分开理解：
+  //   bindAddress      进程绑定的本地网卡地址；0.0.0.0 表示所有网卡。
+  //   advertiseAddress 频道服告诉客户端去连的 IPv4；留空则自动探测私有地址。
+  //   登录器入口        由用户在登录器界面填写，不在本文件里。
+  //
+  // 跨电脑联机时 advertiseAddress 不能是 127.0.0.1，否则另一台电脑的客户端会
+  // 连回它自己。留空自动探测会跳过回环与链路本地地址。
+  "bindAddress": "0.0.0.0",
+  // 已验证拓扑广播的是本机局域网 IPv4，不是回环地址。
+  "advertiseAddress": "192.168.2.226",
+
+  // 频道服入口端口。登录器默认填 7001。
+  "channelPort": 7001,
+
+  // LOGIN_OK body 里回报给客户端的端口。服务端不监听它。
+  "loginOkPort": 7200,
+
+  // 频道拓扑镜像 2026-09-01 之前能进游戏的那份 MySQL 拓扑，逐字段对齐。
+  //
+  // 服务器名不是自由取值：CHANNEL_ACK 里的这个名字是客户端把端点挂到脚本
+  // [server] N 模板上的键。名字对不上时客户端画得出服务器行却没有端点，点
+  // “Connect to Server”不会发起任何连接。已验证取值只有
+  // 存档 0 -> "cain"（协议服务器号 1）、存档 2 -> "siroco"（协议服务器号 3）。
+  // 早期这里默认 "us110"，是配 C# 时新造的值，从未在客户端上验证过。
+  //
+  // wireName 留空会生成 #ch.{channelNo}。这个 # 前缀是必需的：频道脚本与
+  // CHANNEL_ACK 共用同一个名字，格式不符会让客户端把频道模板和端点对不上。
+  "channelServers": [
+    {
+      // 存档拓扑行键，不是协议里的服务器号。
+      "serverId": 0,
+      "wireName": "cain",
+      "displayName": "Cain",
+      "maxUsersPerChannel": 600,
+      "channels": [
+        { "channelNo": 1,  "gamePort": 10011, "wireName": "#ch.1" },
+        { "channelNo": 6,  "gamePort": 10012, "wireName": "#ch.6" },
+        { "channelNo": 10, "gamePort": 10013, "wireName": "#ch.10" },
+        { "channelNo": 84, "gamePort": 10019, "wireName": "#ch.84" },
+        { "channelNo": 91, "gamePort": 10020, "wireName": "#ch.91" },
+        { "channelNo": 82, "gamePort": 10021, "wireName": "#ch.82" }
+      ]
+    },
+    {
+      // Inae 路线。脚本地牢类型 111 已确认，但运行期频道类型枚举未验证，
+      // 真有客户端进这三个频道时进城流程会直接抛异常而不是拿脚本值凑数。
+      // 这里保留它是因为已验证拓扑广播的就是两台服务器。
+      "serverId": 2,
+      "wireName": "siroco",
+      "displayName": "Siroco",
+      "maxUsersPerChannel": 600,
+      "channels": [
+        { "channelNo": 30, "gamePort": 10014, "wireName": "#ch.30" },
+        { "channelNo": 31, "gamePort": 10015, "wireName": "#ch.31" },
+        { "channelNo": 32, "gamePort": 10016, "wireName": "#ch.32" }
+      ]
+    }
+  ],
+
+  "storage": {
+    // 留空则使用服务端 EXE 所在目录，存档与 Logs 放在程序旁边。
+    // 相对路径也以 EXE 目录为基准；绝对路径可指定独立测试库。
+    "dataDirectory": "",
+    "databaseFile": "uslocalserver.db",
+    "busyTimeoutMilliseconds": 3000
+  },
+
+  // 出包节流：同一条连接上两次写出之间的最小间隔。
+  //
+  // 这不是性能调优项，是协议要求。关闭 Nagle 只保证服务端不合并发送，管不住
+  // 接收端把连续到达的字节攒进同一个 recv()；客户端按流解析，多个 S2C 落在
+  // 同一次读里会被放弃。取值来自参考实现，不要为了“快一点”调到 0：
+  //   频道 12ms —— 实机抓包里三个 ACK 的 burst 间距是 8.3ms 与 19.5ms。粘包时
+  //                客户端能画出服务器行却拿不到端点，表现为点“Connect to
+  //                Server”后黑屏一下退回选服界面。
+  //   游戏  5ms —— 避免客户端 trace formatter 批量解析时 state-machine 越界，
+  //                那正是 (1,217) 溢出上报的来源。
+  "pacing": {
+    "channelWriteGapMilliseconds": 12,
+    "gameWriteGapMilliseconds": 5
+  },
+
+  // 诊断与实验开关。
+  //
+  // **这里只放还没有答案的东西。** 已经有答案的行为一律固化在代码里，不做成开关——
+  // 否则每次 publish（会用本文件覆盖 dist 里那份）之后都要重新想"这次该开哪几个"。
+  //
+  // 2026-09-04 按这条规则删掉了五个 experimentalSelfStats* 开关：
+  //   进城的 (0,2) 子类型 1（玩家数据：最大生命/魔法、攻防抗性速度、累计经验）现在
+  //   **无条件发送**，取值按角色的职业/等级/转职分支从客户端自己的 .chr 成长表算出来。
+  //   那两个受保护 u32 已确认是死存储；状态块尾部那张 {id, value} 表已实机证明不是
+  //   面板的数据源，因此恒发全零块。要重做那个实验，用
+  //   TownSelfStatsStateBlock.ProbeSlots()（代码还在，带测试），不要再走配置。
+  //
+  // 一次实机发没发、发了什么，看日志这两行（截图分不清"发了没崩"和"根本没发"）：
+  //   DISPATCH (1,143) -> 9 frame(s)
+  //   TOWN-SELF-DATA  job=0 level=1 exp=0 hp=520 mp=480 str=101 vit=101 int=98 spr=98
+  // TOWN-SELF-DATA 的单位就是面板显示值，可以逐项和截图对。
+  "diagnostics": {
+    // 留空则使用数据目录下的 Logs。
+    "logDirectory": "",
+
+    // 协议迁移期保持开启：定位“停在哪个操作码”需要方向、主/子操作码、长度和
+    // 会话前后状态。流程稳定后可关闭以减少磁盘写入。
+    "packetHexLog": true,
+    "packetHexMaxBytes": 256,
+
+    // (1,4) 角色选择响应里的**账号权限**（付费项）列表。
+    //
+    // 打开时发类型 5 与 12：客户端对这两个类型有额外动作（0x435AB30 起的
+    // cmp al,5 / cmp al,0xC 之后会去设一个管理器开关），别的类型只是存下来。
+    // **那个开关是干什么的没有证据**——setter 后面那一跳落在 Themida 的运行期桩上，
+    // 静态跟不下去。所以它还是个开关：万一反而弄坏了什么，改成 false 即可。
+    //
+    // **它不是点券商城那句 "Account Privilege does not meet CERA Shop requirements"
+    // 的开关。** 2026-09-06 发了 5 与 12 之后商城照旧被挡；真正挡住的是 (0,53) 的
+    // 第三个 u32，见 CurrencyBodies.BuildAccountCera。
+    //
+    // 看日志：SELECTION-4 ... cera=5100000 privileges=5/12
+    "accountPrivilege": true,
+
+    // (0,29) START_MAP 末尾那个队伍槽位。
+    //
+    // 255 使用 110 的无队伍入口（0x43B26E5），普通单人游戏不发送创建队伍包。
+    // 0 仅用于诊断旧的单人队伍路径；该临时队伍在回城时解散。
+    "dungeonPartySlot": 255
+  }
+}

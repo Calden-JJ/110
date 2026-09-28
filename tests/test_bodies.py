@@ -9,9 +9,11 @@ and the tests are organised around that:
     acceptance demo -- demo ① of the plan file.
   * `(1,16)` and `(1,33)` are **declared**.  The reference server names their
     fields in its own `INFO DUNGEON-ENTER-16 ... request=SelectDungeonRequest
-    { DungeonId = 7114, ... }` lines, but no `hex=` or `plain=` dump of either
-    body has ever been logged, so the widths are a reading of the field types.
-    The *values* used below are real; the bytes are not, and the test says so.
+    { DungeonId = 7114, ... }` lines; the widths are a reading of the field
+    types, and neither reading has been confirmed.  The *values* used below
+    are real; the bytes are not, and the test says so.  `(1,16)` has since
+    been captured once -- 32 bytes, so the five-u32 reading is at best half
+    the story -- and `(1,33)` has never been captured at all.
 """
 from __future__ import annotations
 
@@ -123,18 +125,24 @@ class DeclaredLayoutsAreGuarded(unittest.TestCase):
             list(TWO_DECLARED),
         )
 
-    def test_no_capture_exists_for_either_declared_body(self):
+    def test_neither_declared_body_has_been_captured_in_its_declared_shape(self):
         # The guard is only honest while this holds.  221 C->S game packets
-        # carry a hex dump all day; neither opcode is among them, and no
-        # 20-byte body appears anywhere.  If a capture ever shows up this
-        # fails, and the entry gets promoted to verified instead.
-        twenty = 0
+        # carry a hex dump all day and no 20-byte body is among them; the one
+        # `(1,16)` capture there is (32 bytes, 09-27) does not match the
+        # reading either.  If a 20-byte one ever shows up this fails, and the
+        # entry gets promoted to verified instead.
+        seen = {}
+        twenty = []
         for path in paths.server_logs():
             for rec in logs.iter_packets(path):
-                self.assertNotIn(rec.opcode, TWO_DECLARED)
+                if rec.opcode in TWO_DECLARED:
+                    seen.setdefault(rec.opcode, []).append(rec.body_len)
                 if rec.body_len == 20:
-                    twenty += 1
-        self.assertEqual(twenty, 0)
+                    twenty.append((path.name, rec.line_no, rec.opcode))
+        self.assertEqual(twenty, [])
+        self.assertNotIn((1, 33), seen)
+        self.assertEqual(seen[(1, 16)], [32])
+        self.assertNotIn(20, seen[(1, 16)])
 
     def test_a_declared_body_is_refused_unless_asked_for(self):
         for opcode in TWO_DECLARED:

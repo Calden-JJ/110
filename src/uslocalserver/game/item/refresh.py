@@ -40,6 +40,7 @@ from __future__ import annotations
 import binascii
 import sqlite3
 import struct
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 from ...persistence import items
@@ -49,8 +50,26 @@ from . import giant
 from .inventory import MoveRequest
 
 EQUIPMENT_LIST = 3
-SLOT_BODY_SIZE = 168
 EMPTY_ITEM_ID = 0xFFFFFFFF
+
+#: One `(0,14)` body is `u8 list | u8 record count | u8 00`, then that many
+#: 165B record blocks, zero-padded to a multiple of 8 -- so the one-record
+#: form is 168B, the two-record 336B (both measured on the 09-27 buys) and
+#: the slotted bag frame with nine records is 1488B.  One block::
+#:
+#:     [0:2]     u16 le slot index
+#:     [2:6]     u32 le item id (`FF FF FF FF` when the slot is empty)
+#:     [6:10]    u32 le instance_value or count
+#:     [10]      u8 reinforcement, [11] u8 durability
+#:     [14:18]   u32 le enchant card id
+#:     [19]      u8 amplify type, [20] u8 amplify value
+#:     [140:142] u16 le growth experience
+#:
+#: The far fields are the ones the M2.2 oracle pinned to worn rows; the
+#: durability byte and the multi-record frames come from the 09-27 buys
+#: (item 29127's fresh row carried 48, its catalogue's own durability).
+BLOCK_SIZE = 165
+SLOT_BODY_SIZE = 3 + BLOCK_SIZE
 
 USERINFO_HEADER_SIZE = 216
 RECORD_SIZE = 31
@@ -87,6 +106,12 @@ TAIL = bytes.fromhex(
 #: `(0,2432)`: `65` then zeros, 208B.  One unique payload over every send --
 #: town entry and each accepted cross move alike.
 STATE_BODY = b"\x65" + bytes(207)
+
+#: `(0,1361)` has a second, 16B form: `32` then 15 zeros.  It is the last
+#: frame of every *write* run in the 09-27 session -- item use, NPC buy, cargo
+#: move, cera buy -- where the 96B `BOARD_BODY` below is what a town entry and
+#: an equipment cross-move carry.
+BOARD_AFTER_WRITE_BODY = b"\x32" + bytes(15)
 
 #: `(0,1361)`: 96B, one unique payload over every send.
 BOARD_BODY = bytes.fromhex(
@@ -138,6 +163,62 @@ def version(records: bytes) -> int:
     return binascii.crc_hqx(records, 0xFFFF)
 
 
+@dataclass(frozen=True, slots=True)
+class SlotRecord:
+    """One `(0,14)` record block: an address plus the fields it carries.
+
+    `value` is the number the client shows: the instance value when the row
+    has one, else the count.  Measured on both ends of the 09-27 cargo move (a
+    `count=4, instance_value=0` row went out as 4), on both item-use frames
+    (3->2 and 5->4) and on the worn rows of the M2.2 oracle.
+    """
+
+    slot_index: int
+    item_id: int
+    value: int
+    reinforcement: int = 0
+    durability: int = 0
+    enchant_card_id: int = 0
+    amplify_type: int = 0
+    amplify_value: int = 0
+    growth_experience: int = 0
+
+    @classmethod
+    def of_stack(cls, stack: items.ItemStack | None,
+                 slot_index: int | None = None) -> "SlotRecord":
+        if stack is None:
+            return cls(slot_index=0 if slot_index is None else slot_index,
+                       item_id=EMPTY_ITEM_ID, value=0)
+        return cls(
+            slot_index=stack.slot_index if slot_index is None else slot_index,
+            item_id=stack.item_id, value=stack.instance_value or stack.count,
+            reinforcement=stack.reinforcement, durability=stack.durability,
+            enchant_card_id=stack.enchant_card_id,
+            amplify_type=stack.amplify_type, amplify_value=stack.amplify_value,
+            growth_experience=stack.growth_experience)
+
+    def block(self) -> bytes:
+        out = bytearray(BLOCK_SIZE)
+        struct.pack_into("<H", out, 0, self.slot_index)
+        struct.pack_into("<I", out, 2, self.item_id)
+        struct.pack_into("<I", out, 6, self.value)
+        out[10] = self.reinforcement
+        out[11] = self.durability
+        struct.pack_into("<I", out, 14, self.enchant_card_id)
+        out[19] = self.amplify_type
+        out[20] = self.amplify_value
+        struct.pack_into("<H", out, 140, self.growth_experience)
+        return bytes(out)
+
+
+def slot_frame(list_type: int, records: Sequence[SlotRecord]) -> bytes:
+    """A `(0,14)` body: the header, one block per record, zero-pad to 8."""
+    out = bytearray([list_type, len(records), 0])
+    for record in records:
+        out += record.block()
+    return bytes(out) + bytes(-len(out) % 8)
+
+
 def slot_body(stack: items.ItemStack | None, list_type: int,
               slot_index: int) -> bytes:
     """One `(0,14)` frame: the 168B a slot's post-move state goes out as.
@@ -146,23 +227,7 @@ def slot_body(stack: items.ItemStack | None, list_type: int,
     growth field sits far from the rest (`[143:145]`) with the bytes between
     zero in every capture.
     """
-    body = bytearray(SLOT_BODY_SIZE)
-    body[0] = list_type
-    body[1] = 0x01
-    struct.pack_into(">H", body, 2, slot_index)
-    if stack is None:
-        struct.pack_into("<I", body, 5, EMPTY_ITEM_ID)
-        return bytes(body)
-    struct.pack_into("<I", body, 5, stack.item_id)
-    # A stored 0 goes out as 1: the (3,13) creature item is saved with
-    # `instance_value` 0 and both of the reference's frames for it say 1.
-    struct.pack_into("<I", body, 9, stack.instance_value or 1)
-    struct.pack_into("<I", body, 13, stack.reinforcement)
-    struct.pack_into("<I", body, 17, stack.enchant_card_id)
-    body[22] = stack.amplify_type
-    body[23] = stack.amplify_value
-    struct.pack_into("<H", body, 143, stack.growth_experience)
-    return bytes(body)
+    return slot_frame(list_type, [SlotRecord.of_stack(stack, slot_index)])
 
 
 def userinfo_body(summary: CharacterSummary,

@@ -34,10 +34,12 @@ diffs as `(identical)`, because sizes are all this tool otherwise sees.
 
 Against the capture a correct replay differs in exactly two places, both
 clock readings, and they are worth knowing by heart: CHANNELINFO's field 11
-and CONNECT_ACK's date.  A third pair is waiting in `(1,4)` SELECTION-4 -- two
-u24 counters that the reference moves with the session while a replay keeps
-the capture's -- so `(1,4)` is the first body to suspect the day a real client
-stalls after picking a character.  Anything else is a bug in the rewrite.
+and CONNECT_ACK's date.  A third difference appears once `(1,4)` is generated
+rather than replayed (`game.character.roleselection`, M2.10): its body then
+carries the *replay's* `now`, the account's cera and the live contract
+countdown instead of the capture's, and its `SELECTION-4` line follows the
+body.  That one is expected -- reading it as a regression costs an afternoon.
+Anything else is a bug in the rewrite.
 
 C->S is deliberately not compared: those bytes are the *client's*, the capture
 already prints their plaintext, and a replay sends the capture's own frames.

@@ -93,6 +93,14 @@ def relocate(conn: sqlite3.Connection, stack: ItemStack,
                   stack.list_type, stack.slot_index))
 
 
+def set_count(conn: sqlite3.Connection, stack: ItemStack, count: int,
+              updated_at: int) -> None:
+    conn.execute(f'update "{TABLE}" set count = ?, updated_at = ? '
+                 f"where character_id = ? and list_type = ? and slot_index = ?",
+                 (count, updated_at, stack.character_id, stack.list_type,
+                  stack.slot_index))
+
+
 def insert(conn: sqlite3.Connection, stack: ItemStack) -> None:
     conn.execute(f'insert into "{TABLE}" ({", ".join(COLUMNS)}) '
                  f'values ({", ".join("?" * len(COLUMNS))})',
