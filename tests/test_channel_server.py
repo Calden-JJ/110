@@ -10,7 +10,9 @@ The log is checked too: `tools/diff_packets.py` is what tells M1 apart from
 from __future__ import annotations
 
 import asyncio
+import datetime
 import io
+import re
 import unittest
 
 import _bootstrap  # noqa: F401
@@ -27,24 +29,34 @@ CHANNEL_C2S = (bytes.fromhex("000b2b0000000000000001f2f7f142f7dea0499f6bf6129fe6
 REPLIES = channel.ChannelReplies.load()
 CONNECT_ACK = next(r for r in REPLIES if r.name == "CONNECT_ACK")
 
-#: Wire sizes derived, not pinned: the two zlib bodies are keyed by day and
-#: `replies.json` is refreshed from the day's own reference run, so literals
-#: here would have to be re-edited on every refresh (see the extractor).
-S2C_WIRES = [frame.header_len(frame.Link.CHANNEL_S2C) + len(r.body) for r in REPLIES]
-
 #: CONNECT_ACK's date is the one body byte the server picks for itself: the
 #: reference read `DateTime.Now` (the 09-26 capture says 20260926; a replay of
 #: the same build the next day answered 20260927).  Pin the replay to the day
 #: the capture records, or the byte-for-byte comparison is comparing clocks.
-FROZEN_DAY = CONNECT_ACK.body[4:12].decode("ascii")
+FROZEN_DAY = CONNECT_ACK.plain[4:12].decode("ascii")
 
 
-def _exchange(payloads, *, host="127.0.0.1", write_gap=0.0, today=FROZEN_DAY):
+def _captured_body(r: channel.Reply) -> bytes:
+    """The body the reference would send: re-keyed with the capture's own day.
+
+    Sealing is deterministic, so this is the captured ciphertext byte for byte
+    -- `tests/test_channel_seal.py` checks that against the capture's SHA-256.
+    """
+    return channel.seal(r.plain, FROZEN_DAY) if r.sealed else r.plain
+
+
+S2C_WIRES = [frame.header_len(frame.Link.CHANNEL_S2C) + len(_captured_body(r))
+             for r in REPLIES]
+
+
+def _exchange(payloads, *, host="127.0.0.1", write_gap=0.0, today=FROZEN_DAY,
+              advertise=None):
     """Start the server, send every payload as one write, return what came back."""
     async def run():
         log = channel.Log(stream=io.StringIO())
         server = channel.ChannelServer(host, 0, channel.ChannelReplies.load(), log,
-                                       write_gap=write_gap, today=today)
+                                       write_gap=write_gap, today=today,
+                                       advertise=advertise)
         await server.start()
         port = server.sockets[0].getsockname()[1]
         try:
@@ -84,7 +96,7 @@ class TestChannelExchange(unittest.TestCase):
     def test_replies_are_the_captured_wire_bytes(self):
         got, _ = _exchange(CHANNEL_C2S)
         expect = b"".join(
-            frame.build(frame.Link.CHANNEL_S2C, r.opcode, r.body)
+            frame.build(frame.Link.CHANNEL_S2C, r.opcode, _captured_body(r))
             for r in channel.ChannelReplies.load())
         # the server answers in request order, which is also capture order
         self.assertEqual(got, expect)
@@ -97,7 +109,7 @@ class TestChannelExchange(unittest.TestCase):
         self.assertEqual([(f.opcode.main, f.opcode.sub) for f in got_frames],
                          [(124, 12), (124, 10), (124, 3)])
         self.assertEqual([len(f.body) for f in got_frames],
-                         [len(r.body) for r in REPLIES])
+                         [len(_captured_body(r)) for r in REPLIES])
         self.assertEqual(stream.pending, 0, "trailing bytes after the third reply")
 
     def test_pipelined_requests_are_still_paced(self):
@@ -111,9 +123,20 @@ class TestChannelExchange(unittest.TestCase):
         both ACKs in one `recv()` -- the documented "server row, no endpoint"
         failure.  The deadline form in `pacing.sleep_gap` holds; 5ms is the
         floor that still catches a collapse without flaking on timer granularity.
+
+        The gap is read off the server's own `sent ...` lines, not off the
+        client's clock: the client stamps the first read *after* it returns,
+        so a loop starved by the rest of the suite records it late and reports
+        a collapse the server did not commit (seen under load on 09-28).  Two
+        stamps inside one process can only err wide under starvation -- the
+        second send waits out its deadline after the first line is written.
         """
+        log = channel.Log(stream=io.StringIO())
+        sent = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}) "
+                          r"([+-]\d{2}:\d{2}) INFO\s+CHANNEL\s+conn=\d+ sent (\w+)",
+                          re.M)
+
         async def run():
-            log = channel.Log(stream=io.StringIO())
             server = channel.ChannelServer("127.0.0.1", 0, channel.ChannelReplies.load(), log)
             await server.start()
             port = server.sockets[0].getsockname()[1]
@@ -125,15 +148,17 @@ class TestChannelExchange(unittest.TestCase):
                 writer.write(CHANNEL_C2S[1] + CHANNEL_C2S[2])
                 await writer.drain()
                 await asyncio.wait_for(reader.readexactly(S2C_WIRES[1]), timeout=2.0)
-                t2 = asyncio.get_running_loop().time()
                 await asyncio.wait_for(reader.readexactly(S2C_WIRES[2]), timeout=2.0)
-                gap = asyncio.get_running_loop().time() - t2
                 writer.close()
             finally:
                 server.close()
-            return gap
 
-        gap = asyncio.run(run())
+        asyncio.run(run())
+        stamps = [(datetime.datetime.strptime(f"{a} {b}", "%Y-%m-%d %H:%M:%S.%f %z"),
+                   name) for a, b, name in sent.findall(log._fh.getvalue())]
+        self.assertEqual([name for _ts, name in stamps],
+                         ["CONNECT_ACK", "SCRIPT_ACK", "CHANNEL_ACK"])
+        gap = (stamps[2][0] - stamps[1][0]).total_seconds()
         self.assertGreaterEqual(gap, 0.005, f"SCRIPT_ACK -> CHANNEL_ACK gap collapsed to {gap*1000:.2f}ms")
 
     def test_unknown_opcode_gets_no_reply(self):
@@ -142,22 +167,51 @@ class TestChannelExchange(unittest.TestCase):
         self.assertIn("unknown channel message (0,255)", text)
         self.assertEqual(len(got), S2C_WIRES[0], "only CONNECT_ACK should have come back")
 
-    def test_only_the_connect_ack_date_moves_with_the_clock(self):
-        """The reference reads `DateTime.Now` into CONNECT_ACK's date field; a
-        replay of the same build the next day answered `20260927`.  Everything
-        else in the 36B body is the capture's, byte for byte."""
+    def test_all_three_bodies_follow_the_clock(self):
+        """The day is the key: CONNECT_ACK carries it in the clear and the two
+        big bodies are sealed under it, so a server that crosses midnight must
+        move all three together.  The token in the first body is what the
+        client derives the other two's key from -- a stale pair is garbage."""
         got, _ = _exchange(CHANNEL_C2S, today="20270101")
-        captured = frame.build(frame.Link.CHANNEL_S2C, CONNECT_ACK.opcode, CONNECT_ACK.body)
+        captured = frame.build(frame.Link.CHANNEL_S2C, CONNECT_ACK.opcode, CONNECT_ACK.plain)
         self.assertEqual(got[:15], captured[:15])
         self.assertEqual(got[15:23], b"20270101")   # 11B header + u32le + body offset 4
-        self.assertEqual(got[23:S2C_WIRES[0]], captured[23:])
-        rest = b"".join(frame.build(frame.Link.CHANNEL_S2C, r.opcode, r.body)
-                        for r in REPLIES if r.name != "CONNECT_ACK")
-        self.assertEqual(got[S2C_WIRES[0]:], rest, "only CONNECT_ACK is generated")
+        self.assertEqual(got[23:S2C_WIRES[0]], captured[23:],
+                         "everything but the date is the capture's, byte for byte")
+        self.assertNotEqual(got[S2C_WIRES[0]:],
+                            b"".join(frame.build(frame.Link.CHANNEL_S2C, r.opcode,
+                                                 _captured_body(r))
+                                     for r in REPLIES if r.name != "CONNECT_ACK"),
+                            "the sealed bodies must not be the capture's")
+        stream = frame.FrameStream(frame.Link.CHANNEL_S2C)
+        stream.feed(got)
+        for f, r in zip(stream.frames()[1:], [x for x in REPLIES if x.name != "CONNECT_ACK"]):
+            self.assertTrue(r.sealed)
+            self.assertEqual(channel.unseal(f.body, "20270101"), r.plain,
+                             f"{r.name} does not open under the token's day")
 
     def test_the_default_date_is_the_live_clock(self):
         from datetime import date
         self.assertEqual(channel._today(), date.today().strftime("%Y%m%d"))
+
+    def test_the_directory_can_be_re_addressed_for_this_host(self):
+        """The capture names the machine it was taken on; a server on another
+        address must re-stamp it or the client dials the old box."""
+        got, _ = _exchange(CHANNEL_C2S, advertise="10.0.0.7")
+        stream = frame.FrameStream(frame.Link.CHANNEL_S2C)
+        stream.feed(got)
+        directory = next(f for f in stream.frames() if f.opcode.sub == 3)
+        plain = channel.unseal(directory.body, FROZEN_DAY)
+        self.assertIn(b"10.0.0.7".ljust(16, b"\0"), plain)
+        self.assertNotIn(b"192.168.2.226", plain)
+        self.assertEqual(plain, channel.with_advertise(
+            next(r for r in REPLIES if r.name == "CHANNEL_ACK").plain, "10.0.0.7"))
+
+    def test_without_an_address_the_capture_is_replayed_verbatim(self):
+        got, _ = _exchange(CHANNEL_C2S)
+        self.assertEqual(got, b"".join(
+            frame.build(frame.Link.CHANNEL_S2C, r.opcode, _captured_body(r))
+            for r in REPLIES))
 
 
 class TestChannelLog(unittest.TestCase):

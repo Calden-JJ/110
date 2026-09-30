@@ -105,7 +105,13 @@ CONNECT_ACK = next(r for r in REPLIES if r.name == "CONNECT_ACK")
 
 #: CONNECT_ACK's date is the one body byte a server picks for itself, so both
 #: sides of a byte-for-byte comparison must pin the same day.
-FROZEN_DAY = CONNECT_ACK.body[4:12].decode("ascii")
+FROZEN_DAY = CONNECT_ACK.plain[4:12].decode("ascii")
+
+
+def _captured_body(r: channel.Reply) -> bytes:
+    """The wire body the reference sent: the stored plaintext re-sealed under
+    the capture's own day, which is what `probe_replies` unseals."""
+    return channel.seal(r.plain, FROZEN_DAY) if r.sealed else r.plain
 
 
 def _probe_frames() -> list[bytes]:
@@ -180,9 +186,10 @@ class TestProbeReplies(unittest.TestCase):
         self.assertEqual(sorted(by_name),
                          ["CHANNEL_ACK", "CONNECT_ACK", "SCRIPT_ACK"])
         for reply in REPLIES:
-            self.assertEqual(by_name[reply.name].body, reply.body, reply.name)
+            self.assertEqual(by_name[reply.name].plain, reply.plain, reply.name)
+            self.assertEqual(by_name[reply.name].sealed, reply.sealed, reply.name)
             self.assertEqual(by_name[reply.name].opcode, reply.opcode, reply.name)
-        self.assertIn("handed over CONNECT_ACK", buf.getvalue())
+        self.assertIn(f"handed over day={FROZEN_DAY} CONNECT_ACK 36B", buf.getvalue())
 
     def test_the_capture_serves_the_client_like_the_reference_did(self):
         """The bytes the client gets from the captured replies must equal the
@@ -209,7 +216,7 @@ class TestProbeReplies(unittest.TestCase):
 
         got, want = asyncio.run(run())
         self.assertEqual(len(want), sum(frame.header_len(frame.Link.CHANNEL_S2C)
-                                        + len(r.body) for r in REPLIES))
+                                        + len(_captured_body(r)) for r in REPLIES))
         self.assertEqual(got, want)
 
     def test_a_dead_reference_is_a_warning_not_a_crash(self):

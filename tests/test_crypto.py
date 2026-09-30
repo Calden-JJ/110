@@ -22,6 +22,7 @@ import unittest
 from collections import Counter
 
 import _bootstrap  # noqa: F401
+import _corpus
 
 from uslocalserver import paths
 from uslocalserver.protocol import crypto
@@ -108,7 +109,7 @@ class ZeroBlockVectors(unittest.TestCase):
     def test_the_zero_vectors_are_in_the_capture(self):
         # Otherwise the constants above are just strings agreeing with a
         # function that could have been written to return them.
-        text = (paths.LOGS_DIR / "server-20260926.log").read_text(
+        text = _corpus.require().read_text(
             encoding="utf-8-sig", errors="replace")
         self.assertIn(C2S_ZERO, text)
         self.assertIn(S2C_ZERO, text)
@@ -149,12 +150,18 @@ class SelfTest(unittest.TestCase):
 
 
 class VerifyGoldStillRuns(unittest.TestCase):
-    """The untouched script is the regression; these pin its verdict."""
+    """The untouched script is the regression; these pin its verdict.
+
+    `verify_gold.py` decrypts the 0.3.6 capture with each of the 14 tiles, so
+    without that log it has nothing to say -- skip rather than assert on an
+    empty summary.
+    """
 
     @classmethod
     def setUpClass(cls):
         if not VERIFY_GOLD.is_file():
             raise unittest.SkipTest(f"no {VERIFY_GOLD}")
+        _corpus.require()
         cls.proc = subprocess.run([sys.executable, str(VERIFY_GOLD)],
                                   capture_output=True, text=True)
 

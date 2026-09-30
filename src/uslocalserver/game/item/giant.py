@@ -207,6 +207,48 @@ def tail(worn: list[items.ItemStack], levels: dict[int, int],
     return out + bytes(19) + b"\xff\x00\x00" + bytes([level]) + b"\x00"
 
 
+def appearance_note(worn: list[items.ItemStack],
+                    levels: dict[int, int]) -> str:
+    """The reference's `TOWN-APPEARANCE` prose -- one entry per worn row.
+
+    Both markers are `item_block`'s own branches read back: an avatar row's
+    block takes the flat 146B form and never reaches the value field, so its
+    value prints 0 whatever the row holds, and a row whose item is one of the
+    character's creatures is the one that gets the 5B creature pad.
+    """
+    parts = []
+    for stack in worn:
+        if stack.avatar_sockets:
+            value, mark = 0, " avatar"
+        else:
+            value = stack.instance_value or stack.count or 0
+            mark = " creature" if stack.item_id in levels else ""
+        parts.append(f"slot={stack.slot_index} id={stack.item_id} "
+                     f"value={value}{mark}")
+    return ", ".join(parts)
+
+
+def self_data_note(summary: CharacterSummary) -> str:
+    """The reference's `TOWN-SELF-DATA` prose -- the character block's stats.
+
+    The wire carries them at ten times this scale and the line prints the
+    tenth: 69100 on XRenYing's `hp_max` reads `hp=6910`, 39800 `hp=3980` on
+    LRouDao's, on every field.
+    """
+    job = str(summary.class_id)
+
+    def tenth(field: str) -> int:
+        return stat_wire(job, field, summary.level, summary.grow_type) // 10
+
+    return (f"job={summary.class_id} level={summary.level} "
+            f"exp={summary.experience} hp={tenth('hp_max')} "
+            f"mp={tenth('mp_max')} str={tenth('phys_atk')} "
+            f"vit={tenth('phys_def')} int={tenth('mag_atk')} "
+            f"spr={tenth('mag_def')} "
+            f"chr='{load('character_stats')['jobs'][job]['chr']}' "
+            f"grow={summary.grow_type}/{summary.sub_grow_type}")
+
+
 def body(summary: CharacterSummary, worn: list[items.ItemStack],
          levels: dict[int, int], rune_ids: dict[int, int],
          version: int) -> bytes:

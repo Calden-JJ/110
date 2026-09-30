@@ -100,6 +100,31 @@ _C2_SEED_RESTORE = (
     "insert into character_items (rowid,character_id,list_type,slot_index,item_id,count,"
     "durability,instance_value,updated_at) values (1221,2,43,80,10617119,1,0,0,1790503228)",)
 
+#: The eleven list-3 rows carrying reinforcement 13 + amplify 3/7 (char1's
+#: "mythic" set): slots and their per-row extras, for exact undos.
+_MYTHIC = (12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25)
+_MYTHIC_ENCH = {12: 10349087, 15: 10349108, 16: 10349073, 17: 10349071,
+                18: 10349105, 19: 10349042, 20: 10349054, 21: 10349110,
+                22: 10349080, 23: 10349078, 25: 10349062}
+_MYTHIC_GROWTH = {12: 2808799, 15: 228534, 16: 29269, 17: 69194, 18: 1222000,
+                  19: 9769, 20: 3767, 21: 17305, 23: 407, 25: 528}
+
+#: (slot, avatar_sockets hex) for the eleven socketed rows; the undo restores
+#: the exact 35-byte blob.
+_MYTHIC_SOCKS = (
+    (0, "01005F94352301005F94352300000000000000000000000000000000000000000000"),
+    (1, "01005F94352301005F94352300000000000000000000000000000000000000000000"),
+    (2, "02006794352302006794352300000000000000000000000000000000000000000000"),
+    (3, "10008193352304006994352304006994352300000000000000000000000000000000"),
+    (4, "10008193352304006994352304006994352300000000000000000000000000000000"),
+    (5, "08006F94352308006F94352300000000000000000000000000000000000000000000"),
+    (6, "02006794352302006794352300000000000000000000000000000000000000000000"),
+    (7, "08006F94352308006F94352300000000000000000000000000000000000000000000"),
+    (8, "EFFFCD923523EFFFCD92352300000000000000000000000000000000000000000000"),
+    (9, "100081933523EFFF5F943523EFFF6994352300000000000000000000000000000000"),
+    (10, "EFFF67943523EFFF6794352300000000000000000000000000000000000000000000"),
+)
+
 _CREATURES = ((1, 500990888), (2, 500990882), (3, 500990783), (4, 500990902))
 
 _CREATURE_RESTORE = tuple(
@@ -270,6 +295,150 @@ ROUNDS: tuple[Round, ...] = (
           (f"update character_items set item_id=101011250, growth_experience=2808799 where character_id={CHAR} "
            f"and list_type=3 and slot_index=12",),
           "slot 12 with a non-weapon: still sectioned?"),
+    #: The version u16 equals char2's/char3's plain `sum(fame(item))` over the
+    #: counted rows but char1 sits 16.5k above its own sum -- these rounds take
+    #: each per-row extra away from every mythic row at once and read the delta.
+    Round("zero_rein_all",
+          (f"update character_items set reinforcement=0 where character_id={CHAR} "
+           f"and list_type=3",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index in {_MYTHIC}",),
+          "fame: every row's reinforcement contribution"),
+    Round("zero_amp_all",
+          (f"update character_items set amplify_type=0, amplify_value=0 "
+           f"where character_id={CHAR} and list_type=3",),
+          (f"update character_items set amplify_type=3, amplify_value=7 "
+           f"where character_id={CHAR} and list_type=3 and slot_index in {_MYTHIC}",),
+          "fame: every row's amplify contribution"),
+    Round("zero_rein_s12",
+          (f"update character_items set reinforcement=0 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=12",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=12",),
+          "fame: slot 12's reinforcement alone (the level-110 row)"),
+    Round("zero_amp_s12",
+          (f"update character_items set amplify_type=0, amplify_value=0 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=12",),
+          (f"update character_items set amplify_type=3, amplify_value=7 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=12",),
+          "fame: slot 12's amplify alone"),
+    Round("zero_ench_all",
+          (f"update character_items set enchant_card_id=0 where character_id={CHAR} "
+           f"and list_type=3",),
+          tuple(f"update character_items set enchant_card_id={v} where "
+                f"character_id={CHAR} and list_type=3 and slot_index={k}"
+                for k, v in sorted(_MYTHIC_ENCH.items())),
+          "fame: enchant-card fame, all rows"),
+    Round("zero_growth_all",
+          (f"update character_items set growth_experience=0 where character_id={CHAR} "
+           f"and list_type=3",),
+          tuple(f"update character_items set growth_experience={v} where "
+                f"character_id={CHAR} and list_type=3 and slot_index={k}"
+                for k, v in sorted(_MYTHIC_GROWTH.items())),
+          "fame: growth/divine, thresholds only or fractional?"),
+    Round("zero_sock_all",
+          (f"update character_items set avatar_sockets=X'' where character_id={CHAR} "
+           f"and list_type=3",),
+          tuple(f"update character_items set avatar_sockets=X'{h}' where "
+                f"character_id={CHAR} and list_type=3 and slot_index={s}"
+                for s, h in _MYTHIC_SOCKS),
+          "fame: avatar-socket emblems, 35B blobs"),
+    Round("zero_ench_s12",
+          (f"update character_items set enchant_card_id=0 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=12",),
+          (f"update character_items set enchant_card_id=10349087 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=12",),
+          "fame: slot 12's enchant alone (10349087)"),
+    Round("zero_pair_s15",
+          (f"update character_items set reinforcement=0, amplify_type=0, amplify_value=0 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=15",),
+          (f"update character_items set reinforcement=13, amplify_type=3, amplify_value=7 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=15",),
+          "fame: one 105 row's rein+amp pair: additive 289 or 345?"),
+    Round("zero_rein_s15",
+          (f"update character_items set reinforcement=0 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          "fame: one 105 row's reinforcement alone"),
+    Round("zero_amp_s15",
+          (f"update character_items set amplify_type=0, amplify_value=0 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=15",),
+          (f"update character_items set amplify_type=3, amplify_value=7 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=15",),
+          "fame: one 105 row's amplify alone"),
+    Round("rein12_s12",
+          (f"update character_items set reinforcement=12 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=12",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=12",),
+          "fame: +12 on the 110 weapon: 682 (shared table) or other?"),
+    Round("rein12_s15",
+          (f"update character_items set reinforcement=12 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          "fame: +12 on the 105 armor: expect 219 (amp on)"),
+    Round("rein8_s15",
+          (f"update character_items set reinforcement=8 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          "fame: +8 on the 105 armor: expect 49 (amp on)"),
+    Round("rein8_s12_ampoff",
+          (f"update character_items set reinforcement=8, amplify_type=0, amplify_value=0 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=12",),
+          (f"update character_items set reinforcement=13, amplify_type=3, amplify_value=7 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=12",),
+          "fame: +8 no-amp on the 110 weapon: expect 137 (rein force table)"),
+    Round("rein10_s12_ampoff",
+          (f"update character_items set reinforcement=10, amplify_type=0, amplify_value=0 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=12",),
+          (f"update character_items set reinforcement=13, amplify_type=3, amplify_value=7 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=12",),
+          "fame: +10 no-amp weapon: expect 216"),
+    Round("rein11_s15",
+          (f"update character_items set reinforcement=11 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          "fame: +11 amp armor: expect 152 (jump row)"),
+    Round("rein16_s15",
+          (f"update character_items set reinforcement=16 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          "fame: >15 clamp behavior (table has no +16 row)"),
+    Round("rein17_s15",
+          (f"update character_items set reinforcement=17 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=15",),
+          "fame: +17 armor amp: slope past 15"),
+    Round("rein20_s12",
+          (f"update character_items set reinforcement=20 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=12",),
+          (f"update character_items set reinforcement=13 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=12",),
+          "fame: +20 weapon amp: weapon slope past 15"),
+    Round("rein16_s15_ampoff",
+          (f"update character_items set reinforcement=16, amplify_type=0, amplify_value=0 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=15",),
+          (f"update character_items set reinforcement=13, amplify_type=3, amplify_value=7 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=15",),
+          "fame: +16 armor no-amp: slope past 15"),
+    Round("rein16_s12_ampoff",
+          (f"update character_items set reinforcement=16, amplify_type=0, amplify_value=0 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=12",),
+          (f"update character_items set reinforcement=13, amplify_type=3, amplify_value=7 "
+           f"where character_id={CHAR} and list_type=3 and slot_index=12",),
+          "fame: +16 weapon no-amp: slope past 15"),
+    Round("swap_s32_item",
+          (f"update character_items set item_id=400400019 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=32",),
+          (f"update character_items set item_id=500990888 where character_id={CHAR} "
+           f"and list_type=3 and slot_index=32",),
+          "fame: is the 315-fame row at s32 counted (expect -130) or not (expect 0)?"),
     Round("creature_state_s26",
           (f"update character_creatures set satiety=33, level=7, experience=999 where creature_id=3",),
           (f"update character_creatures set satiety=100, level=1, experience=0 where creature_id=3",),
@@ -496,7 +665,199 @@ ROUNDS: tuple[Round, ...] = (
           (f"update character_items set item_id=500990783 where character_id={CHAR} and list_type=3 "
            f"and slot_index=26",),
           "non-creature item at slot 26: does the +5 vanish?"),
+    #: char2's list-43 inserts (updated_at=0) never add fame while char1's live
+    #: rows (real timestamps) do; these two rounds tell the column from a gate.
+    Round("zero_ts_window",
+          (f"update character_items set updated_at=0 where character_id={CHAR} "
+           f"and list_type=43 and slot_index=328",),
+          (f"update character_items set updated_at=1790327364 where character_id={CHAR} "
+           f"and list_type=43 and slot_index=328",),
+          "fame: window row with updated_at=0 (expect -46 if the fame read gates on it)"),
+    Round("c2_row_ts",
+          ("insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,updated_at) values (2,43,320,10617119,1,0,0,1790327366)",),
+          ("delete from character_items where character_id=2 and list_type=43 and slot_index=320",),
+          "fame: char2 window row with a REAL timestamp (expect +46 if ts was the blocker) (--slot 1)"),
+    Round("c2_gate_row",
+          ("update characters set level=110, ex_equip_slot_flags=59, grow_type=5, sub_grow_type=3 "
+           "where character_id=2",
+           "insert into character_finished_quests (character_id, quest_id, finished_at) "
+           "values (2, 21019, 0)",
+           "insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,updated_at) values (2,43,320,10617119,1,0,0,1790327366)",),
+          ("update characters set level=55, ex_equip_slot_flags=0, grow_type=4, sub_grow_type=1 "
+           "where character_id=2",
+           "delete from character_finished_quests where character_id=2 and quest_id=21019",
+           "delete from character_items where character_id=2 and list_type=43 and slot_index=320",),
+          "fame: char2 given everything char1 has + the row (expect +46 if a state gate) (--slot 1)"),
+    Round("swap_win_185",
+          (f"update character_items set item_id=400400022 where character_id={CHAR} "
+           f"and list_type=43 and slot_index=328",),
+          (f"update character_items set item_id=10617119 where character_id={CHAR} "
+           f"and list_type=43 and slot_index=328",),
+          "fame: window row item 46 -> 185 (delta +139 = per-item, 0 = fixed, -46 = class-gated)"),
+    Round("c2_ins321",
+          ("insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,updated_at) values (2,43,321,10617119,1,0,0,1790327366)",),
+          ("delete from character_items where character_id=2 and list_type=43 and slot_index=321",),
+          "fame: is slot 320 alone dead, or the whole char2 window? (--slot 1)"),
+    Round("c2_ins_two",
+          ("insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,updated_at) values (2,43,320,10617119,1,0,0,1790327366)",
+           "insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,updated_at) values (2,43,321,10617127,1,0,0,1790327367)",),
+          ("delete from character_items where character_id=2 and list_type=43 and slot_index in (320,321)",),
+          "fame: two char2 window rows: 0, +46 or +92? (--slot 1)"),
+    Round("c2_copy_all_l43",
+          ("insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,random_options,avatar_sockets,clone_appearance_id,reinforcement,refinement,"
+           "fusion_item,bakal_state,transferred_option_mask,enchant_card_id,enchant_upgrade,mist_imbued,"
+           "updated_at,expires_at,custom_option_ids,growth_experience,amplify_type,amplify_value) "
+           "select 2,list_type,slot_index,item_id,count,durability,instance_value,random_options,"
+           "avatar_sockets,clone_appearance_id,reinforcement,refinement,fusion_item,bakal_state,"
+           "transferred_option_mask,enchant_card_id,enchant_upgrade,mist_imbued,updated_at,expires_at,"
+           "custom_option_ids,growth_experience,amplify_type,amplify_value "
+           "from character_items where character_id=1 and list_type=43",),
+          ("delete from character_items where character_id=2 and list_type=43",),
+          "fame: char2 with char1's whole list-43 set verbatim (811 = char gate, 1225 = row-structure) "
+          "(--slot 1)"),
+    Round("c1_del_q21019",
+          (f"delete from character_finished_quests where character_id={CHAR} and quest_id=21019",),
+          (f"insert into character_finished_quests (character_id,quest_id,finished_at) "
+           f"values ({CHAR},21019,1790309158)",),
+          "fame: does removing quest 21019 un-latch char1's rune-window fame?"),
 )
+
+_C2_L3_RESTORE = tuple(
+    ln for ln in (Path(__file__).resolve().parents[1] / "_m23" / "c2_l3_restore.sql")
+    .read_text(encoding="utf-8").splitlines() if ln.strip())
+
+ROUNDS += (
+    Round("c2_promote",
+          ("update characters set level=110 where character_id=2",
+           "insert into character_finished_quests (character_id,quest_id,finished_at) "
+           "values (2,21019,1790309158)",
+           "delete from character_items where character_id=2 and list_type=3",
+           "insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,random_options,avatar_sockets,clone_appearance_id,reinforcement,refinement,"
+           "fusion_item,bakal_state,transferred_option_mask,enchant_card_id,enchant_upgrade,mist_imbued,"
+           "updated_at,expires_at,custom_option_ids,growth_experience,amplify_type,amplify_value) "
+           "select 2,list_type,slot_index,item_id,count,durability,instance_value,random_options,"
+           "avatar_sockets,clone_appearance_id,reinforcement,refinement,fusion_item,bakal_state,"
+           "transferred_option_mask,enchant_card_id,enchant_upgrade,mist_imbued,updated_at,expires_at,"
+           "custom_option_ids,growth_experience,amplify_type,amplify_value "
+           "from character_items where character_id=1 and list_type=3 "
+           "and slot_index <= 35 and slot_index <> 26",
+           "insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,updated_at) select 2,43,slot_index,item_id,1,0,0,updated_at "
+           "from character_items where character_id=1 and list_type=43 and slot_index between 320 and 328"),
+          ("delete from character_items where character_id=2 and list_type=3",
+           "update characters set level=55 where character_id=2",
+           "delete from character_finished_quests where character_id=2 and quest_id=21019",
+           "delete from character_items where character_id=2 and list_type=43") + _C2_L3_RESTORE,
+          "fame: char2 promoted to the exe-string triple (level110 + quest21019 + char1 gear) with "
+          "all 9 window rows: latent rune fame should appear (+414) (--slot 1)"),
+)
+
+_PROMOTE_SETUP = (
+    "update characters set level=110 where character_id=2",
+    "insert into character_finished_quests (character_id,quest_id,finished_at) "
+    "values (2,21019,1790309158)",
+    "delete from character_items where character_id=2 and list_type=3",
+    "insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+    "instance_value,random_options,avatar_sockets,clone_appearance_id,reinforcement,refinement,"
+    "fusion_item,bakal_state,transferred_option_mask,enchant_card_id,enchant_upgrade,mist_imbued,"
+    "updated_at,expires_at,custom_option_ids,growth_experience,amplify_type,amplify_value) "
+    "select 2,list_type,slot_index,item_id,count,durability,instance_value,random_options,"
+    "avatar_sockets,clone_appearance_id,reinforcement,refinement,fusion_item,bakal_state,"
+    "transferred_option_mask,enchant_card_id,enchant_upgrade,mist_imbued,updated_at,expires_at,"
+    "custom_option_ids,growth_experience,amplify_type,amplify_value "
+    "from character_items where character_id=1 and list_type=3 "
+    "and slot_index <= 35 and slot_index <> 26")
+
+_PROMOTE_UNDO = (
+    "delete from character_items where character_id=2 and list_type=3",
+    "update characters set level=55 where character_id=2",
+    "delete from character_finished_quests where character_id=2 and quest_id=21019",
+    "delete from character_items where character_id=2 and list_type=43") + _C2_L3_RESTORE
+
+_INS_ONE_WINDOW = (
+    "insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+    "instance_value,updated_at) values (2,43,320,10617119,1,0,0,1790327366)",)
+
+ROUNDS += (
+    Round("c2_promote_norow", _PROMOTE_SETUP, _PROMOTE_UNDO,
+          "fame: promoted char2, zero window rows -> expect 33632 (control) (--slot 1)"),
+    Round("c2_promote_one", _PROMOTE_SETUP + _INS_ONE_WINDOW, _PROMOTE_UNDO,
+          "fame: promoted char2, one window row -> 33678 if fame-gated, 33632 if row-count-gated "
+          "(--slot 1)"),
+)
+
+
+def _promote_setup(*filters: str) -> tuple[str, ...]:
+    base = list(_PROMOTE_SETUP)
+    copy = base.pop()
+    where = " and ".join(filters)
+    base.append(copy.replace("and slot_index <= 35 and slot_index <> 26", f"and {where}"))
+    return tuple(base)
+
+
+ROUNDS += (
+    Round("c2_only_s12", _promote_setup("slot_index = 12") + _INS_ONE_WINDOW, _PROMOTE_UNDO,
+          "fame: char2 with ONLY the minLvl-110 item + 1 window row: 3867 if 'owns level110', "
+          "3821 if fame-gated (--slot 1)"),
+    Round("c2_fam5677", _promote_setup("slot_index in (15,16)") + _INS_ONE_WINDOW, _PROMOTE_UNDO,
+          "fame: char2 gear fame 5677 + 1 window row: 5723 if window counts (--slot 1)"),
+    Round("c2_fam14142", _promote_setup("slot_index between 15 and 19") + _INS_ONE_WINDOW,
+          _PROMOTE_UNDO,
+          "fame: char2 gear fame 14142 + 1 window row: 14188 if window counts (--slot 1)"),
+    Round("c2_manyrows", _promote_setup("slot_index in (0,1,2,3,4,5,6,7,8,9,10,12,13,27,28,29,33,34,35)")
+          + _INS_ONE_WINDOW, _PROMOTE_UNDO,
+          "fame: 19 low-fame rows (8621) + 1 window row: 8667 if row-count-gated, 8621 if "
+          "fame>=T with T>14142 (--slot 1)"),
+    Round("c2_fam25011", _promote_setup("slot_index between 15 and 25") + _INS_ONE_WINDOW,
+          _PROMOTE_UNDO,
+          "fame: 10 x 105-bracket rows (25011) + 1 window row: 25057 if fame-gated "
+          "(T<=25011) (--slot 1)"),
+    Round("c2_talismans_only", _promote_setup("slot_index in (33,34,35)") + _INS_ONE_WINDOW,
+          _PROMOTE_UNDO,
+          "fame: only the three slot-33..35 talismans (555) + 1 window row: 601 if the gate needs "
+          "talismans, 555 if it needs >=19 rows (--slot 1)"),
+    Round("c2_t33", _promote_setup("slot_index = 33") + _INS_ONE_WINDOW, _PROMOTE_UNDO,
+          "fame: only slot 33 (185) + 1 window row: 231 if one talisman suffices (--slot 1)"),
+    Round("c2_t35", _promote_setup("slot_index = 35") + _INS_ONE_WINDOW, _PROMOTE_UNDO,
+          "fame: only slot 35 (185) + 1 window row: 231 if any single talisman suffices (--slot 1)"),
+    Round("c2_t23at33",
+          ("update characters set level=110 where character_id=2",
+           "delete from character_items where character_id=2 and list_type=3",
+           "insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,updated_at) values (2,3,33,400400023,1,0,0,1790327366)") + _INS_ONE_WINDOW,
+          _PROMOTE_UNDO,
+          "fame: 400400023 (dead at slot 35) moved to slot 33 + 1 window row: 231 = slot-based, "
+          "185 = item-based (--slot 1)"),
+    Round("c2_t34", _promote_setup("slot_index = 34") + _INS_ONE_WINDOW, _PROMOTE_UNDO,
+          "fame: only slot 34 (400400022) + 1 window row: 231 if slot 34 also qualifies (--slot 1)"),
+    Round("c2_rune33",
+          ("update characters set level=110 where character_id=2",
+           "delete from character_items where character_id=2 and list_type=3",
+           "insert into character_items (character_id,list_type,slot_index,item_id,count,durability,"
+           "instance_value,updated_at) values (2,3,33,10617119,1,0,0,1790327366)") + _INS_ONE_WINDOW,
+          _PROMOTE_UNDO,
+          "fame: a rune (10617119) instead of a talisman at slot 33 (46) + 1 window row: "
+          "92 if the gate needs a talisman-class item, 46 if any item (--slot 1)"),
+)
+
+
+#: Per-row growth credit: zeroing one row's growth removes just that row's
+#: section, so the per-row fame contribution can be read off one at a time.
+ROUNDS += tuple(
+    Round(f"growth_row_{slot}",
+          (f"update character_items set growth_experience=0 where character_id={CHAR} "
+           f"and list_type=3 and slot_index={slot}",),
+          (f"update character_items set growth_experience={val} where character_id={CHAR} "
+           f"and list_type=3 and slot_index={slot}",),
+          f"fame: growth {val} on row {slot} alone")
+    for slot, val in sorted(_MYTHIC_GROWTH.items()) if slot != 12)
 
 
 def run_sql(save: Path, statements: tuple[str, ...]) -> None:

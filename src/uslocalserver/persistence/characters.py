@@ -19,12 +19,19 @@ TABLE = "characters"
 
 #: slot_index first: it is the ordering the client shows, and the field a
 #: caller is most likely to reach for.
+#:
+#: The four `expert_job_*` columns are 0.4.4's (the 副职业 / expert job system)
+#: and sit *between* `ex_equip_slot_flags` and `bonus_sp` in the live table.
+#: 0.3.6 has neither them nor anything in that gap, so this list is the 0.4.4
+#: declaration order -- the order `pragma table_info` returns, which
+#: `test_schema` pins.
 COLUMNS = (
     "character_id", "account_id", "slot_index", "name", "class_id", "level",
     "town_id", "area_id", "position_x", "position_y", "town_state",
     "created_at", "updated_at", "experience", "grow_type", "sub_grow_type",
-    "ex_equip_slot_flags", "bonus_sp", "bonus_tp", "favorite_position",
-    "pending_tutorial_dungeon_id",
+    "ex_equip_slot_flags", "expert_job_type", "expert_job_experience",
+    "expert_job_grade", "expert_job_endurance", "bonus_sp", "bonus_tp",
+    "favorite_position", "pending_tutorial_dungeon_id",
 )
 
 
@@ -47,6 +54,10 @@ class CharacterSummary:
     grow_type: int
     sub_grow_type: int
     ex_equip_slot_flags: int
+    expert_job_type: int
+    expert_job_experience: int
+    expert_job_grade: int
+    expert_job_endurance: int
     bonus_sp: int
     bonus_tp: int
     favorite_position: int
@@ -104,3 +115,53 @@ def by_id(conn: sqlite3.Connection, character_id: int) -> CharacterSummary | Non
         f'select {", ".join(COLUMNS)} from "{TABLE}" '
         f'where character_id = ?', (character_id,)).fetchone()
     return CharacterSummary.from_row(row) if row else None
+
+
+def clear_pending_tutorial(conn: sqlite3.Connection, character_id: int) -> None:
+    """The tutorial entry's write: the pending dungeon is consumed.
+
+    A character is born holding one (`pending_tutorial_dungeon_id`), and the
+    reference's `tutorial entry committed; pending cleared=True` is the row
+    read back after this.  Nothing else is touched: the capture gives no
+    evidence about `updated_at` and none of its frames read it.
+    """
+    with conn:
+        conn.execute(f'update "{TABLE}" set pending_tutorial_dungeon_id = 0 '
+                     f'where character_id = ?', (character_id,))
+
+
+def grant_experience(conn: sqlite3.Connection, character_id: int, level: int,
+                     experience: int) -> None:
+    """A kill's write-back: the row's level and cumulative experience.
+
+    The row is what the next `(1,16)` prints -- the capture's four entries
+    read level 1, 3, 5, 7, which is exactly `die.level_for` over the kills
+    the runs had answered by then -- and what `(1,4)`'s selection shows.
+    """
+    with conn:
+        conn.execute(f'update "{TABLE}" set level = ?, experience = ? '
+                     f'where character_id = ?', (level, experience, character_id))
+
+
+def story_level(conn: sqlite3.Connection, character_id: int) -> int:
+    """`character_story_digest.last_level`, 0 when the character has no row.
+
+    The row is what `(1,4)`'s STORY-DIGEST line reads, and it is the only
+    per-character difference this project has found behind that body's
+    tutorial-flag block -- see `game.character.roleselection`.
+    """
+    row = conn.execute(
+        'select last_level from character_story_digest where character_id = ?',
+        (character_id,)).fetchone()
+    return 0 if row is None else row[0]
+
+
+def tutorial_flag_count(conn: sqlite3.Connection, character_id: int) -> int:
+    """How many tutorial flags the client has reported for a character.
+
+    The `reported N` in the reference's TUTORIAL-FLAGS line: 4 for both
+    characters that have played, 0 for a fresh one.
+    """
+    return conn.execute(
+        'select count(*) from character_tutorial_flags where character_id = ?',
+        (character_id,)).fetchone()[0]

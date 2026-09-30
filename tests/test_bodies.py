@@ -7,13 +7,15 @@ and the tests are organised around that:
     no handler plain=<hex>` carries the whole body, and the three corpus logs
     hold 23 of those lines, all byte-identical.  Parsing one is M0's
     acceptance demo -- demo ① of the plan file.
-  * `(1,16)` and `(1,33)` are **declared**.  The reference server names their
-    fields in its own `INFO DUNGEON-ENTER-16 ... request=SelectDungeonRequest
-    { DungeonId = 7114, ... }` lines; the widths are a reading of the field
-    types, and neither reading has been confirmed.  The *values* used below
-    are real; the bytes are not, and the test says so.  `(1,16)` has since
-    been captured once -- 32 bytes, so the five-u32 reading is at best half
-    the story -- and `(1,33)` has never been captured at all.
+  * `(1,16)` and `(1,33)` are **declared, and contradicted**.  The reference
+    server names their fields in its own `INFO DUNGEON-ENTER-16 ...
+    request=SelectDungeonRequest { DungeonId = 7114, ... }` lines; the widths
+    are a reading of the field types.  The *values* used below are real; the
+    bytes are not, and the test says so.  The 09-28 dungeon session then
+    captured both: seven `(1,16)` bodies of 32 bytes and three `(1,33)` of 16,
+    so the five-u32 (20B) reading is wrong about the widths in both cases --
+    only the field order in the reference's prose still stands.  Re-fitting
+    them is M3.1's 门口链 work; until then the entries stay declared.
 """
 from __future__ import annotations
 
@@ -22,6 +24,7 @@ import re
 import unittest
 
 import _bootstrap  # noqa: F401
+import _corpus
 
 from uslocalserver import logs, paths
 from uslocalserver.protocol import bodies
@@ -44,9 +47,14 @@ TWO_DECLARED = ((1, 16), (1, 33))
 
 @functools.lru_cache(maxsize=1)
 def unhandled_1592() -> tuple[tuple[int | None, bytes], ...]:
-    """`(body=, plain=)` for every `UNHANDLED` line that dumped this body."""
+    """`(body=, plain=)` for every `UNHANDLED` line that dumped this body.
+
+    Only the 0.3.6 capture set dumped `(1,1592)` -- 23 times, all identical --
+    so without it there is no sample to decode and the tests below skip.
+    """
+    _corpus.require()
     out = []
-    for path in paths.server_logs():
+    for path in paths.corpus_logs():
         for ln in logs.stream(path):
             if ln.tag != "UNHANDLED" or "(1,1592)" not in ln.msg:
                 continue
@@ -125,24 +133,21 @@ class DeclaredLayoutsAreGuarded(unittest.TestCase):
             list(TWO_DECLARED),
         )
 
-    def test_neither_declared_body_has_been_captured_in_its_declared_shape(self):
-        # The guard is only honest while this holds.  221 C->S game packets
-        # carry a hex dump all day and no 20-byte body is among them; the one
-        # `(1,16)` capture there is (32 bytes, 09-27) does not match the
-        # reading either.  If a 20-byte one ever shows up this fails, and the
-        # entry gets promoted to verified instead.
+    def test_no_capture_has_the_declared_shape(self):
+        # The guard is only honest while this holds: a declared entry is a
+        # reading of the field *types*, and the day the wire agrees with it
+        # the entry graduates.  It did not.  `(1,16)` is 32B on every one of
+        # its seven captures and `(1,33)` -- which had never been captured at
+        # all before 09-28 -- is 16B on all three, so neither is the declared
+        # 20.  The lengths are asserted as a *set*: sessions accumulate.
         seen = {}
-        twenty = []
-        for path in paths.server_logs():
+        _corpus.require()
+        for path in paths.corpus_logs():
             for rec in logs.iter_packets(path):
                 if rec.opcode in TWO_DECLARED:
-                    seen.setdefault(rec.opcode, []).append(rec.body_len)
-                if rec.body_len == 20:
-                    twenty.append((path.name, rec.line_no, rec.opcode))
-        self.assertEqual(twenty, [])
-        self.assertNotIn((1, 33), seen)
-        self.assertEqual(seen[(1, 16)], [32])
-        self.assertNotIn(20, seen[(1, 16)])
+                    seen.setdefault(rec.opcode, set()).add(rec.body_len)
+        self.assertEqual(seen.get((1, 16)), {32})
+        self.assertEqual(seen.get((1, 33)), {16})
 
     def test_a_declared_body_is_refused_unless_asked_for(self):
         for opcode in TWO_DECLARED:
@@ -176,7 +181,8 @@ class DeclaredLayoutsAreGuarded(unittest.TestCase):
             "TownPlacement { TownId = 38, AreaId = 2, X = 254, Y = 249, State = 4 }",
         }
         found = set()
-        for path in paths.server_logs():
+        _corpus.require()
+        for path in paths.corpus_logs():
             for ln in logs.stream(path):
                 for text in wanted:
                     if text in ln.msg:

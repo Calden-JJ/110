@@ -38,6 +38,27 @@ def cera(conn: sqlite3.Connection, account_id: int) -> int | None:
     return None if row is None else row[0]
 
 
+def set_cera(conn: sqlite3.Connection, account_id: int, cera: int,
+             updated_at: int) -> None:
+    """Charge or credit the balance, stamping the row the way every write to
+    `accounts` does -- the 09-27 cera buys moved `updated_at` to the buy's
+    own second (`1790522197` for the 23:16:37 one)."""
+    conn.execute(f'update "{TABLE}" set cera = ?, updated_at = ? '
+                 f"where account_id = ?", (cera, updated_at, account_id))
+
+
+def set_contract(conn: sqlite3.Connection, account_id: int, premium_type: int,
+                 expires_at: int, updated_at: int) -> None:
+    """Write one contract's expiry, creating the row if the account has none
+    of that type."""
+    conn.execute(
+        f'insert into "{CONTRACTS_TABLE}" (account_id, premium_type, '
+        f"expires_at, updated_at) values (?, ?, ?, ?) "
+        f"on conflict (account_id, premium_type) do update set "
+        f"expires_at = excluded.expires_at, updated_at = excluded.updated_at",
+        (account_id, premium_type, expires_at, updated_at))
+
+
 def premium_contracts(conn: sqlite3.Connection, account_id: int
                       ) -> tuple[tuple[int, int], ...]:
     """The account's contracts as `(premium_type, expires_at)`, `premium_type`

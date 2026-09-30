@@ -26,6 +26,40 @@ from ..protocol import frame
 HEX_DUMP_LIMIT = 4096
 
 
+def _rotate(path: Path) -> Path:
+    """Move a previous session's log aside; return the path to open.
+
+    The file used to be opened `w`, so every start destroyed the previous
+    session -- and with it the only record of a bug report (the 2026-09-29
+    `赛利亚房间` session was lost this way).  The reference keeps one file per
+    day; here each session gets its own name, stamped with when it ended.
+
+    A move that fails is the case the old session matters most -- on Windows
+    the rename fails exactly while its writer still holds the file open (a
+    server left running, a crashed process's lock) -- so the fallback must
+    not be truncation either: this session takes a `+` name of its own and
+    leaves the held file alone.
+    """
+    if not path.exists() or not path.stat().st_size:
+        return path
+    stamp = dt.datetime.fromtimestamp(path.stat().st_mtime).strftime("%Y%m%d-%H%M%S")
+    try:
+        path.rename(_free(path, f"{path.stem}-{stamp}"))
+    except OSError:
+        return _free(path, f"{path.stem}+{dt.datetime.now():%Y%m%d-%H%M%S}")
+    return path
+
+
+def _free(path: Path, stem: str) -> Path:
+    """`stem` in `path`'s directory, `-N`-suffixed until nothing owns it."""
+    target = path.with_name(f"{stem}{path.suffix}")
+    n = 1
+    while target.exists():
+        n += 1
+        target = path.with_name(f"{stem}-{n}{path.suffix}")
+    return target
+
+
 def _dumps(data: bytes) -> str:
     """`hex=<...>`, truncated the way the reference logger truncates it."""
     if len(data) <= HEX_DUMP_LIMIT:
@@ -44,6 +78,7 @@ class Log:
         elif path is not None:
             p = Path(path)
             p.parent.mkdir(parents=True, exist_ok=True)
+            p = _rotate(p)
             self._fh = p.open("w", encoding="utf-8", newline="\n")
             self._owns = True
 

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import asyncio
 import datetime
+import json
 import functools
 import io
 import re
@@ -27,6 +28,7 @@ from pathlib import Path
 from unittest import mock
 
 import _bootstrap  # noqa: F401
+import _corpus
 
 from uslocalserver import logs, paths
 from uslocalserver.game.character import roleselection
@@ -38,6 +40,7 @@ from uslocalserver.server.logfile import Log
 
 ACCOUNT = 0
 WIRE_SIZE = 1312               # 16B header + the 1296B body
+DUNGEON = paths.DATA_DIR / "game" / "dungeon-20260928.json"
 NOW = 1_789_824_022            # the socket test's pinned clock
 
 #: The 39 bytes the reference's own line reports ten fewer than it sends:
@@ -52,6 +55,46 @@ LINE = re.compile(
     r"privileges=(\S+?)(?: contracts=(\d+):(\d+))?$")
 
 _LINE_LOGS = ("server-20260926.log", "server-20260927.log")
+
+
+def _line_logs() -> tuple[Path, ...]:
+    """Where the `(1,4)` dumps are read from.
+
+    `DFO_CORPUS_LOG` names one capture, so it replaces the pinned pair outright
+    -- the point of the override is that a host without the 0.3.6 tree can
+    still run these.  Joining the names onto `paths.LOGS_DIR` unconditionally
+    (what this used to do) meant the override was honoured by `_corpus.require`
+    and then ignored here, so the test raised `FileNotFoundError` instead of
+    skipping or running.
+    """
+    override = paths.corpus_override()
+    if override:
+        return (override,)
+    return tuple(p for p in (paths.LOGS_DIR / n for n in _LINE_LOGS) if p.exists())
+
+
+#: Every byte `Pick.body()` writes, the flag block included: the seven live
+#: regions plus the block that is the template's own copy.  Anything outside
+#: this set is corpus data, so a dump that moves outside it is a layout bug.
+WRITTEN = frozenset(
+    set(range(roleselection.NOW_AT, roleselection.NOW_AT + 4))
+    | {roleselection.KEY_AT, roleselection.CONTRACT_TYPE_AT, roleselection.TOWN_AT}
+    | set(range(roleselection.CONTRACT_END_AT, roleselection.CONTRACT_END_AT + 4))
+    | set(range(roleselection.CERA_AT, roleselection.CERA_AT + 4))
+    | set(range(roleselection.FLAG_COUNT_AT, roleselection.FLAG_IDS_END)))
+
+
+def _pinned_corpus() -> bool:
+    """True when what is being read is the pinned 0.3.6 pair itself.
+
+    Two assertions in `TemplateTest` are records of *that* corpus -- which six
+    dumps it holds, down to the line number, and which eight bytes they move.
+    Nothing else can have them: a substitute capture has its own dumps at its
+    own line numbers, with its own set of characters behind them.  So they are
+    asserted only when the corpus is the pinned one, and the general claim
+    (`moved <= WRITTEN`, every dump rebuilt byte for byte) holds always.
+    """
+    return paths.corpus_override() is None
 
 
 _REAL_MONOTONIC = time.monotonic
@@ -80,10 +123,18 @@ def _captured_bodies():
     The `SELECTION-4` line that goes with each one is the last before the send
     -- the reference builds the run and logs it in one pass, so the two are a
     few lines apart and no other run intervenes.
+
+    Both source logs are 0.3.6 captures; without them there is nothing to
+    compare against and the tests that call this skip.
     """
+    _corpus.require()
+    sources = _line_logs()
+    if not sources:
+        raise unittest.SkipTest(
+            "no `(1,4)` corpus: set DFO_CORPUS_LOG to a log with `hex=` dumps")
     found = []
-    for name in _LINE_LOGS:
-        path = paths.LOGS_DIR / name
+    for path in sources:
+        name = path.name
         by_no = {}
         selection_lines = []
         for line in logs.stream(path):
@@ -119,23 +170,48 @@ class TemplateTest(unittest.TestCase):
         self.assertEqual(len(reply.plain), roleselection.BODY_SIZE)
         template = roleselection.template()
         self.assertEqual(template, reply.plain)
-        # Six dumps, the corpus (09-26 22:16:34) the first of them.
+        # Six dumps against the pinned corpus, the first of them the 09-26
+        # 22:16:34 build for conn=2 (XRenYing slot 0), which is the capture the
+        # template *is*.  A substituted corpus has its own dumps, at its own
+        # line numbers, for characters of its own -- but every one of them is
+        # still this template outside the written regions, and that is what is
+        # asserted either way.
         dumps = _captured_bodies()
-        self.assertEqual([(n, i) for n, i, _, _ in dumps],
-                         [("server-20260926.log", 6466), ("server-20260927.log", 382),
-                          ("server-20260927.log", 806), ("server-20260927.log", 1115),
-                          ("server-20260927.log", 1769), ("server-20260927.log", 2104)])
-        self.assertEqual(template, dumps[0][3])
+        self.assertTrue(dumps, "the corpus has no `(1,4)` dumps")
+        stable = [at for at in range(roleselection.BODY_SIZE) if at not in WRITTEN]
+        for name, line_no, _, body in dumps:
+            with self.subTest(log=name, line=line_no):
+                self.assertEqual([body[at] for at in stable],
+                                 [template[at] for at in stable],
+                                 "a dump differs from the template")
+        if _pinned_corpus():
+            self.assertEqual(template, dumps[0][3])
+            self.assertEqual([(n, i) for n, i, _, _ in dumps],
+                             [("server-20260926.log", 6466),
+                              ("server-20260927.log", 382),
+                              ("server-20260927.log", 806),
+                              ("server-20260927.log", 1115),
+                              ("server-20260927.log", 1769),
+                              ("server-20260927.log", 2104)])
 
     def test_the_six_dumps_only_move_inside_the_regions(self):
+        """Everything a dump moves is a byte `body()` writes.
+
+        The pinned corpus moves eight of them (`{5,6,7,9,37,38,39,249}`) across
+        two characters, five levels, two towns and two slots -- but which
+        eight is a fact about *that* corpus, not about the layout, so a
+        substituted one is held to the layout claim instead: nothing outside
+        `WRITTEN` may differ.  The high bytes of `now`, `remaining` and `cera`
+        are among the ones a given corpus may or may not exercise; they are
+        written as u32s either way, which is the body's own convention.
+        """
         bodies = [body for *_, body in _captured_bodies()]
         moved = {at for at in range(roleselection.BODY_SIZE)
                  if len({body[at] for body in bodies}) > 1}
-        # Everything else -- 1288 bytes -- is identical across two characters,
-        # five levels, two towns and two slots.  (The high bytes of `now`,
-        # `remaining` and `cera` happen to be constant too; they are still
-        # written as u32s, which is the body's own convention.)
-        self.assertEqual(moved, {5, 6, 7, 9, 37, 38, 39, 249})
+        self.assertEqual(moved - WRITTEN, set(),
+                         "a byte outside the written regions changed")
+        if _pinned_corpus():
+            self.assertEqual(moved, {5, 6, 7, 9, 37, 38, 39, 249})
 
     def test_the_flag_block_is_the_89_sent_flags(self):
         blob = roleselection.template()
@@ -171,7 +247,7 @@ class DumpTest(unittest.TestCase):
                 self.assertEqual(pick.key, int(m[5]))
                 self.assertEqual(pick.remaining, int(m[12]) if m[12] else 0)
                 self.assertEqual(line.msg, f"conn={m[1]} {pick.note()}")
-                self.assertEqual(int(m[2]), roleselection.LOGGED_SIZE)
+                self.assertEqual(int(m[2]), pick.content_size)
 
     def test_the_line_omits_the_contract_tail_when_there_is_none(self):
         pick = roleselection.Pick(account=0, slot=0, name="LRouDao", job=1,
@@ -192,6 +268,127 @@ class DumpTest(unittest.TestCase):
         self.assertEqual(struct.unpack("<I", pick.body()[roleselection.CONTRACT_END_AT:
                                                           roleselection.CONTRACT_END_AT + 4])[0],
                          0)
+
+
+class FlaglessTest(unittest.TestCase):
+    """The 09-28 dungeon session's new character, whose body is 1200B.
+
+    `data/game/dungeon-20260928.json` holds the only dump of a character with
+    no tutorial flags (`XJianHun`, no `character_story_digest` row yet), and
+    the reference's own two lines beside it -- `built 1197B` and `sent 0 seen
+    flag(s) (baseline 89 + reported 0)`.
+    """
+
+    def _run(self) -> dict:
+        doc = json.loads(DUNGEON.read_text(encoding="utf-8"))
+        return next(s["runs"][0] for s in doc["scripts"]
+                    if (s["request_main"], s["request_sub"]) == (1, 4))
+
+    def test_the_body_is_the_template_less_the_block(self):
+        run = self._run()
+        body = bytes.fromhex(next(f["plain_hex"] for f in run["replies"]
+                                  if (f["main"], f["sub"]) == (1, 4)))
+        self.assertEqual(len(body), 1200)
+        # The block is an insertion: the tail that follows the ids in the
+        # template sits 89 bytes earlier here, and the pad is 3 not 10.  The
+        # live regions are the dump's, not the template's, so they are skipped.
+        template = roleselection.template()
+        live = {*range(roleselection.NOW_AT, roleselection.NOW_AT + 4),
+                roleselection.KEY_AT, roleselection.CONTRACT_TYPE_AT,
+                *range(roleselection.CONTRACT_END_AT,
+                       roleselection.CONTRACT_END_AT + 4),
+                *range(roleselection.CERA_AT, roleselection.CERA_AT + 4),
+                roleselection.TOWN_AT, FLAG_COUNT_AT}
+        self.assertEqual(body[FLAG_COUNT_AT], 0)
+        self.assertEqual(body[FLAG_COUNT_AT + 1:],
+                         template[roleselection.FLAG_IDS_END:
+                                  roleselection.CONTENT_SIZE] + bytes(3))
+        self.assertEqual(
+            [body[at] for at in range(FLAG_COUNT_AT) if at not in live],
+            [template[at] for at in range(FLAG_COUNT_AT) if at not in live])
+
+    def test_the_two_lines_are_rebuilt_from_the_pick(self):
+        run = self._run()
+        body = bytes.fromhex(next(f["plain_hex"] for f in run["replies"]
+                                  if (f["main"], f["sub"]) == (1, 4)))
+        line = next(n[2] for n in run["notes"] if n[1] == "SELECTION-4")
+        m = LINE.fullmatch("conn=4 " + line.replace("conn={conn} ", "", 1))
+        now = int.from_bytes(body[roleselection.NOW_AT:roleselection.NOW_AT + 4],
+                             "little")
+        pick = roleselection.Pick(
+            account=int(m[3]), slot=int(m[4]), name=m[6], job=int(m[7]),
+            level=int(m[8]), cera=int(m[9]), town=body[roleselection.TOWN_AT],
+            contracts=((int(m[11]), now + int(m[12])),), now=now,
+            flags=0, reported=0)
+        self.assertEqual(pick.body(), body)
+        self.assertEqual(int(m[2]), pick.content_size)
+        self.assertEqual(line.replace("conn={conn} ", "", 1), pick.note())
+        flags = next(n[2] for n in run["notes"] if n[1] == "TUTORIAL-FLAGS")
+        self.assertEqual(flags.replace("conn={conn} ", "", 1),
+                         pick.flags_note())
+
+    def test_the_gate_is_the_story_digest_row(self):
+        """The one fitted rule: `Pick.of` reads the block off that row.
+
+        Both characters in the shipped save have one and send 89; the row is
+        deleted here to stand in for a character that has not started the
+        story, which is what the 09-28 dump is.
+        """
+        save = _save_copy()
+        try:
+            conn = schema.connect(save)
+            try:
+                summary = characters.by_id(conn, 1)
+                self.assertEqual(roleselection.Pick.of(conn, ACCOUNT, summary,
+                                                       NOW).flags, 89)
+                conn.execute("delete from character_story_digest "
+                             "where character_id = 1")
+                conn.commit()
+                pick = roleselection.Pick.of(conn, ACCOUNT, summary, NOW)
+                self.assertEqual(pick.flags, 0)
+                self.assertEqual(pick.content_size, roleselection.FLAGLESS_SIZE)
+                reported = conn.execute(
+                    "select count(*) from character_tutorial_flags "
+                    "where character_id = 1").fetchone()[0]
+                self.assertEqual(pick.flags_note(),
+                                 f"key=1 sent 0 seen flag(s) "
+                                 f"(baseline 89 + reported {reported})")
+            finally:
+                conn.close()
+        finally:
+            shutil.rmtree(save.parent, ignore_errors=True)
+
+
+class StoryTest(unittest.TestCase):
+    """`(0,1370)`: the run's third frame, the character's story digest.
+
+    Two dumps, both whole frames: 110 for the M2 corpus's XRenYing (its
+    `character_story_digest.last_level`) and 0 for the 09-28 session's fresh
+    character, whose row does not exist yet.
+    """
+
+    def test_the_corpus_frame_is_the_row_level(self):
+        doc = json.loads((paths.DATA_DIR / "game" / "replies.json")
+                         .read_text(encoding="utf-8"))
+        srun = next(s["runs"][0] for s in doc["scripts"]
+                    if (s["request_main"], s["request_sub"]) == (1, 4))
+        blob = next(f["plain_hex"] for f in srun["replies"]
+                    if (f["main"], f["sub"]) == (0, 1370))
+        self.assertEqual(blob, "6e000000000000000000000000000000")
+        self.assertEqual(roleselection.story_body(110), bytes.fromhex(blob))
+        note = next(n[2] for n in srun["notes"] if n[1] == "STORY-DIGEST")
+        self.assertEqual(note, "conn={conn} " + roleselection.story_note(1, 110))
+
+    def test_the_dungeon_frame_is_zero_for_a_fresh_character(self):
+        doc = json.loads(DUNGEON.read_text(encoding="utf-8"))
+        srun = next(s["runs"][0] for s in doc["scripts"]
+                    if (s["request_main"], s["request_sub"]) == (1, 4))
+        blob = next(f["plain_hex"] for f in srun["replies"]
+                    if (f["main"], f["sub"]) == (0, 1370))
+        self.assertEqual(blob, "00" * 16)
+        self.assertEqual(roleselection.story_body(0), bytes.fromhex(blob))
+        note = next(n[2] for n in srun["notes"] if n[1] == "STORY-DIGEST")
+        self.assertEqual(note, "conn={conn} " + roleselection.story_note(3, 0))
 
 
 class SaveTest(unittest.TestCase):
@@ -280,24 +477,37 @@ class SocketTest(unittest.TestCase):
             self.assertTrue(summaries)
             expected = {}
             for summary in summaries:
+                level = characters.story_level(conn, summary.character_id)
                 expected[summary.slot_index] = (
                     accounts.cera(conn, ACCOUNT),
-                    roleselection.Pick.of(conn, ACCOUNT, summary, NOW))
+                    roleselection.Pick.of(conn, ACCOUNT, summary, NOW),
+                    summary.character_id, level)
         finally:
             conn.close()
 
-        for slot, (cera, pick) in expected.items():
+        for slot, (cera, pick, character_id, level) in expected.items():
             with self.subTest(slot=slot):
                 frames, text = self._select(slot)
                 self.assertEqual(frames[roleselection.RUN_AT][0].key(), (1, 4))
                 body = frames[roleselection.RUN_AT][1]
                 self.assertEqual(body, pick.body())
-                self.assertEqual(len(body), roleselection.BODY_SIZE)
+                # The body is the content padded to the next 16 bytes -- 1296
+                # for a character with the flag block, 1200 without it.
+                self.assertEqual(len(body) % 16, 0)
+                self.assertLess(len(body) - pick.content_size, 16)
                 self.assertEqual(struct.unpack("<I", body[5:9])[0], NOW)
                 self.assertEqual(struct.unpack("<I", body[45:49])[0], cera)
                 self.assertEqual(body[roleselection.TOWN_AT], pick.town)
                 self.assertEqual(body[roleselection.KEY_AT], slot + 1)
+                self.assertEqual(frames[roleselection.STORY_AT][0].key(), (0, 1370))
+                self.assertEqual(frames[roleselection.STORY_AT][1],
+                                 roleselection.story_body(level))
+                self.assertEqual(frames[3][0].key(), (0, 2082))
                 self.assertIn(f"SELECTION-4 conn=1 {pick.note()}", text)
+                self.assertIn(f"TUTORIAL-FLAGS conn=1 {pick.flags_note()}", text)
+                self.assertIn(f"STORY-DIGEST conn=1 "
+                              f"{roleselection.story_note(character_id, level)}",
+                              text)
 
     def test_a_slot_with_no_character_replays_the_capture(self):
         frames, text = self._select(9)

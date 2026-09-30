@@ -1,14 +1,17 @@
 """`(0,173)` CLIENT-SETTINGS: the row, the 504B push, the `(1,197)` save.
 
 Pinned 2026-09-27 against the one captured push (09-26 22:16:34.470, conn=2)
-and the reference's own 40 `S0/173` + 264 `saved C1/197` lines.  No test
-crosses the captured body with the live row -- the row is what the client
-edits, so the capture only pins the *shape* (`u32le(492)` + blob + 8 zero
-bytes) and the socket test pins body == f(row) for whatever the row holds.
+and the reference's own 40 `S0/173` + 264 `saved C1/197` lines, and the save
+re-pinned 2026-09-28 against the one dumped `(1,197)` (09-27 22:55:34.753,
+conn=2) and its `(0,343)` reply.  No test crosses the captured body with the
+live row -- the row is what the client edits, so the capture only pins the
+*shape* (`u32le(492)` + blob + 8 zero bytes) and the socket test pins
+body == f(row) for whatever the row holds.
 
-`recommendedGuideShown`'s slot is unpinned (`GUIDE_SHOWN_AT` is None), so the
-tests exercise the reader through a patched offset rather than assert the
-stand-in value.
+`recommendedGuideShown` reads the blob's `[396:398]` signed -- the slot the
+reference's own two line builders (`0x4458e0`, `0x3d21d0`) load with `movsx`.
+The CLASS-AVATAR step reads a *different* slot, `[2:4]`, through `0x597b10`:
+the `0x7fff` sentinel maps to 4, 0..4 pass through, the rest read 0.
 """
 from __future__ import annotations
 
@@ -19,7 +22,6 @@ import struct
 import tempfile
 import unittest
 from pathlib import Path
-from unittest import mock
 
 import _bootstrap  # noqa: F401
 
@@ -74,25 +76,50 @@ class BodyTest(unittest.TestCase):
         # A head that is not the row size is not this request.
         self.assertIsNone(clientsettings.parse_save(struct.pack("<I", 504) + blob))
 
-    def test_the_save_reply_is_the_captured_frame(self):
+    def test_the_save_reply_is_the_key_and_the_flags(self):
+        # `0x597bb0`: `u16le(key)` + the flags byte, zero-padded to 8 -- the
+        # 09-27 dump for character 2 (`02 00 02 ...`), and character 3 for
+        # every 09-28 send (`03 00 02 ...`).
         self.assertEqual(clientsettings.SAVE_REPLY_OPCODE.key(), (0, 343))
-        self.assertEqual(clientsettings.SAVE_REPLY_BODY,
+        self.assertEqual(clientsettings.avatar_reply_body(2, 2),
                          bytes.fromhex("0200020000000000"))
+        self.assertEqual(clientsettings.avatar_reply_body(3, 0x20),
+                         bytes.fromhex("0300200000000000"))
 
     def test_recommended_guide_shown_reads_the_pinned_slot(self):
         options = bytearray(clientsettings.ROW_SIZE)
-        struct.pack_into("<H", options, 40, 32767)
-        self.assertIsNone(clientsettings.GUIDE_SHOWN_AT)
-        with mock.patch.object(clientsettings, "GUIDE_SHOWN_AT", 40):
-            self.assertEqual(clientsettings.recommended_guide_shown(bytes(options)),
-                             32767)
+        self.assertEqual(clientsettings.GUIDE_SHOWN_AT, 396)
+        struct.pack_into("<H", options, 396, 1)
+        self.assertEqual(clientsettings.recommended_guide_shown(bytes(options)), 1)
+        # The `movsx` read, visible above 0x7fff only: 0xffff is -1, not 65535.
+        struct.pack_into("<H", options, 396, 0xFFFF)
+        self.assertEqual(clientsettings.recommended_guide_shown(bytes(options)), -1)
+
+    def test_preference_maps_the_sentinel_and_runs_off_size_to_zero(self):
+        options = bytearray(clientsettings.ROW_SIZE)
+        for raw, want in ((1, 1), (3, 3), (4, 4), (clientsettings.PREFERENCE_UNSET,
+                          clientsettings.PREFERENCE_UNSET_VALUE), (5, 0), (0, 0)):
+            struct.pack_into("<H", options, clientsettings.PREFERENCE_AT, raw)
+            self.assertEqual(clientsettings.preference(bytes(options)), want)
+        self.assertEqual(clientsettings.preference(bytes(491)), 0)
+
+    def test_flags_look_up_the_clamped_preference(self):
+        self.assertEqual(clientsettings.flags(1), 2)
+        self.assertEqual(clientsettings.flags(2), 0x10)
+        self.assertEqual(clientsettings.flags(0), 0)
 
     def test_the_lines_read_like_the_reference_ones(self):
-        options = bytes(clientsettings.ROW_SIZE)
-        self.assertEqual(clientsettings.push_line(options, 504),
+        options = bytearray(clientsettings.ROW_SIZE)
+        struct.pack_into("<H", options, clientsettings.GUIDE_SHOWN_AT, 1)
+        self.assertEqual(clientsettings.push_line(bytes(options), 504),
                          "S0/173 504B recommendedGuideShown=1")
-        self.assertEqual(clientsettings.save_line(options),
+        self.assertEqual(clientsettings.save_line(bytes(options)),
                          "saved C1/197 492B recommendedGuideShown=1")
+        struct.pack_into("<H", options, clientsettings.GUIDE_SHOWN_AT, 0)
+        self.assertEqual(clientsettings.push_line(bytes(options), 504),
+                         "S0/173 504B recommendedGuideShown=0")
+        self.assertEqual(clientsettings.avatar_line(3, 1, 2),
+                         "key=3 preference=1 flags=2; N343")
 
     def test_the_captured_push_has_the_shape(self):
         body = _captured_selection_run().replies[clientsettings.SELECTION_AT].plain
@@ -208,7 +235,8 @@ class SocketTest(unittest.TestCase):
         self.assertNotEqual(frames[0][1][4:496], bytes(492))
         text = log._fh.getvalue()
         self.assertIn("CLIENT-SETTINGS conn=", text)
-        self.assertIn("S0/173 504B recommendedGuideShown=1", text)
+        shown = clientsettings.recommended_guide_shown(self.row_options())
+        self.assertIn(f"S0/173 504B recommendedGuideShown={shown}", text)
 
     def test_the_save_writes_the_row_and_answers_the_343_ack(self):
         log = Log(stream=io.StringIO())
@@ -216,12 +244,20 @@ class SocketTest(unittest.TestCase):
         changed[7] ^= 0xFF
         [_, after_save] = self._session(
             log, (1, 4, bytes(16)), (1, 197, self.wire_save(bytes(changed))))
+        # The ack's key is the selected slot's own character key, and the flags
+        # byte is the row's preference mapped through `flags()` -- both read
+        # from the save, whose preference the 0.4.4 fixture holds as 3.
+        shown = clientsettings.recommended_guide_shown(bytes(changed))
+        flags = clientsettings.flags(clientsettings.preference(bytes(changed)))
         self.assertEqual(self._decode(after_save),
                          [(clientsettings.SAVE_REPLY_OPCODE,
-                           clientsettings.SAVE_REPLY_BODY)])
+                           clientsettings.avatar_reply_body(1, flags))])
         self.assertEqual(self.row_options(), bytes(changed))
         text = log._fh.getvalue()
-        self.assertIn("saved C1/197 492B recommendedGuideShown=1", text)
+        self.assertIn(f"saved C1/197 492B recommendedGuideShown={shown}", text)
+        self.assertIn(f"CLASS-AVATAR conn=1 key=1 preference="
+                      f"{clientsettings.preference(bytes(changed))} "
+                      f"flags={flags}; N343", text)
         self.assertIn("conn=1 (1,197) -> 1 frame(s) 24B", text)
 
     def wire_save(self, options: bytes) -> bytes:

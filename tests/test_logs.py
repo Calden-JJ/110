@@ -12,6 +12,7 @@ import functools
 import unittest
 
 import _bootstrap  # noqa: F401
+import _corpus
 
 from uslocalserver import logs, paths
 
@@ -19,6 +20,7 @@ from uslocalserver import logs, paths
 @functools.lru_cache(maxsize=1)
 def fields() -> tuple[tuple[str, str, str], ...]:
     """`(key, raw token, shape)` for every `hex=`/`plain=` in the corpus."""
+    _corpus.require()
     out = []
     import re
     for path in paths.corpus_logs():
@@ -50,20 +52,27 @@ class TheColumnLayout(unittest.TestCase):
     def test_a_level_is_not_a_tag(self):
         # `DEBUG PACKET` and `WARN UNHANDLED` both put the interesting word
         # third; a `split()`-based reader would key on DEBUG / WARN and find
-        # neither.  The two sets stay disjoint in every log; the level set
-        # itself grows (later logs add ERROR), so it is only bounded below.
+        # neither.  Two independent checks: the two sets must stay disjoint in
+        # whatever logs are present (a narrow release may write neither tag,
+        # so which tags exist is not asserted), and the shapes must parse.
         levels, tags = set(), set()
         for path in paths.server_logs():
             for ln in logs.stream(path):
                 levels.add(ln.level)
                 tags.add(ln.tag)
-        self.assertLessEqual({"DEBUG", "INFO", "WARN"}, levels)
-        self.assertIn("PACKET", tags)
-        self.assertIn("UNHANDLED", tags)
+        self.assertTrue(levels, "no server logs to read")
         self.assertFalse(levels & tags)
+        # The two shapes, parsed rather than globbed for.
+        for level, tag in (("DEBUG", "PACKET"), ("WARN", "UNHANDLED"),
+                           ("INFO", "LISTEN")):
+            line = (f"2026-09-26 22:16:32.032 +08:00 {level} {tag:<12} "
+                    f"conn=1 C->S game (1,39) wire=13 body=0 state=Ready")
+            m = logs.LINE.match(line)
+            self.assertIsNotNone(m, line)
+            self.assertEqual((m.group(3), m.group(4)), (level, tag))
 
     def test_a_real_packet_line_yields_a_record(self):
-        records = tuple(logs.iter_packets(paths.LOGS_DIR / "server-20260926.log"))
+        records = tuple(logs.iter_packets(_corpus.require()))
         self.assertTrue(records)
         r = records[0]
         self.assertIn(r.direction, ("C->S", "S->C"))
@@ -128,6 +137,7 @@ class HexFieldShapes(unittest.TestCase):
         # So a test that needs a whole frame has exactly one log to read.
         # Later logs are not part of the corpus and do carry dumps -- that is
         # the point of pinning the corpus rather than globbing the directory.
+        _corpus.require()
         per_log = {}
         for path in paths.corpus_logs():
             per_log[path.name] = sum(
@@ -150,7 +160,7 @@ class OpcodeHelpers(unittest.TestCase):
     def test_a_coordinate_pair_is_not_an_opcode(self):
         # COMBAT-DIE-39 logs `cell=(1,0) boss=(3,0)`; a bare \((\d+),(\d+)\)
         # picks those up and pollutes the registry with main in {2,3,4,5}.
-        records = tuple(logs.iter_packets(paths.LOGS_DIR / "server-20260926.log"))
+        records = tuple(logs.iter_packets(_corpus.require()))
         for r in records:
             if r.opcode is not None:
                 with self.subTest(line=r.line_no):

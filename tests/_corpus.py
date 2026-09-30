@@ -6,27 +6,41 @@ everything frame-related.  It covers the login/channel handshake window only.
 
 288 lines carry a hex dump; 4 of them are truncated as `<hex>...(+NNB)` --
 all S->C game frames whose body exceeds the logger's 4096-byte cut.
+
+That log lived in the 0.3.6 tree, which has been deleted; `CORPUS_LOG` is now
+resolved by `_bootstrap.corpus_log()` and every consumer must go through
+`require()`, which skips rather than reporting a missing fixture as a defect.
 """
 from __future__ import annotations
 
 import functools
-import os
 from pathlib import Path
 
 import _bootstrap  # noqa: F401  (sys.path)
+from _bootstrap import require_corpus
 
-from uslocalserver import logs, paths
+from uslocalserver import logs
 from uslocalserver.logs import PacketRecord
 
-CORPUS_LOG = Path(os.environ.get("DFO_CORPUS_LOG", paths.LOGS_DIR / "server-20260926.log"))
+#: The 0.3.6 capture, when present.  None means the corpus is not on disk and
+#: every frame-count assertion in the suite is unverifiable.
+CORPUS_LOG: Path | None = _bootstrap.corpus_log()
 
 EXPECTED_TOTAL = 288
 EXPECTED_TRUNCATED = 4
 
 
+def require() -> Path:
+    """The corpus path, skipping the test when it is not on disk."""
+    global CORPUS_LOG
+    if CORPUS_LOG is None:
+        CORPUS_LOG = require_corpus()
+    return CORPUS_LOG
+
+
 @functools.lru_cache(maxsize=1)
 def all_packets() -> tuple[PacketRecord, ...]:
-    return tuple(p for p in logs.iter_packets(CORPUS_LOG) if p.hex is not None)
+    return tuple(p for p in logs.iter_packets(require()) if p.hex is not None)
 
 
 @functools.lru_cache(maxsize=1)

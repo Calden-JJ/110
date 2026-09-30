@@ -73,9 +73,10 @@ class UseRequest:
         return b"\x01" + plain[:15]
 
     def request_line(self, conn: int, plain: bytes) -> str:
+        """`plain=` in upper case, like every request line in the corpus."""
         return (f"conn={conn} slot={self.slot_index} list={self.list_type} "
                 f"item={self.item_id} iv={self.instance_value} "
-                f"plain={plain.hex()}")
+                f"plain={plain.hex().upper()}")
 
     def outcome_line(self, conn: int, before: int, after: int) -> str:
         return (f"conn={conn} item {self.item_id} at slot {self.slot_index}: "

@@ -18,10 +18,10 @@ balances, so it ships as a constant, `data/game/selection4.bin` (the
 `packetHexLog` corpus session's own body, 09-26 22:16:34;
 `tools/extract_game_replies.py` writes it).
 
-**The logged size.**  The line reports 1286B, ten less than the 1296 it sends,
-and across its 39 lines the number takes three values that decompose exactly::
+**The logged size.**  The line reports ten less than the frame it sends, and
+the number takes three values that decompose exactly::
 
-    1188  the first login (09-25 08:57:20, level 1) -- no tutorial flags sent
+    1188  no tutorial flags and no contract row
     1277  + 89, the flag block at [254:344): a count byte 0x59 = 89 and the
           ids 0..88, matching the `TUTORIAL-FLAGS` note beside each line
           (`sent 89 seen flag(s) max=88`)
@@ -29,7 +29,14 @@ and across its 39 lines the number takes three values that decompose exactly::
           and four bytes that never differ in any dump
 
 and each is padded up to the next 16-byte multiple: 1188 -> 1200, 1277 ->
-1280, 1286 -> **1296**, the size that goes on the wire.
+1280, 1286 -> 1296.  The flag block is an insertion, not a region: a
+character with no flags sends 89 bytes less than the template and the whole
+tail moves down, which is why `body()` rebuilds rather than overwrites.
+Neither 1188 nor 1277 was ever dumped; what is dumped is the 09-28 dungeon
+session's 1197 (no flags, contract) -> **1200**, reproduced byte for byte.
+
+The gate on the block is the one thing here fitted rather than measured --
+`Pick.flags` carries the three characters behind it.
 
 **The countdown pair.**  `[36]`/`[37:41]` are the account's
 `account_premium_contracts` row: the 33 post-contract lines all print
@@ -59,6 +66,11 @@ four values across the logs (100000, 99870, 99005, 96500).
 and is in no table -- `PRIVILEGES` is a stand-in.  Name, job and level are in
 the line only; the body does not carry them.
 
+**The story digest.**  `(0,1370)`, the run's third frame, is
+`u32le(character_story_digest.last_level)` + 12 zero bytes -- 110 in the M2
+dump (XRenYing's row), 0 in the 09-28 one (a character with no row), and both
+dumps are whole frames, so nothing else in it has ever differed.
+
 **Inferred, no capture**: an account with no contract row.  The 1277/1188
 bodies were never dumped, so neither the record's absence nor the resulting
 size (the padding rule says 1280, not 1296) is observed; `NO_EXPIRY` writes a
@@ -80,13 +92,20 @@ from ...protocol import frame
 
 OPCODE = frame.Opcode(1, 4, frame.OpcodeEncoding.U8_U16LE, True)
 
-#: The frame's size, and the content size the reference's line reports for it.
+#: The third frame of the run, the story digest: `u32le(last_level)` + 12
+#: zero bytes.  The M2 dump carries 110 (XRenYing's `character_story_digest`
+#: row) and the 09-28 session's 0 (its character has no row).
+STORY_OPCODE = frame.Opcode(0, 1370, frame.OpcodeEncoding.U8_U16LE, True)
+
+#: The frame's template size.  The body it builds is smaller when the
+#: character has no tutorial flags -- see `FLAGLESS_SIZE`.
 BODY_SIZE = 1296
-LOGGED_SIZE = 1286
 
 #: Where the run's four frames sit, 0-based: the `(0,173)` push is 0
-#: (`account.clientsettings.SELECTION_AT`), this body is 1.
+#: (`account.clientsettings.SELECTION_AT`), the body is 1, the story digest
+#: is 2, and `(0,2082)` -- replayed as captured -- is 3.
 RUN_AT = 1
+STORY_AT = 2
 
 #: The six live regions.
 NOW_AT = 5
@@ -95,6 +114,23 @@ CONTRACT_TYPE_AT = 36
 CONTRACT_END_AT = 37
 CERA_AT = 45
 TOWN_AT = 249
+
+#: The seventh: the tutorial-flag block, `[254]` count then that many ids.
+#: The template's own copy is 89 ids, `0..88`, and the core resumes at 344 --
+#: the block is an *insertion*, so a character with no flags sends 89 bytes
+#: less and the whole tail moves down (`body()`).
+FLAG_COUNT_AT = 254
+FLAG_IDS_AT = 255
+FLAG_IDS_END = 344
+
+#: The ids a character that has started the story sends: one per index, 0..88.
+#: "baseline 89" in the reference's TUTORIAL-FLAGS line.
+BASELINE_FLAGS = 89
+
+#: The template's content length, before its own 10 bytes of padding -- what
+#: the reference's line counts, and 89 more than a flagless character's 1197.
+CONTENT_SIZE = 1286
+FLAGLESS_SIZE = CONTENT_SIZE - BASELINE_FLAGS
 
 #: What `[37:41]` counts down to when the account has no contract row.
 NO_EXPIRY = 0
@@ -127,15 +163,45 @@ class Pick:
     town: int
     contracts: tuple[tuple[int, int], ...]     # (premium_type, expires_at)
     now: int
+    #: How many tutorial flags `[254]` counts, and the ids `[255:255+flags]`
+    #: carries.  The template's own block -- what a hand-built `Pick` means.
+    flags: int = BASELINE_FLAGS
+    #: The `reported N` of the TUTORIAL-FLAGS line: rows the client has sent.
+    reported: int = 0
 
     @classmethod
     def of(cls, conn: sqlite3.Connection, account: int, summary: "characters.CharacterSummary",
            now: int) -> "Pick":
+        """Read the row the way the reference does -- including `flags`.
+
+        **One inference, three observations.**  Every other byte of this body
+        is either a dump or a written live region; this is the only rule
+        fitted rather than measured, and it has three characters behind it:
+
+        * XRenYing (story digest last_level 110, 4 reported flags) -> 89
+        * LRouDao (last_level 55, 4 reported) -> 89
+        * XJianHun, the 09-28 dungeon session's new character (no digest row,
+          0 reported) -> 0, and its body is 89 bytes shorter
+
+        What separates them is the digest row: the reported count is 4 vs 0
+        too, but XRenYing already had its four flags on 09-25 08:57 when the
+        reference built it an 1188B body -- its digest row is written later
+        that day (12:06) -- so the flag *rows* are not the gate.  LRouDao is
+        the same story from the other side: it sent 89 on 09-27 17:15, before
+        its row's own `updated_at` of 22:53, which is just its last level
+        change.  A character that has never been written to
+        `character_story_digest` is one that has not started the story, and
+        an empty block is what the reference sends it.
+        """
         row = accounts.cera(conn, account)
+        started = characters.story_level(conn, summary.character_id) > 0
         return cls(account=account, slot=summary.slot_index, name=summary.name,
                    job=summary.class_id, level=summary.level,
                    cera=0 if row is None else row, town=summary.town_id,
-                   contracts=accounts.premium_contracts(conn, account), now=now)
+                   contracts=accounts.premium_contracts(conn, account), now=now,
+                   flags=BASELINE_FLAGS if started else 0,
+                   reported=characters.tutorial_flag_count(conn,
+                                                           summary.character_id))
 
     @property
     def key(self) -> int:
@@ -156,9 +222,20 @@ class Pick:
         expiry = self.contracts[0][1] if self.contracts else NO_EXPIRY
         return max(0, expiry - self.now)
 
+    @property
+    def content_size(self) -> int:
+        """What the reference's line counts -- its ten pad bytes are not in
+        it, so a flagless character reports 1197 rather than 1200."""
+        return FLAGLESS_SIZE + self.flags
+
     def body(self) -> bytes:
-        """The 1296B body: the captured blob with the six regions written."""
-        out = bytearray(template())
+        """The body: the captured blob with the seven regions written, the
+        flag block cut to size and the whole thing padded to 16 bytes."""
+        src = template()
+        out = bytearray(src[:FLAG_IDS_AT] + bytes(range(self.flags))
+                        + src[FLAG_IDS_END:CONTENT_SIZE])
+        out[FLAG_COUNT_AT] = self.flags & 0xFF
+        out += bytes(-len(out) % 16)
         out[NOW_AT:NOW_AT + 4] = struct.pack("<I", self.now)
         out[KEY_AT] = self.key & 0xFF
         out[CONTRACT_TYPE_AT] = self.premium_type & 0xFF
@@ -169,10 +246,32 @@ class Pick:
 
     def note(self) -> str:
         """The `SELECTION-4` prose after the bare `conn=N `."""
-        text = (f"built {LOGGED_SIZE}B role-selection response for account "
+        text = (f"built {self.content_size}B role-selection response for account "
                 f"{self.account}: slot={self.slot} key={self.key} "
                 f"name='{self.name}' job={self.job} level={self.level} "
                 f"cera={self.cera} privileges={PRIVILEGES}")
         if self.contracts:
             text += f" contracts={self.premium_type}:{self.remaining}"
         return text
+
+    def flags_note(self) -> str:
+        """The `TUTORIAL-FLAGS` prose: the block it sent, then the id range's
+        top (which a flagless character has none of), then the two counts."""
+        text = f"key={self.key} sent {self.flags} seen flag(s)"
+        if self.flags:
+            text += f" max={self.flags - 1}"
+        return f"{text} (baseline {BASELINE_FLAGS} + reported {self.reported})"
+
+
+def story_body(level: int) -> bytes:
+    """`(0,1370)`: the story digest, `u32le(last_level)` + 12 zero bytes.
+
+    Both dumps are the whole frame -- 110 for XRenYing, 0 for the 09-28
+    session's fresh character -- and nothing else in them ever differed.
+    """
+    return struct.pack("<I", level) + bytes(12)
+
+
+def story_note(character: int, level: int) -> str:
+    """The `STORY-DIGEST` prose after the bare `conn=N `."""
+    return f"S0/1370 character={character} lastLevel={level}"

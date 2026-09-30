@@ -38,7 +38,8 @@ corpus *did* write down, and opcode and declared length must agree too.  Any
 disagreement is an error, not a silently rewritten script.
 
     python tools/extract_game_replies.py             # report
-    python tools/extract_game_replies.py --json --completion Logs/reference-replay-20260927.log
+    python tools/extract_game_replies.py --json --completion Logs/reference-replay-20260927.log \
+        --town-entry Logs-dungeon/server-20260928.log
                                                      #  -> data/game/replies.json        (169511B)
                                                      #   + data/game/selection4.bin      (1296B)
 
@@ -46,6 +47,14 @@ disagreement is an error, not a silently rewritten script.
 truncated bodies fall back to "prefix + missing count" and the file shrinks to
 146630B *without any error*, quietly gutting the `(0,2)` frames the M2.3
 diff is built on.  Check `git status data/game/` after a run.
+
+**Always pass `--town-entry` too.**  It splices in the two runs the town-entry
+burst takes its other shape from (`town_entry_runs`): the M2 corpus character
+walked in through `(1,143)` and the 09-28 dungeon character through `(1,666)`,
+and a script keyed by opcode alone can only hold one of those per opcode.
+Without it the rewrite answers a `(1,666)` town entry with the bare 8B ack and
+the client never renders the town.  Every run records the log it came from in
+`capture=`, so the two sources stay tellable apart in the file.
 
 `--json` also writes `selection4.bin`, the `(1,4)` run's own 1296B body: it is
 the template `game.character.roleselection` ships as a constant and rewrites
@@ -116,12 +125,27 @@ DISPATCH = re.compile(r"conn=\d+ \((\d+),(\d+)\) -> (\d+) frame\(s\) (\d+)B "
 #: frame, not to the capture, so they become placeholders and the server fills
 #: them from what it actually received -- a note that echoed the capture's
 #: bytes would read as evidence while proving nothing.
+#:
+#: `{n}` is the *request* body's length: `_log_notes` fills it from the frame
+#: the server just read, so the placeholder only fits the lines whose number is
+#: that length.  `TOWN-ITEMS` prints the size of its own `(0,13)` reply -- 2480
+#: while the `(1,666)` that draws it is 0B -- and would come out as "body=0B"
+#: if it were templated, so it stays literal.  The third element names the one
+#: tag the substitution is true for, or None for every tag.
 NOTE_SUBS = (
-    (re.compile(r"conn=\d+"), "conn={conn}"),
-    (re.compile(r"body=\d+B"), "body={n}B"),
-    (re.compile(r"consumed \d+B"), "consumed {n}B"),
-    (re.compile(r"plain=[0-9a-fA-F]*(\.\.\.\(\+\d+B\))?"), "plain={plain}"),
+    (re.compile(r"conn=\d+"), "conn={conn}", None),
+    (re.compile(r"body=\d+B"), "body={n}B", "UNHANDLED"),
+    (re.compile(r"consumed \d+B"), "consumed {n}B", "LEGACY-QUERY"),
+    (re.compile(r"plain=[0-9a-fA-F]*(\.\.\.\(\+\d+B\))?"), "plain={plain}", None),
 )
+
+
+def resub(msg: str, tag: str) -> str:
+    for pat, rep, only in NOTE_SUBS:
+        if only is not None and tag != only:
+            continue
+        msg = pat.sub(rep, msg)
+    return msg
 
 
 #: `--completion <log>`: the full plaintext of the frames this corpus cut, keyed
@@ -189,7 +213,7 @@ def fill_truncated(events: list[dict]) -> int:
     return filled
 
 
-def corpus_events():
+def corpus_events(path: Path | None = None, session=None):
     """The session as `(sess, events)` in line order.
 
     Packets carry their decoded frame; everything else that is not a PACKET or
@@ -197,11 +221,20 @@ def corpus_events():
     (`HANDSHAKE ... built success response`, `WARN UNHANDLED ...`).  Those are
     what makes the rewritten log diffable against the capture, so they are part
     of the script rather than something the rewrite invents.
+
+    `path`/`session` default to the M2 corpus.  `--town-entry` passes the
+    09-28 dungeon log instead, where the session to use is the last hex-dumped
+    one (`logs.corpus_session`), not necessarily `pick_session`'s.
     """
-    sess = P.pick_session()
+    path = P.LOG if path is None else path
+    if session is None:
+        sess = P.pick_session()
+    else:
+        sess = {"conn": session.conn, "port": session.port,
+                "first": session.first, "last": session.last}
     packets = {}
     s2c_seen = 0
-    for pk in logs.iter_packets(P.LOG):
+    for pk in logs.iter_packets(path):
         if not (sess["first"] <= pk.line_no <= sess["last"]):
             continue
         if pk.link != "game" or pk.conn != sess["conn"] or pk.hex is None:
@@ -232,7 +265,7 @@ def corpus_events():
         print(f"completions applied: {fill_truncated(list(packets.values()))}")
 
     events = []
-    for ln in logs.stream(P.LOG):
+    for ln in logs.stream(path):
         if not (sess["first"] <= ln.line_no <= sess["last"]):
             continue
         if ln.line_no in packets:
@@ -282,11 +315,39 @@ def build_script(sess, events):
             if cur is not None:
                 cur["runs"][-1]["state"] = list(e["state"])
         elif cur is not None:
-            msg = e["msg"]
-            for pat, rep in NOTE_SUBS:
-                msg = pat.sub(rep, msg)
-            cur["runs"][-1]["notes"].append([e["level"], e["tag"], msg])
+            cur["runs"][-1]["notes"].append(
+                [e["level"], e["tag"], resub(e["msg"], e["tag"])])
     return connect, scripts
+
+
+def town_entry_runs(path: Path) -> tuple[dict, dict]:
+    """The two runs the town-entry burst only has in the 09-28 session.
+
+    The burst rides whichever of `(1,143)` / `(1,666)` the client sends from
+    `CharacterSelected`, and either of them sent again from `InTown` draws a
+    one-frame ack instead -- so each of the two opcodes needs a run per `from`
+    state.  The M2 corpus shows only one side of each pair: char 1 entered
+    through `(1,143)` (33 frames) and its `(1,666)` is the ack.  The 09-28
+    dungeon session is the other character: a fresh one, which enters through
+    `(1,666)` (31 frames, the same burst less the three bag frames it has no
+    rows for) and whose three later `(1,143)` sends are all acks.
+    """
+    session = logs.corpus_session(path)
+    sess, events = corpus_events(path, session)
+    _, scripts = build_script(sess, events)
+    by = {(s["request_main"], s["request_sub"]): s for s in scripts}
+
+    def one(key: tuple[int, int], from_state: str) -> dict:
+        runs = [r for r in by[key]["runs"] if r["state"] == [from_state, "InTown"]]
+        if not runs:
+            raise SystemExit(f"{path.name}: no ({key[0]},{key[1]}) run "
+                             f"{from_state}->InTown to splice")
+        run = runs[0]
+        run["capture"] = path.name
+        run["notes"] = [[lv, tag, resub(m, tag)] for lv, tag, m in run["notes"]]
+        return run
+
+    return one((1, 666), "CharacterSelected"), one((1, 143), "InTown")
 
 
 def frame_doc(p: dict) -> dict:
@@ -351,8 +412,23 @@ def main(argv: list[str]) -> int:
             raise SystemExit("--completion needs a log path")
         completion = Path(argv[i + 1])
         COMPLETION.update(load_completion(completion))
+    town_entry = None
+    if "--town-entry" in argv:
+        i = argv.index("--town-entry")
+        if i + 1 >= len(argv):
+            raise SystemExit("--town-entry needs a log path")
+        town_entry = Path(argv[i + 1])
     sess, events = corpus_events()
     connect, scripts = build_script(sess, events)
+
+    if town_entry is not None:
+        burst, ack = town_entry_runs(town_entry)
+        by = {(s["request_main"], s["request_sub"]): s for s in scripts}
+        by[(1, 666)]["runs"].insert(0, burst)
+        by[(1, 143)]["runs"].append(ack)
+        print(f"town-entry spliced from {town_entry.name}: "
+              f"(1,666) {len(burst['replies'])}-frame burst and "
+              f"(1,143) {len(ack['replies'])}-frame ack\n")
 
     print(f"# conn={sess['conn']} game:{sess['port']} lines "
           f"{sess['first']}..{sess['last']}\n")
@@ -407,6 +483,7 @@ def main(argv: list[str]) -> int:
                 "request_sub": s["request_sub"],
                 "runs": [{
                     "state": r["state"],
+                    "capture": r.get("capture", Path(P.LOG).name),
                     "notes": r["notes"],
                     "replies": [frame_doc(p) for p in r["replies"]],
                 } for r in s["runs"]],

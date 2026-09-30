@@ -47,6 +47,7 @@ from __future__ import annotations
 import sqlite3
 import struct
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Sequence
 
 from ...game import data
@@ -56,6 +57,13 @@ from ...persistence.characters import CharacterSummary
 FINISHED_OPCODE = frame.Opcode(0, 342, frame.OpcodeEncoding.U8_U16LE, True)
 IN_PROGRESS_OPCODE = frame.Opcode(0, 291, frame.OpcodeEncoding.U8_U16LE, True)
 AVAILABLE_OPCODE = frame.Opcode(0, 21, frame.OpcodeEncoding.U8_U16LE, True)
+
+ACCEPT_OPCODE = frame.Opcode(1, 31, frame.OpcodeEncoding.U8_U16LE, True)
+FINISH_OPCODE = frame.Opcode(1, 34, frame.OpcodeEncoding.U8_U16LE, True)
+
+#: Both requests carry the quest id at offset 2, behind a two-byte constant
+#: (`1f 00` for the accept, `22 00` for the finish) and its flags.
+QUEST_AT = 2
 
 #: Where the three sit in the `(1,143)` burst, 0-based.
 FINISHED_AT = 17
@@ -93,6 +101,11 @@ ALLOWED_GRADES = frozenset({"side", "episode", "daily mission", "common unique"}
 IN_PROGRESS_TAIL = bytes(10)
 
 
+def request_quest(plain: bytes) -> int:
+    """The quest a `(1,31)`/`(1,34)` names: the `u16le` behind the constant."""
+    return struct.unpack_from("<H", plain, QUEST_AT)[0]
+
+
 def varint(value: int) -> bytes:
     out = bytearray()
     while True:
@@ -111,15 +124,22 @@ def finished_ids(conn: sqlite3.Connection, character_id: int) -> list[int]:
 
 def in_progress(conn: sqlite3.Connection,
                 character_id: int) -> list[tuple[int, int]]:
-    """`(quest_id, trigger_value)` of every accepted-but-unfinished quest."""
+    """`(quest_id, trigger_value)` of every started-but-unfinished quest.
+
+    Read from `character_quest_progress`, not `character_quests`: the two
+    agree for every quest the client accepted -- the accept writes both rows
+    -- but only the progress table carries the starter quest a character is
+    born on.  A fresh character's first state line reads `in-progress=1 (of 0
+    ever accepted); in-progress=3145` (2026-09-28 21:09:42, and the same
+    shape on 09-19 and 09-25): one progress row, no accept behind it.  A
+    Lv110 character pins the same split from the other side -- 814 finished,
+    11 ever accepted, 13615 the one progress row without a finish.
+    """
     return [(r[0], r[1]) for r in conn.execute(
-        "select q.quest_id, coalesce(p.trigger_value, 0) "
-        "from character_quests q "
-        "left join character_quest_progress p "
-        "  on p.character_id = q.character_id and p.quest_id = q.quest_id "
-        "where q.character_id = ? and q.quest_id not in "
+        "select p.quest_id, p.trigger_value from character_quest_progress p "
+        "where p.character_id = ? and p.quest_id not in "
         "  (select quest_id from character_finished_quests where character_id = ?) "
-        "order by q.quest_id", (character_id, character_id))]
+        "order by p.quest_id", (character_id, character_id))]
 
 
 def accepted_count(conn: sqlite3.Connection, character_id: int) -> int:
@@ -127,10 +147,112 @@ def accepted_count(conn: sqlite3.Connection, character_id: int) -> int:
                         (character_id,)).fetchone()[0]
 
 
+def accept(conn: sqlite3.Connection, character_id: int, quest_id: int, *,
+           now: int) -> None:
+    """`(1,31)`: the two rows an accept writes.
+
+    The progress row starts at trigger 1, which is what "not yet triggered"
+    reads as: every unfinished row in the save carries 1 -- exactly one per
+    character, 13615/13780/3147 -- and every finished one 0, so `LRouDao`'s
+    117 finished rows are the 117 the boss-cell kill zeroed.  The
+    `QUEST-STARTER` line's `trigger=1` is the same value, and `cleared_trigger`
+    is the write that takes it to 0.  The or-replace is for a re-sent accept:
+    the reference's rows cannot say what it does with one, and dying on the
+    primary key would take the connection down.
+    """
+    with conn:
+        conn.execute("insert or replace into character_quests "
+                     "(character_id, quest_id, accepted_at) values (?, ?, ?)",
+                     (character_id, quest_id, now))
+        conn.execute("insert or replace into character_quest_progress "
+                     "(character_id, quest_id, trigger_value, answer_index, "
+                     "counter_initialized) values (?, ?, 1, -1, 1)",
+                     (character_id, quest_id))
+
+
+@lru_cache(maxsize=1)
+def _clear_map_quests() -> dict[int, tuple[int, int]]:
+    """Room -> (quest id, `dungeonInfo[0]`) for every `clear map` quest."""
+    out: dict[int, tuple[int, int]] = {}
+    for key, quest in data.load("quest_content")["quests"].items():
+        if quest.get("questType") != "clear map":
+            continue
+        dungeon = (quest.get("dungeonInfo") or (0,))[0]
+        for target in quest.get("targets") or ():
+            out.setdefault(target, (int(key), dungeon))
+    return out
+
+
+def clear_map_quest(map_id: int) -> tuple[int, int] | None:
+    """The `clear map` quest naming this room, and the dungeon it belongs to.
+
+    The capture's two `QUEST-COMBAT` lines: 76126 -> 3145 (dungeon 3) and
+    76136 -> 3146 (dungeon 5).  The tutorial's own boss room, 53130, is in no
+    such quest's targets, which is why the tutorial's clear sends no burst --
+    its kill still appends `(0,31)`, one frame and no quest state.
+    """
+    return _clear_map_quests().get(map_id)
+
+
+def prerequisite(quest_id: int) -> int:
+    """The quest a story retry line prints before the arrow.
+
+    All five story lines the corpus holds -- `quest=3146 -> quest=3147
+    dungeon=6` and its four 09-26 siblings -- name the target quest's own
+    `preRequiredQuests[0]`.  The other reading that fits all five is the
+    cleared run's `clear map` quest, which is the same id wherever both
+    exist; the table says 0 when a target has no prerequisite at all.
+    """
+    quest = data.load("quest_content")["quests"].get(str(quest_id)) or {}
+    prereqs = tuple(quest.get("preRequiredQuests") or ())
+    return prereqs[0] if prereqs else 0
+
+
+def cleared_trigger(conn: sqlite3.Connection, character_id: int,
+                    quest_id: int) -> int:
+    """The write a boss-cell-clearing kill makes: the trigger back to 0.
+
+    Returns the value the row carried -- `trigger=1->0` in the reference's
+    line.  A quest with no progress row updates nothing, and the 0 it reads
+    as is the caller's to print.
+    """
+    row = conn.execute("select trigger_value from character_quest_progress "
+                       "where character_id = ? and quest_id = ?",
+                       (character_id, quest_id)).fetchone()
+    before = 0 if row is None else row[0]
+    with conn:
+        conn.execute("update character_quest_progress set trigger_value = 0 "
+                     "where character_id = ? and quest_id = ?",
+                     (character_id, quest_id))
+    return before
+
+
+def finish(conn: sqlite3.Connection, character_id: int, quest_id: int, *,
+           now: int) -> None:
+    """`(1,34)`: the finished row, and nothing else.
+
+    Finishing does not require -- or record -- an accept: 804 of `XRenYing`'s
+    814 finished quests have no `character_quests` row, and the progress row
+    (if any) stays where it is; `in_progress` is what subtracts the finish.
+    """
+    with conn:
+        conn.execute("insert or replace into character_finished_quests "
+                     "(character_id, quest_id, finished_at) values (?, ?, ?)",
+                     (character_id, quest_id, now))
+
+
 def finished_body(ids: Sequence[int]) -> bytes:
-    """`(0,342)`: count, the ids, a zero terminator."""
+    """`(0,342)`: the count, then the ids.
+
+    Four bytes of the entry burst's frame are not content: `4 + 4 x 814` is
+    3260 and the captured body 3264, and the four zeros the test used to read
+    as a terminator are the tile padding every frame of the kind gets.  The
+    story burst settles it -- `4 + 4 x 3` is 16, already a multiple of 8, and
+    the reference's own frame there is those sixteen bytes with no trailer at
+    all (2026-09-28 21:13:22.026, one `03` and three ids).
+    """
     return (struct.pack("<I", len(ids))
-            + b"".join(struct.pack("<I", i) for i in ids) + bytes(4))
+            + b"".join(struct.pack("<I", i) for i in ids))
 
 
 def in_progress_body(entries: Sequence[tuple[int, int]]) -> bytes:

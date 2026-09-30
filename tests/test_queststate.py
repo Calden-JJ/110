@@ -21,6 +21,7 @@ import _bootstrap  # noqa: F401
 
 from uslocalserver import paths
 from uslocalserver.game import data
+from uslocalserver.game.dungeon import clear as dungeon_clear
 from uslocalserver.game.town import queststate
 from uslocalserver.persistence import characters, schema
 from uslocalserver.protocol import frame
@@ -95,10 +96,15 @@ class BodyTest(unittest.TestCase):
             self.assertEqual(out, value)
             self.assertEqual(pos, len(enc))
 
-    def test_finished_body_is_count_ids_zero(self):
+    def test_finished_body_is_the_count_and_the_ids(self):
         self.assertEqual(queststate.finished_body([5, 9]),
-                         struct.pack("<III", 2, 5, 9) + bytes(4))
-        self.assertEqual(queststate.finished_body([]), struct.pack("<I", 0) + bytes(4))
+                         struct.pack("<III", 2, 5, 9))
+        self.assertEqual(queststate.finished_body([]), struct.pack("<I", 0))
+        # Three ids are 16 bytes, already a tile multiple: the reference's own
+        # story burst sends them with nothing behind them (2026-09-28
+        # 21:13:22.026).
+        self.assertEqual(queststate.finished_body([3145, 3146, 4873]),
+                         bytes.fromhex("03000000490C00004A0C000009130000"))
 
     def test_in_progress_body_is_the_captured_sixteen_bytes(self):
         # 09-27 13:23, quest 13615 with trigger 1 and ten zero bytes: the only
@@ -159,14 +165,16 @@ class BodyTest(unittest.TestCase):
 class CaptureTest(unittest.TestCase):
     """`available_ids` against the captured frames, off shipped data only."""
 
-    def test_finished_frame_ids_and_trailer(self):
+    def test_finished_frame_ids_and_padding(self):
         run = _captured_entry_run()
         body = run.replies[queststate.FINISHED_AT].plain
         ids = _finished_of_frame(body)
         self.assertEqual(len(ids), 814)
         self.assertEqual(ids, sorted(ids))
+        # `4 + 4 x 814` is 3260 and the frame 3264: the four bytes past the
+        # ids are the tile's padding, not a terminator.
         self.assertEqual(body[4 + 4 * 814:], bytes(4))
-        self.assertEqual(queststate.finished_body(ids), body)
+        self.assertEqual(queststate.finished_body(ids) + bytes(4), body)
 
     def test_in_progress_frame_is_the_one_entry_body(self):
         run = _captured_entry_run()
@@ -293,12 +301,19 @@ class SocketTest(unittest.TestCase):
         finally:
             conn.close()
 
+        # The burst pads every rebuilt body to its opcode's tile, the way the
+        # reference's own frames are padded (the `(0,342)` of the story
+        # settle is the capture that shows the count's four bytes alone).
         self.assertEqual(burst[queststate.FINISHED_AT][1],
-                         queststate.finished_body(finished))
+                         dungeon_clear.padded(queststate.FINISHED_OPCODE,
+                                              queststate.finished_body(finished)))
         self.assertEqual(burst[queststate.IN_PROGRESS_AT][1],
-                         queststate.in_progress_body(in_progress))
+                         dungeon_clear.padded(queststate.IN_PROGRESS_OPCODE,
+                                              queststate.in_progress_body(in_progress)))
         self.assertEqual(burst[queststate.AVAILABLE_AT][1],
-                         queststate.available_body(summary.level, available))
+                         dungeon_clear.padded(queststate.AVAILABLE_OPCODE,
+                                              queststate.available_body(
+                                                  summary.level, available)))
 
         text = log._fh.getvalue()
         self.assertIn(queststate.state_line(finished, in_progress, accepted), text)

@@ -44,9 +44,9 @@ paid 3037 first at cell 367 then the bought 3034 at 364).
 
 **Where the item lands** is two rules, both read off the save.  A shop rule
 whose `path` starts `stackable/material/` lands in `account_materials`,
-addressed by *cell* = 363 + its rank among the account's rows by item id
-(3034 -> 364, 3035 -> 365, both measured; the paid 3037 sits at 367 and is
-already there); anything else lands in `character_items` list 0, in the
+addressed by *cell* out of the band table (`BAG_ITEMS`: 3034 -> 364,
+3035 -> 365, both measured, and the paid 3037 sits at its band cell 367
+already); anything else lands in `character_items` list 0, in the
 first free slot of its catalogue `kind`'s range -- 65 for the stackable
 1106, 17 for the equipment 29127.  The 17 is a *scan* anchor, not just a
 number: the character sold the rows at list-0 slots 9..15 and 17 at
@@ -58,8 +58,8 @@ fresh random `instance_value` (under 2^31: 700543244 was the 29127 one) and
 its catalogue durability (48, the value the captured row block carries at
 `[11]`), a stackable with 0 and count 1.
 
-The bag-cell base 363 and the two cell bases (equipment from 9, stackables
-from 65) are the module's inferred parts, and so are the edges no capture
+The two cell bases (equipment from 9, stackables from 65) are the module's
+inferred parts, and so are the edges no capture
 shows: a bought stack merging into a row the character already has (both
 ends do -- `account_materials` has no slot to insert at), every refusal --
 not in that shop, no gold, not enough materials, no free cell, a body that
@@ -93,9 +93,23 @@ BODY_SIZE = 24
 GOLD_LIST = 0
 GOLD_SLOT = 0
 
-#: `account_materials` has no slot column; the cell the client shows a bag row
-#: in is derived -- see `bag_cell`.
+#: `account_materials` has no slot column.  The bag is a fixed band of twelve
+#: cells -- this one first -- in this exact order, pinned on 44 `TOWN-ITEMS`
+#: lines over the seven reference logs (09-19..09-30): every line carries
+#: exactly these ids at these cells, counts moving and cells never, and the
+#: 09-19 band is all twelve at count=0, so the band is a table the account's
+#: counts fill, not a list its rows generate.  The order is not item-id order
+#: -- 10100115/10100116 sit above the 10099773-10099775 trio -- and no
+#: catalogue or save column sorts into it (brute-forced 09-30), so it is a
+#: constant.  `game.town.burst.Inventory` is the band's other reader.
 BAG_CELL_BASE = 363
+BAG_ITEMS = (3033, 3034, 3035, 3036, 3037, 3262, 10100115, 10100116,
+             10099773, 10099774, 10099775, 10158124)
+#: The first cell an item *off* the band takes.  Nothing off the twelve ever
+#: entered a bag anywhere in the logs, so the rest of the bag's numbering is
+#: unobserved; an off-band material lines up behind the band in item-id order
+#: -- inferred.
+BAG_AFTER = BAG_CELL_BASE + len(BAG_ITEMS)
 #: What a `stackable/material/` shop rule's path means.
 MATERIAL_PREFIX = "stackable/material/"
 #: The first list-0 cell a bought item may take, by catalogue `kind`:
@@ -104,6 +118,15 @@ MATERIAL_PREFIX = "stackable/material/"
 #: 29127 the eight under 9.  How far a kind's run *ends* is not read here:
 #: the scan runs to the last character cell, `BAG_CELL_BASE` - 1.
 BAG_BASES = {0: 9, 1: 65}
+#: Items that take a cell below their kind's base.  Item 1 -- the revive coin
+#: the cera shop sells -- is the only one measured: six buys over three days
+#: and both characters landed it at cell 1 (`game.shop.cera` has the runs),
+#: each on a character whose cell 1 was free, so 1 is a *reading* of where its
+#: band starts and not a rule that was read out of the catalogue (its kind,
+#: type_index, rarity, grade and attach_index all fail to single it out).
+#: The band still ends at the equipment base -- that the coin may take cells
+#: 1..8 and nothing reads above 9 is the one bound the captures leave open.
+SLOT_BASE_OVERRIDES = {1: 1}
 #: A fresh equipment row's `instance_value` is a nonzero u31; the reference's
 #: own values are all in that band, and nothing shows the draw.
 INSTANCE_LIMIT = 1 << 31
@@ -185,30 +208,37 @@ def into_bag(rule: dict) -> bool:
 
 
 def bag_cell(conn: sqlite3.Connection, account_id: int, item_id: int) -> int:
-    """The cell the client shows an `account_materials` row in: the row's rank
-    by item id over the account's bag, offset by the bag's own base.
+    """The cell the client shows an `account_materials` row in.
 
-    Pinned to three cells: the 3034 buy's 364 with 3033 below it, 3035's 365,
-    and the 3037 already in the bag at 367.  The base 363 itself is not
-    derived -- 362 cells before the account bag is one reading of the client's
-    item numbering, nothing more.
+    On the band it is the fixed table's own address (3034 -> 364,
+    3035 -> 365 and the paid 3037 at 367, all measured on the 09-27 buys);
+    off it, the row lines up behind the band in item-id order -- inferred,
+    no capture shows an off-band item in a bag either way.
     """
+    if item_id in BAG_ITEMS:
+        return BAG_CELL_BASE + BAG_ITEMS.index(item_id)
     rank = conn.execute(
         "select count(*) from account_materials where account_id = ? "
-        "and item_id < ?", (account_id, item_id)).fetchone()[0]
-    return BAG_CELL_BASE + rank
+        f"and item_id < ? and item_id not in "
+        f"({', '.join('?' * len(BAG_ITEMS))})",
+        (account_id, item_id, *BAG_ITEMS)).fetchone()[0]
+    return BAG_AFTER + rank
 
 
-def _base_for(item_id: int) -> int:
+def base_for(item_id: int) -> int:
+    """The first list-0 cell this item's band starts at -- see `BAG_BASES`
+    and `SLOT_BASE_OVERRIDES`."""
+    if item_id in SLOT_BASE_OVERRIDES:
+        return SLOT_BASE_OVERRIDES[item_id]
     definition = content.definition(item_id)
     kind = definition.kind if definition is not None else 1
     return BAG_BASES.get(kind, BAG_BASES[1])
 
 
-def _free_slot(conn: sqlite3.Connection, character_id: int, item_id: int
-               ) -> int | None:
+def free_slot(conn: sqlite3.Connection, character_id: int, item_id: int
+              ) -> int | None:
     """The slot a bought item goes to: where a row of the same item already
-    sits, else the first free cell at or past its kind's base.  A stack already
+    sits, else the first free cell at or past its band's base.  A stack already
     in the bag takes the buy -- inferred, no capture merges.
     """
     rows = conn.execute(
@@ -219,19 +249,21 @@ def _free_slot(conn: sqlite3.Connection, character_id: int, item_id: int
     for slot, held in rows:
         if held == item_id and slot != GOLD_SLOT:
             return slot
-    for slot in range(_base_for(item_id), BAG_CELL_BASE):
+    for slot in range(base_for(item_id), BAG_CELL_BASE):
         if slot not in taken:
             return slot
     return None
 
 
-def _fresh_row(character_id: int, slot: int, request: BuyRequest, count: int,
-               now: int) -> items.ItemStack:
-    definition = content.definition(request.item_id)
+def fresh_row(character_id: int, slot: int, item_id: int, count: int,
+              now: int) -> items.ItemStack:
+    """A bought row: the catalogue's durability, a fresh u31 `instance_value`
+    for equipment and nothing else carried over."""
+    definition = content.definition(item_id)
     kind = definition.kind if definition is not None else 1
     return items.ItemStack(
         character_id=character_id, list_type=GOLD_LIST, slot_index=slot,
-        item_id=request.item_id, count=count,
+        item_id=item_id, count=count,
         durability=definition.durability if definition is not None else 0,
         instance_value=(random.randrange(1, INSTANCE_LIMIT) if kind == 0 else 0),
         random_options=b"", avatar_sockets=b"", clone_appearance_id=0,
@@ -273,7 +305,7 @@ def execute(conn: sqlite3.Connection, account_id: int, character_id: int,
         bag = into_bag(rule)
         slot = None
         if not bag:
-            slot = _free_slot(conn, character_id, request.item_id)
+            slot = free_slot(conn, character_id, request.item_id)
             if slot is None:
                 return Outcome(False, reason="no free slot")
 
@@ -329,7 +361,7 @@ def _land(conn: sqlite3.Connection, account_id: int, character_id: int,
         items.set_count(conn, existing, held, now)
         row = replace(existing, count=held, updated_at=now)
     else:
-        row = _fresh_row(character_id, slot, request, count, now)
+        row = fresh_row(character_id, slot, request.item_id, count, now)
         items.insert(conn, row)
     return refresh.SlotRecord.of_stack(row)
 

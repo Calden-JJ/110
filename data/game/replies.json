@@ -25,6 +25,7 @@
       "Connected",
       "Handshaken"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -57,6 +58,7 @@
       "Handshaken",
       "Authenticated"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -102,6 +104,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -119,6 +122,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -136,6 +140,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -153,6 +158,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -164,6 +170,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -175,6 +182,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -186,6 +194,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -197,6 +206,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -217,6 +227,7 @@
       "Authenticated",
       "RosterReady"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -254,6 +265,7 @@
       "RosterReady",
       "RosterReady"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -286,6 +298,7 @@
       "RosterReady",
       "RosterReady"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -312,6 +325,7 @@
       "RosterReady",
       "RosterReady"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -338,6 +352,7 @@
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -370,6 +385,7 @@
       "RosterReady",
       "RosterReady"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -399,6 +415,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -410,6 +427,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -421,6 +439,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -432,6 +451,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -443,6 +463,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -454,6 +475,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -465,6 +487,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -476,6 +499,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -487,6 +511,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -498,6 +523,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -509,6 +535,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -520,6 +547,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -531,6 +559,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -542,6 +571,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -553,6 +583,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -564,6 +595,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -575,6 +607,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -586,6 +619,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -597,6 +631,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -608,6 +643,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -624,6 +660,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -635,6 +672,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -646,6 +684,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -657,6 +696,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -668,6 +708,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -679,6 +720,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -690,6 +732,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -701,6 +744,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -712,6 +756,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -723,6 +768,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -734,6 +780,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -745,6 +792,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -756,6 +804,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -767,6 +816,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -778,6 +828,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -789,6 +840,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -800,6 +852,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -811,6 +864,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -822,6 +876,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -833,6 +888,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -844,6 +900,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -855,6 +912,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -866,6 +924,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -877,6 +936,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -888,6 +948,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -899,6 +960,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -910,6 +972,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -921,6 +984,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -932,6 +996,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -943,6 +1008,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -954,6 +1020,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -965,6 +1032,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -976,6 +1044,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -987,6 +1056,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -998,6 +1068,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1009,6 +1080,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1020,6 +1092,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1031,6 +1104,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1042,6 +1116,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1053,6 +1128,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1064,6 +1140,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1075,6 +1152,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1086,6 +1164,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1097,6 +1176,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1108,6 +1188,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1119,6 +1200,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1130,6 +1212,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1141,6 +1224,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1152,6 +1236,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1163,6 +1248,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1174,6 +1260,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1185,6 +1272,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1196,6 +1284,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1207,6 +1296,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1218,6 +1308,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1229,6 +1320,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1240,6 +1332,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1251,6 +1344,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1262,6 +1356,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1273,6 +1368,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1284,6 +1380,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1295,6 +1392,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1306,6 +1404,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1317,6 +1416,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1328,6 +1428,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1339,6 +1440,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1350,6 +1452,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1361,6 +1464,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1372,6 +1476,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1383,6 +1488,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1394,6 +1500,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1405,6 +1512,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1416,6 +1524,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1427,6 +1536,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1438,6 +1548,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1449,6 +1560,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1460,6 +1572,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1471,6 +1584,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1482,6 +1596,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1493,6 +1608,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1504,6 +1620,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1515,6 +1632,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1526,6 +1644,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1537,6 +1656,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1548,6 +1668,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1559,6 +1680,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1570,6 +1692,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1581,6 +1704,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1592,6 +1716,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1603,6 +1728,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1614,6 +1740,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1625,6 +1752,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1636,6 +1764,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1647,6 +1776,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1658,6 +1788,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1669,6 +1800,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1680,6 +1812,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1691,6 +1824,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1702,6 +1836,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1713,6 +1848,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1724,6 +1860,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1735,6 +1872,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1746,6 +1884,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1757,6 +1896,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1768,6 +1908,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1779,6 +1920,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1790,6 +1932,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1801,6 +1944,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1812,6 +1956,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1823,6 +1968,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1834,6 +1980,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1845,6 +1992,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1856,6 +2004,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1867,6 +2016,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1878,6 +2028,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1889,6 +2040,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1900,6 +2052,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1911,6 +2064,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1922,6 +2076,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1933,6 +2088,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1944,6 +2100,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1955,6 +2112,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1966,6 +2124,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1977,6 +2136,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1988,6 +2148,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -1999,6 +2160,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2010,6 +2172,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2021,6 +2184,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2032,6 +2196,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2043,6 +2208,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2054,6 +2220,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2065,6 +2232,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2076,6 +2244,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2087,6 +2256,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2098,6 +2268,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2109,6 +2280,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2120,6 +2292,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2131,6 +2304,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2142,6 +2316,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2153,6 +2328,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2164,6 +2340,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2175,6 +2352,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2192,6 +2370,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2212,6 +2391,7 @@
       "RosterReady",
       "CharacterSelected"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -2297,6 +2477,7 @@
       "CharacterSelected",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -2326,7 +2507,7 @@
       [
        "INFO",
        "TOWN-ITEMS",
-       "conn={conn} main inventory 76 row(s), (0,13) body={n}B: slot=0 id=0 count=995793376 dur=0, slot=1 id=1 count=99 dur=0, slot=3 id=2660671 count=495 dur=0, slot=4 id=590704000 count=61 dur=0, slot=5 id=50051742 count=61 dur=0, slot=9 id=101011203 seed=668198703 dur=45, slot=10 id=101011025 seed=704166429 dur=45, slot=17 id=100080936 seed=353764666 dur=60, slot=20 id=100051121 seed=326026281 dur=60, slot=22 id=100080937 seed=876099816 dur=60, slot=40 id=500330437 count=1 dur=0, slot=45 id=400320504 count=1 dur=0, slot=46 id=400310503 count=1 dur=0, slot=47 id=400300509 count=1 dur=0, slot=48 id=400260193 seed=519748210 dur=40, slot=53 id=400110187 seed=635565332 dur=50, slot=54 id=400210187 seed=880859644 dur=40, slot=55 id=400160186 seed=312832569 dur=48, slot=56 id=400060192 seed=889921480 dur=60, slot=61 id=101011245 seed=794523203 dur=45, slot=62 id=400390375 count=1 dur=0, slot=63 id=400340593 count=1 dur=0, slot=64 id=400350513 count=1 dur=0, slot=65 id=1001 count=5 dur=0, slot=66 id=50080317 count=971 dur=0, slot=67 id=896 count=4 dur=0, slot=68 id=15 count=247 dur=0, slot=71 id=24 count=988 dur=0, slot=72 id=1111 count=15 dur=0, slot=73 id=1117 count=13 dur=0, slot=121 id=10000912 count=2 dur=0, slot=122 id=10000911 count=4 dur=0, slot=123 id=3156 count=12 dur=0, slot=124 id=10313056 count=199 dur=0, slot=125 id=3166 count=8 dur=0, slot=126 id=3221 count=2 dur=0, slot=127 id=3027 count=27 dur=0, slot=128 id=3151 count=13 dur=0, slot=129 id=3052 count=10 dur=0, slot=130 id=3142 count=20 dur=0, slot=131 id=3167 count=815 dur=0, slot=132 id=3326 count=7229 dur=0, slot=133 id=10325138 count=300 dur=0, slot=134 id=3028 count=15 dur=0, slot=135 id=10312874 count=1592 dur=0, slot=136 id=10313459 count=529 dur=0, slot=137 id=3019 count=2 dur=0, slot=138 id=3332 count=1787 dur=0, slot=139 id=3030 count=23 dur=0, slot=140 id=10307438 count=24900 dur=0, slot=141 id=10308622 count=1 dur=0, slot=142 id=3022 count=2 dur=0, slot=143 id=3023 count=4 dur=0, slot=144 id=10327283 count=650 dur=0, slot=145 id=3021 count=3 dur=0, slot=146 id=10347751 count=9 dur=0, slot=147 id=10347745 count=1 dur=0, slot=153 id=10327281 count=400 dur=0, slot=289 id=590713959 count=37 dur=0, slot=290 id=590714156 count=6 dur=0, slot=291 id=590713729 count=7 dur=0, slot=292 id=590713951 count=392 dur=0, slot=293 id=590713967 count=396 dur=0, slot=295 id=590713961 count=193 dur=0, slot=363 id=3033 count=170010 dur=0, slot=364 id=3034 count=170710 dur=0, slot=365 id=3035 count=170228 dur=0, slot=366 id=3036 count=169747 dur=0, slot=367 id=3037 count=221730 dur=0, slot=368 id=3262 count=169900 dur=0, slot=369 id=10100115 count=116 dur=0, slot=370 id=10100116 count=53 dur=0, slot=371 id=10099773 count=166 dur=0, slot=372 id=10099774 count=156 dur=0, slot=373 id=10099775 count=116 dur=0, slot=374 id=10158124 count=19 dur=0"
+       "conn={conn} main inventory 76 row(s), (0,13) body=12545B: slot=0 id=0 count=995793376 dur=0, slot=1 id=1 count=99 dur=0, slot=3 id=2660671 count=495 dur=0, slot=4 id=590704000 count=61 dur=0, slot=5 id=50051742 count=61 dur=0, slot=9 id=101011203 seed=668198703 dur=45, slot=10 id=101011025 seed=704166429 dur=45, slot=17 id=100080936 seed=353764666 dur=60, slot=20 id=100051121 seed=326026281 dur=60, slot=22 id=100080937 seed=876099816 dur=60, slot=40 id=500330437 count=1 dur=0, slot=45 id=400320504 count=1 dur=0, slot=46 id=400310503 count=1 dur=0, slot=47 id=400300509 count=1 dur=0, slot=48 id=400260193 seed=519748210 dur=40, slot=53 id=400110187 seed=635565332 dur=50, slot=54 id=400210187 seed=880859644 dur=40, slot=55 id=400160186 seed=312832569 dur=48, slot=56 id=400060192 seed=889921480 dur=60, slot=61 id=101011245 seed=794523203 dur=45, slot=62 id=400390375 count=1 dur=0, slot=63 id=400340593 count=1 dur=0, slot=64 id=400350513 count=1 dur=0, slot=65 id=1001 count=5 dur=0, slot=66 id=50080317 count=971 dur=0, slot=67 id=896 count=4 dur=0, slot=68 id=15 count=247 dur=0, slot=71 id=24 count=988 dur=0, slot=72 id=1111 count=15 dur=0, slot=73 id=1117 count=13 dur=0, slot=121 id=10000912 count=2 dur=0, slot=122 id=10000911 count=4 dur=0, slot=123 id=3156 count=12 dur=0, slot=124 id=10313056 count=199 dur=0, slot=125 id=3166 count=8 dur=0, slot=126 id=3221 count=2 dur=0, slot=127 id=3027 count=27 dur=0, slot=128 id=3151 count=13 dur=0, slot=129 id=3052 count=10 dur=0, slot=130 id=3142 count=20 dur=0, slot=131 id=3167 count=815 dur=0, slot=132 id=3326 count=7229 dur=0, slot=133 id=10325138 count=300 dur=0, slot=134 id=3028 count=15 dur=0, slot=135 id=10312874 count=1592 dur=0, slot=136 id=10313459 count=529 dur=0, slot=137 id=3019 count=2 dur=0, slot=138 id=3332 count=1787 dur=0, slot=139 id=3030 count=23 dur=0, slot=140 id=10307438 count=24900 dur=0, slot=141 id=10308622 count=1 dur=0, slot=142 id=3022 count=2 dur=0, slot=143 id=3023 count=4 dur=0, slot=144 id=10327283 count=650 dur=0, slot=145 id=3021 count=3 dur=0, slot=146 id=10347751 count=9 dur=0, slot=147 id=10347745 count=1 dur=0, slot=153 id=10327281 count=400 dur=0, slot=289 id=590713959 count=37 dur=0, slot=290 id=590714156 count=6 dur=0, slot=291 id=590713729 count=7 dur=0, slot=292 id=590713951 count=392 dur=0, slot=293 id=590713967 count=396 dur=0, slot=295 id=590713961 count=193 dur=0, slot=363 id=3033 count=170010 dur=0, slot=364 id=3034 count=170710 dur=0, slot=365 id=3035 count=170228 dur=0, slot=366 id=3036 count=169747 dur=0, slot=367 id=3037 count=221730 dur=0, slot=368 id=3262 count=169900 dur=0, slot=369 id=10100115 count=116 dur=0, slot=370 id=10100116 count=53 dur=0, slot=371 id=10099773 count=166 dur=0, slot=372 id=10099774 count=156 dur=0, slot=373 id=10099775 count=116 dur=0, slot=374 id=10158124 count=19 dur=0"
       ],
       [
        "INFO",
@@ -2759,6 +2940,38 @@
        "missing_bytes": 0
       }
      ]
+    },
+    {
+     "state": [
+      "InTown",
+      "InTown"
+     ],
+     "capture": "server-20260928.log",
+     "notes": [
+      [
+       "INFO",
+       "TUTORIAL-FLAGS",
+       "conn={conn} key=3 client reported flag=30 (raw=30 prefix=0 reward=1) stored"
+      ],
+      [
+       "INFO",
+       "TUTORIAL-FLAG-143",
+       "conn={conn} duplicate valid request after town completion; returned a fresh S2C 143 ACK only"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 143,
+       "transform": "tile3",
+       "plain_hex": "01000000000000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "84c0cb",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
     }
    ]
   },
@@ -2771,6 +2984,7 @@
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -2803,6 +3017,7 @@
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -2832,9 +3047,462 @@
    "runs": [
     {
      "state": [
+      "CharacterSelected",
+      "InTown"
+     ],
+     "capture": "server-20260928.log",
+     "notes": [
+      [
+       "INFO",
+       "SELECTION-666",
+       "conn={conn} built S2C (1,666) 1B reply (request body 0B)"
+      ],
+      [
+       "INFO",
+       "TUTORIAL-PUSH",
+       "conn={conn} key=3 pending tutorial dungeon=7115; pushing town-entry frames after 666 reply (round 12: client renders town, tutorial dungeon enters via the gate-fallback worldmap injection)"
+      ],
+      [
+       "INFO",
+       "QUEST-STARTER",
+       "conn={conn} key=3 activated quest=3145 trigger=1"
+      ],
+      [
+       "INFO",
+       "TOWN-CARGO",
+       "conn={conn} key=3 list2 capacity=8 items=0; initialized before first area render"
+      ],
+      [
+       "INFO",
+       "TOWN-TALISMAN",
+       "conn={conn} enabled=True; storedRunes=0; list43Rows=0; runeVector="
+      ],
+      [
+       "INFO",
+       "TUTORIAL-FLAG-143",
+       "conn={conn} town entry for key=3 tutorialAck=True; built 143 -> 2443 -> subtype-0 self -> 13(main) -> 13(worn) -> 21/23/24/22 -> 124"
+      ],
+      [
+       "INFO",
+       "TOWN-ITEMS",
+       "conn={conn} main inventory 15 row(s), (0,13) body=2480B: slot=0 id=0 count=5000 dur=0, slot=9 id=27118 seed=872944189 dur=45, slot=65 id=1001 count=5 dur=0, slot=363 id=3033 count=170010 dur=0, slot=364 id=3034 count=170711 dur=0, slot=365 id=3035 count=170229 dur=0, slot=366 id=3036 count=169747 dur=0, slot=367 id=3037 count=221720 dur=0, slot=368 id=3262 count=169900 dur=0, slot=369 id=10100115 count=116 dur=0, slot=370 id=10100116 count=53 dur=0, slot=371 id=10099773 count=166 dur=0, slot=372 id=10099774 count=156 dur=0, slot=373 id=10099775 count=116 dur=0, slot=374 id=10158124 count=19 dur=0"
+      ],
+      [
+       "INFO",
+       "TOWN-WORN",
+       "conn={conn} nothing equipped"
+      ],
+      [
+       "INFO",
+       "TOWN-QUEST-STATE",
+       "conn={conn} (0,342) finished=0 (0,291) in-progress=1 (of 0 ever accepted); in-progress=3145"
+      ],
+      [
+       "INFO",
+       "TOWN-QUICKSLOT",
+       "conn={conn} (0,376) restoring 1028B of character options"
+      ],
+      [
+       "INFO",
+       "HOTKEY-440",
+       "conn={conn} account=0 character=3 type=0 restoring 791B effective keyboard bindings"
+      ],
+      [
+       "INFO",
+       "TOWN-APPEARANCE",
+       "conn={conn} nothing worn; the paper doll falls back to the default look"
+      ],
+      [
+       "INFO",
+       "TOWN-AVATAR",
+       "conn={conn} avatar bag 0 row(s), param=105"
+      ],
+      [
+       "INFO",
+       "TOWN-PET",
+       "conn={conn} pet bag 0 row(s)"
+      ],
+      [
+       "INFO",
+       "TOWN-SKILLS",
+       "conn={conn} level=1 grow=1 awakening=0 sp=0/0 tp=0/0 learnable=10 skills=19 5@0:1, 46@1:1, 67@2:1, 169@3:1, 190@4:1, 4@102:1, 12@103:1, 13@104:1, 14@105:1, 15@106:1, 27@107:1, 33@108:1, 37@109:1, 174@110:1, 179@111:7, 197@112:1, 491@113:1, 501@114:1, 511@115:1; sent as (0,19)"
+      ],
+      [
+       "INFO",
+       "TOWN-CERA",
+       "conn={conn} account 0 cera=95575; sent as (0,53)"
+      ],
+      [
+       "INFO",
+       "TOWN-SELF",
+       "conn={conn} self entity name='XJianHun' job=0 level=1 channel=(1,10,0,22)"
+      ],
+      [
+       "INFO",
+       "TOWN-SELF-DATA",
+       "conn={conn} job=0 level=1 exp=0 hp=520 mp=480 str=101 vit=101 int=98 spr=98 chr='Character/Swordman/Swordman.chr' grow=1/0"
+      ],
+      [
+       "INFO",
+       "TOWN-SPAWN",
+       "conn={conn} town=38 area=1 pos=(561,234) key=3"
+      ],
+      [
+       "INFO",
+       "TOWN-QUESTS",
+       "conn={conn} town=38 worldmap nodes=29 (0,21) available=8 active=[3145] finished=0 level=1"
+      ]
+     ],
+     "replies": [
+      {
+       "main": 1,
+       "sub": 666,
+       "transform": "tile8",
+       "plain_hex": "0000000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "f2d526",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 1,
+       "sub": 143,
+       "transform": "tile3",
+       "plain_hex": "01000000000000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "1bac0e",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2443,
+       "transform": "tile7",
+       "plain_hex": "010000000a0000000000000016000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "f3b01a",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 889,
+       "transform": "tile7",
+       "plain_hex": "00ff000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "0bf76c",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2,
+       "transform": "tile2",
+       "plain_hex": "000100010a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030008000000584a69616e48756e000101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 336,
+       "wire_body_len": 336,
+       "nonce": "b304ef",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 19,
+       "transform": "tile5",
+       "plain_hex": "50010000081312a401080010001a060800100518011a060801102e18011a060802104318011a07080310a90118011a07080410be0118011a060866100418011a060867100c18011a060868100d18011a060869100e18011a06086a100f18011a06086b101b18011a06086c102118011a06086d102518011a07086e10ae0118011a07086f10b30118071a07087010c50118011a07087110eb0318011a07087210f50318011a07087310ff03180112a401080010001a060800100518011a060801102e18011a060802104318011a07080310a90118011a07080410be0118011a060866100418011a060867100c18011a060868100d18011a060869100e18011a06086a100f18011a06086b101b18011a06086c102118011a06086d102518011a07086e10ae0118011a07086f10b30118071a07087010c50118011a07087110eb0318011a07087210f50318011a07087310ff03180100000000",
+       "body_len": 344,
+       "wire_body_len": 344,
+       "nonce": "c254ad",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2,
+       "transform": "tile2",
+       "plain_hex": "010100010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030000000000000000005900000050140000c0120000f703f703d903d90300000000c80038ff000000000000000000000000000000000000000000000000000000000000000000000000005307000000f401342100003421581b7017cc1020a1070064000000000000000000000000000000000000000000000000000000000000ff000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 400,
+       "wire_body_len": 400,
+       "nonce": "9b7a7c",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0000000f000000000000008813000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000900ee6900003d120834002d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004100e90300000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006b01d90b00001a98020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006c01da0b0000d79a020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006d01db0b0000f598020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006e01dc0b00001397020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006f01dd0b00001862030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007001be0c0000ac97020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007101931d9a007400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007201941d9a0035000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000073013d1c9a00a6000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000074013e1c9a009c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000075013f1c9a0074000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000076012c009b00130000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 2480,
+       "wire_body_len": 2480,
+       "nonce": "f16259",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0169000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "01bf33",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "2d08000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "341d1b",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0208000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "b9042f",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0700000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "d5112f",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "2b00000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "304be5",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0300000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "e1a988",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 53,
+       "transform": "tile11",
+       "plain_hex": "01577501000100000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "610d8c",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 376,
+       "transform": "tile12",
+       "plain_hex": "00040000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000",
+       "body_len": 1040,
+       "wire_body_len": 1040,
+       "nonce": "94f16f",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 440,
+       "transform": "tile6",
+       "plain_hex": "001703000049303109320a49303209300a49303309330a49303409310a4930350937380a4930360935370a4930370938300a4930380931330a4930390937360a4931300936370a4931310936350a4931320936330a4931330936390a4931350937350a4931360938350a4931370936380a4931380938360a4931390938340a4932300938310a4932310935350a4932320937330a4932330935380a4932340936300a4932350936310a4932360936320a4932370937310a4932380937370a4932390935390a4933300937320a4933310937340a4933320937390a4933330934360a4933340934370a4933350934380a4933360934390a4933370935300a4933380935310a493339093133340a4934300932380a4934310938330a4934320938370a493434093130380a4934390932360a4935300937300a493531093130340a493532093130350a4935330936360a4935340932370a4935390935360a493630093133340a493631093133340a493635093133340a493637093133340a493639093133340a49373009360a49373109390a493732093133340a493733093133340a493734093133340a493735093133340a493736093133340a493737093133340a493738093133340a493739093133340a4938300938380a4938310938390a4938320939300a4938330939310a4938340939320a4938350936340a493836093133340a493838093133340a4939310933340a4939350932340a4939360931330a493938093133340a4939390933320a4b30320933310a4b3034093133340a4b3036093133340a4b3038093133340a4b3039093133340a4b31300931300a4b313109340a4b31330932390a4b3132093130390a4b31340938320a4b31350933330a4b3136093133340a4b3137093133340a4b3138093133340a4b3139093133340a4b3230093133340a4b3231093133340a4b3232093133340a4b3233093133340a4b3234093133340a4b3235093133340a4b3236093133340a4b3237093133340a4b3238093133340a4b32390935340a4b3330093133340a4b3331093133340a4b3332093133340a4b3333093133340a4b3334093133340a4b333509370a00000000",
+       "body_len": 800,
+       "wire_body_len": 800,
+       "nonce": "d316ed",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 342,
+       "transform": "tile6",
+       "plain_hex": "0000000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "7a2fcf",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 291,
+       "transform": "tile11",
+       "plain_hex": "0100490c010000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "3bf7f8",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 21,
+       "transform": "tile7",
+       "plain_hex": "1c0000001001180820a11820a21820a31820a41820a51820a61820a71820a818",
+       "body_len": 32,
+       "wire_body_len": 32,
+       "nonce": "17b545",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 23,
+       "transform": "tile9",
+       "plain_hex": "030026000000010000003102ea000001",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "d8e137",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 24,
+       "transform": "tile10",
+       "plain_hex": "2600000001000000010003003102ea0000010100",
+       "body_len": 20,
+       "wire_body_len": 20,
+       "nonce": "46aa47",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 22,
+       "transform": "tile8",
+       "plain_hex": "03003102ea0000640000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "7fcafa",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 36,
+       "transform": "tile8",
+       "plain_hex": "00009c00000000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "42e2e0",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2463,
+       "transform": "tile13",
+       "plain_hex": "0000000000004e00",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "1ab307",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 124,
+       "transform": "tile12",
+       "plain_hex": "",
+       "body_len": 0,
+       "wire_body_len": 0,
+       "nonce": "3d617b",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 13,
+       "transform": "tile13",
+       "plain_hex": "0c200000000000030000008a6435232c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100fbab9d0062050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002004c6cfb02d70300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "body_len": 504,
+       "wire_body_len": 504,
+       "nonce": "c589bf",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 1280,
+       "transform": "tile6",
+       "plain_hex": "0200000100000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "e268b9",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2431,
+       "transform": "tile9",
+       "plain_hex": "00000000000000000000000000000000",
+       "body_len": 16,
+       "wire_body_len": 16,
+       "nonce": "f92f8a",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 2318,
+       "transform": "tile8",
+       "plain_hex": "0000000000000000",
+       "body_len": 8,
+       "wire_body_len": 8,
+       "nonce": "30bd76",
+       "truncated": false,
+       "missing_bytes": 0
+      },
+      {
+       "main": 0,
+       "sub": 108,
+       "transform": "tile10",
+       "plain_hex": "05008002008102000803006d0200820200000000",
+       "body_len": 20,
+       "wire_body_len": 20,
+       "nonce": "16952c",
+       "truncated": false,
+       "missing_bytes": 0
+      }
+     ]
+    },
+    {
+     "state": [
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -2864,6 +3532,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     }
@@ -2875,6 +3544,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2892,6 +3562,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -2909,41 +3580,49 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -2955,11 +3634,13 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -2971,11 +3652,13 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -2987,11 +3670,13 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -3003,6 +3688,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [],
      "replies": []
     }
@@ -3014,6 +3700,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3025,6 +3712,7 @@
     },
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3042,6 +3730,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3059,6 +3748,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3079,6 +3769,7 @@
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -3116,6 +3807,7 @@
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -3153,6 +3845,7 @@
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -3190,6 +3883,7 @@
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -3227,6 +3921,7 @@
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -3267,6 +3962,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -3284,6 +3980,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3301,6 +3998,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3318,6 +4016,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",
@@ -3335,6 +4034,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3352,6 +4052,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3369,6 +4070,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3386,6 +4088,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3403,6 +4106,7 @@
    "runs": [
     {
      "state": null,
+     "capture": "server-20260926.log",
      "notes": [
       [
        "WARN",
@@ -3423,6 +4127,7 @@
       "InTown",
       "InTown"
      ],
+     "capture": "server-20260926.log",
      "notes": [
       [
        "INFO",

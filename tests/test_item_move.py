@@ -20,10 +20,11 @@ import unittest
 from pathlib import Path
 
 import _bootstrap  # noqa: F401
+import _save
 
 from uslocalserver import paths
 from uslocalserver.game.item import giant, inventory, refresh
-from uslocalserver.persistence import items, schema
+from uslocalserver.persistence import characters, items, schema
 from uslocalserver.protocol import frame
 from uslocalserver.protocol.crypto import tiles
 from uslocalserver.server import game
@@ -49,12 +50,10 @@ ACK_SEALED = bytes.fromhex("00130000030000000000000000000000")
 
 
 def _save_copy() -> Path:
-    dst = Path(tempfile.mkdtemp(prefix="dfo-item-move-")) / "uslocalserver.db"
-    for suffix in ("", "-wal", "-shm"):
-        src = Path(str(paths.SAVE_DB) + suffix)
-        if src.exists():
-            shutil.copy2(src, Path(str(dst) + suffix))
-    return dst
+    # The 0.4.4 save ships one character; this module also names characters 2
+    # and 3, whose rows the fixture clones from it.  The item rows themselves
+    # are seeded per test by `_stack`, not assumed from the save.
+    return _save.fresh(1, 2, 3)
 
 
 def _stack(conn, character_id, list_type, slot_index, item_id, *, count=1,
@@ -274,12 +273,19 @@ class SaveTest(unittest.TestCase):
                 self.assertEqual(inventory.execute(self.conn, CHARACTER, request,
                                                    now=NOW).action, action)
         self.assertEqual(self.revisions(), before)
-        self.assertEqual(items.load(self.conn, CHARACTER, 0, 9).item_id, 101011203)
-        self.assertEqual(items.load(self.conn, CHARACTER, 3, 19).item_id
-                         if items.load(self.conn, CHARACTER, 3, 19) else None,
-                         self.conn.execute("select item_id from character_items where "
-                                           "character_id=? and list_type=3 and slot_index=19",
-                                           (CHARACTER,)).fetchone()[0])
+        # Both ends of the rejections are unchanged.  The rows themselves are
+        # the fixture's, not the 0.3.6 capture's, so the assertions are asked of
+        # the table rather than pinned to an item id.
+        for list_type, slot in ((0, 9), (3, 19)):
+            row = items.load(self.conn, CHARACTER, list_type, slot)
+            want = self.conn.execute(
+                "select item_id from character_items where character_id = ? "
+                "and list_type = ? and slot_index = ?",
+                (CHARACTER, list_type, slot)).fetchone()
+            if want is None:
+                self.assertIsNone(row)
+            else:
+                self.assertEqual(row.item_id, want[0])
         self.assertIsNone(items.load(self.conn, CHARACTER, 0, 6))
 
 
@@ -375,7 +381,11 @@ class SocketTest(unittest.TestCase):
         # that equipped a piece on 2026-09-27 turned a pinned 31 into a red test).
         worn_after = len(refresh.equipment(conn, CHARACTER)) - 1
         self.assertGreater(worn_after, 0, "the save copy's worn set is empty")
-        small_len = (refresh.USERINFO_HEADER_SIZE + refresh.RECORD_SIZE * worn_after
+        # The name is the fixture character's own; the roster offsets are a
+        # function of its length, which is what the frame layout keys off.
+        name = characters.by_id(conn, CHARACTER).name.encode()
+        roster = refresh.roster_at(len(name))
+        small_len = (refresh.records_at(len(name)) + refresh.RECORD_SIZE * worn_after
                      + len(refresh.TAIL))
         small_len += -small_len % 16
         conn.close()
@@ -436,8 +446,8 @@ class SocketTest(unittest.TestCase):
 
         # the small USERINFO: one fewer worn now, version is the (0,2265) one
         userinfo = frames[3][1]
-        self.assertEqual(userinfo[refresh.COUNT_AT], worn_after)
-        self.assertEqual(userinfo[refresh.NAME_AT:refresh.NAME_AT + 8], b"XRenYing")
+        self.assertEqual(userinfo[roster + refresh.COUNT_OFFSET], worn_after)
+        self.assertEqual(userinfo[refresh.NAME_AT:roster], name)
         version = struct.unpack_from("<H", userinfo, refresh.VERSION_AT)[0]
         self.assertEqual(version, struct.unpack_from("<H", frames[5][1], 4)[0])
         self.assertEqual(frames[5][1][:4], bytes.fromhex("01000000"))
@@ -462,13 +472,27 @@ class SocketTest(unittest.TestCase):
             conn.close()
         end = giant.ITEMS_AT + sum(len(giant.item_block(s, frozenset(levels)))
                                    for s in worn)
-        self.assertEqual(big[end:end + 5], bytes(4) + b"\x09")
-        self.assertEqual(
-            big[end + 5:end + 41],
-            b"".join(struct.pack("<I", runes.get(slot, 0xFFFFFFFF))
-                     for slot in giant.RUNE_SLOTS))
-        self.assertEqual(big[end + 60:end + 65], b"\xff\x00\x00\x01\x00")
-        self.assertEqual(big[end + 65:], bytes(len(big) - end - 65))
+        # The creature byte is the level of whatever occupies the creature
+        # slot, or 0 when nothing does.  It was 9 on the 0.3.6 save because
+        # that character wore a levelled creature there; the 0.4.4 fixture
+        # does not, so the expectation is derived rather than pinned.
+        creature_level = 0
+        for stack in worn:
+            if stack.slot_index == giant.CREATURE_SLOT:
+                creature_level = levels.get(stack.item_id, 0)
+        self.assertEqual(big[end:end + 5], bytes(4) + bytes([creature_level]))
+        # The tail that follows is `giant.tail`'s own two shapes: the rune array
+        # is present only when the character has one (a rune row in its own
+        # slots, or a worn row reaching into 33..35).  The 0.3.6 save had one and
+        # its tail was 65B; the 0.4.4 fixture has neither, so its tail is the 29B
+        # form.  Comparing against the implementation keeps the *offsets* out of
+        # the test, which is what made this assertion release-specific.
+        expected_tail = giant.tail(worn, levels, runes)
+        # `giant.body` zero-pads to a multiple of 16 past `content_end`.
+        content_end = end + len(expected_tail)
+        self.assertEqual(big[end:content_end], expected_tail)
+        self.assertEqual(big[content_end:],
+                         bytes(len(big) - content_end))
 
         text = log._fh.getvalue()
         self.assertIn("ack + 2 (0,14) refresh frame(s)", text)

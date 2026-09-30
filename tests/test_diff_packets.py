@@ -24,7 +24,7 @@ TRANSITION_CELLS = ("(2,4)", "(3,4)", "(2,2)", "(2,3)", "(3,2)", "(0,4)", "(1,0)
 class DigestTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.digest = D.digest(_corpus.CORPUS_LOG)
+        cls.digest = D.digest(_corpus.require())
 
     def test_every_packet_dump_parses(self):
         self.assertEqual(self.digest.packets, _corpus.EXPECTED_TOTAL)
@@ -72,11 +72,11 @@ class BodyDiffTest(unittest.TestCase):
     """
     @classmethod
     def setUpClass(cls):
-        cls.digest = D.digest(_corpus.CORPUS_LOG, bodies=True)
+        cls.digest = D.digest(_corpus.require(), bodies=True)
 
     def test_a_log_differs_from_itself_with_bodies_too(self):
-        a = D.digest(_corpus.CORPUS_LOG, bodies=True)
-        b = D.digest(_corpus.CORPUS_LOG, bodies=True)
+        a = D.digest(_corpus.require(), bodies=True)
+        b = D.digest(_corpus.require(), bodies=True)
         self.assertEqual(D.diff(a, b), [])
 
     def test_only_s2c_is_collected(self):
@@ -145,8 +145,8 @@ class DiffRunsTest(unittest.TestCase):
 
 class SelfDiffTest(unittest.TestCase):
     def test_a_log_differs_from_itself_in_no_way(self):
-        a = D.digest(_corpus.CORPUS_LOG)
-        b = D.digest(_corpus.CORPUS_LOG)
+        a = D.digest(_corpus.require())
+        b = D.digest(_corpus.require())
         self.assertEqual(D.diff(a, b), [])
 
     def test_a_side_without_packet_dumps_says_so(self):
@@ -168,8 +168,8 @@ class SessionScopeTest(unittest.TestCase):
         # prose, and counting that as this replay's behaviour is the noise
         # `--session` exists to remove.  (Their PACKET lines are absent
         # entirely, not hex-less, so `notes` is 0 either way.)
-        whole = D.digest(_corpus.CORPUS_LOG)
-        corpus = D.digest(_corpus.CORPUS_LOG, kinds=["channel", "game"])
+        whole = D.digest(_corpus.require())
+        corpus = D.digest(_corpus.require(), kinds=["channel", "game"])
         self.assertEqual(whole.packets, _corpus.EXPECTED_TOTAL)
         self.assertEqual(corpus.packets, whole.packets)
         self.assertLess(corpus.lines, whole.lines)
@@ -181,7 +181,7 @@ class SessionScopeTest(unittest.TestCase):
         # A typo must not quietly widen the comparison to everything: that
         # reads as a diff, not as a broken invocation.
         with self.assertRaises(SystemExit):
-            D.spans(_corpus.CORPUS_LOG, ["dungeon"])
+            D.spans(_corpus.require(), ["dungeon"])
 
 
 class RequestOpcodeTest(unittest.TestCase):

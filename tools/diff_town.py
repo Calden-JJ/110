@@ -31,6 +31,12 @@ Then the save's `characters` row against the last location the reference's own
 last line says it wrote.  `updated_at` is a wall clock on both sides and is
 reported, not compared.
 
+`--save` has to be a save whose character 1 still stands where the oracle's
+conn=1 session began, (168,5) at (500,214) dir 5: the session opens mid-flight
+with no `(1,36)` to establish its `from=`, so a drifted row shows up as one
+extra INFO line and one extra ack.  The live save moves as the game is played,
+so the default is the backup it was cut against, not `paths.SAVE_DB`.
+
     python tools/diff_town.py
     python tools/diff_town.py --conn 2          # sessions 1..2, diff 2 only
 """
@@ -59,6 +65,8 @@ from uslocalserver.server import game  # noqa: E402
 from uslocalserver.server.logfile import Log  # noqa: E402
 
 DEFAULT_ORACLE = paths.REPO_ROOT / "Logs-townprobe" / "server-20260927.log"
+DEFAULT_SAVE = (paths.REPO_ROOT / "_backups"
+                / "uslocalserver-m2oracle-20260927-144607.db")
 PORT = 10013
 CHARACTER = 1
 AREA = (1, 36)
@@ -274,7 +282,7 @@ def compare(what: str, want: list, got: list, problems: list[str]) -> None:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--oracle", type=Path, default=DEFAULT_ORACLE)
-    ap.add_argument("--save", type=Path, default=paths.SAVE_DB,
+    ap.add_argument("--save", type=Path, default=DEFAULT_SAVE,
                     help="baseline save; the sessions chain on one copy of it")
     ap.add_argument("--conn", type=int, default=None,
                     help="replay sessions 1..N, diff only N")

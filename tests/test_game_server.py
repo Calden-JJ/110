@@ -24,6 +24,7 @@ import _bootstrap  # noqa: F401
 import _corpus
 
 from uslocalserver import logs
+from uslocalserver.game.town import movement
 from uslocalserver.protocol import channelinfo, frame
 from uslocalserver.protocol.crypto import tiles
 from uslocalserver.server import game
@@ -43,7 +44,7 @@ FROZEN_TS = 1_789_824_022
 
 def _session_frames():
     """`(direction, opcode|None, raw)` for the corpus session, in wire order."""
-    s = logs.corpus_session(_corpus.CORPUS_LOG)
+    s = logs.corpus_session(_corpus.require())
     out = []
     for p in _corpus.all_packets():
         if not (s.first <= p.line_no <= s.last) or p.conn != s.conn or p.link != "game":
@@ -59,20 +60,40 @@ C2S = [(op, raw) for d, op, raw in SESSION if d == "C->S"]
 S2C_OPCODES = [op for d, op, _r in SESSION if d == "S->C"]
 
 
-def _expected() -> bytes:
-    """What the server must send for `C2S`, derived from the same script."""
+def _selected_runs():
+    """`(op, run)` per answered C->S frame, the way the server picks them.
+
+    Most opcodes walk their run list by send count, but the town entry does
+    not: `(1,143)`/`(1,666)` are a 33/31-frame burst when sent from
+    `CharacterSelected` and a one-frame ack when sent from `InTown`, so the
+    run is chosen by the state the connection is in.  The harness runs with a
+    character but no save, so the server replays the burst as captured rather
+    than rebuilding it from the row -- this test is the log round trip, and
+    `test_town_move` covers the row-built frames.
+    """
     script = game.GameScript.load()
-    out = frame.build_s2c(game.CHANNELINFO_OPCODE,
-                          channelinfo.build(PROTOCOL_SERVER, CHANNEL, HOST, FROZEN_TS),
-                          nonce=script.connect[0].nonce)
     cursors: dict = {}
+    state = game.INITIAL_STATE
     for op, _raw in C2S:
         s = script.match(*op)
         if s is None:
             continue
         nth = cursors.get(op, 0)
         cursors[op] = nth + 1
-        for reply in s.run(nth).replies:
+        run = s.run(nth, from_state=state if op in movement.ENTRY_KEYS else None)
+        if run.state:
+            state = run.state[1]
+        yield op, run
+
+
+def _expected() -> bytes:
+    """What the server must send for `C2S`, derived from the same script."""
+    script = game.GameScript.load()
+    out = frame.build_s2c(game.CHANNELINFO_OPCODE,
+                          channelinfo.build(PROTOCOL_SERVER, CHANNEL, HOST, FROZEN_TS),
+                          nonce=script.connect[0].nonce)
+    for _op, run in _selected_runs():
+        for reply in run.replies:
             body = tiles.encrypt_body(tiles.algo_id(reply.sub), reply.plain)
             out += frame.build_s2c(reply.opcode, body, nonce=reply.nonce)
     return out
@@ -204,7 +225,10 @@ class TestGameScript(unittest.TestCase):
     def test_opcode_count_matches_the_extractor(self):
         self.assertEqual(len(self.script), 35)
         self.assertEqual(len(self.script.unanswered()), 22)
-        self.assertEqual(self.script.reply_count, 60)
+        # 60 frames in the corpus, plus the 09-28 splice (`--town-entry`): the
+        # 31-frame `(1,666)` burst and the 1-frame `(1,143)` ack, neither of
+        # which that session's character ever drew.
+        self.assertEqual(self.script.reply_count, 60 + 31 + 1)
 
     def test_repeated_requests_keep_their_runs_apart(self):
         s433 = self.script.match(1, 433)
@@ -222,11 +246,10 @@ class TestGameScript(unittest.TestCase):
         self.assertEqual(s.run(999).replies, (), "a 163rd send is still silence")
 
     def test_state_machine_is_a_straight_walk_into_town(self):
-        walk = []
-        for op, _raw in C2S:
-            for r in self.script.match(*op).runs:
-                if r.state:
-                    walk.append((op, r.state))
+        # The *selected* runs, not every run in the script: `(1,143)` and
+        # `(1,666)` each hold both shapes, and the capture only ever used one
+        # of them per opcode.
+        walk = [(op, run.state) for op, run in _selected_runs() if run.state]
         self.assertEqual(walk[0], ((1, 1554), ("Connected", "Handshaken")))
         self.assertEqual(walk[-1][1][1], "InTown")
         self.assertEqual([(a, b) for _op, (a, b) in walk if a != b],
@@ -234,6 +257,13 @@ class TestGameScript(unittest.TestCase):
                           ("Authenticated", "RosterReady"), ("RosterReady", "CharacterSelected"),
                           ("CharacterSelected", "InTown")])
         self.assertEqual(dict(walk)[(1, 143)], ("CharacterSelected", "InTown"))
+        # The corpus's own `(1,666)` is the *ack*: by the time char 1 sent it,
+        # the `(1,143)` burst had already landed.  The 31-frame burst is the
+        # 09-28 character's shape, spliced in from that session.
+        self.assertEqual(dict(walk)[(1, 666)], ("InTown", "InTown"))
+        self.assertEqual(len(self.script.match(1, 666).runs), 2)
+        self.assertEqual([len(r.replies) for r in self.script.match(1, 666).runs],
+                         [31, 1])
 
     def test_the_town_entry_run_is_the_33_frame_burst(self):
         run = self.script.match(1, 143).runs[0]
@@ -319,11 +349,12 @@ class TestGameLog(unittest.TestCase):
         # the session's line range and hides it from the packet diff.
         self.assertNotIn("438.4s", self.text)
         self.assertNotIn("state released", self.text)
-        # `plain=` is this server's own decryption of the frame it just read
+        # `plain=` is this server's own decryption of the frame it just read,
+        # dumped in the reference's upper case
         f = frame.parse(frame.Link.GAME_C2S, C2S[2][1])       # the (1,1592) probe
         plain = tiles.decrypt_body(tiles.algo_id(1592), f.body)
         self.assertEqual(len(plain), 32)
-        self.assertIn(f"plain={plain[:96].hex()}", self.text)
+        self.assertIn(f"plain={plain[:96].hex().upper()}", self.text)
 
     def test_port_table_matches_the_reference_listen_lines(self):
         """`GAME_PORTS` is a transcription of the reference's startup log, not
@@ -331,7 +362,7 @@ class TestGameLog(unittest.TestCase):
         the reference binds eight, because the endpoints come from the save's
         `channels` table."""
         bound = set()
-        for ln in logs.stream(_corpus.CORPUS_LOG):
+        for ln in logs.stream(_corpus.require()):
             if ln.tag == "LISTEN" and (m := re.search(r"game bound on (\S+):(\d+)", ln.msg)):
                 self.assertEqual(m.group(1), "192.168.1.6")
                 bound.add(int(m.group(2)))
@@ -339,13 +370,13 @@ class TestGameLog(unittest.TestCase):
         self.assertEqual(len(bound), 8)
 
     def test_session_scoping_finds_the_corpus(self):
-        s = logs.corpus_session(_corpus.CORPUS_LOG)
+        s = logs.corpus_session(_corpus.require())
         self.assertEqual((s.conn, s.kind, s.port), (2, "game", 10013))
-        self.assertEqual(len(logs.sessions(_corpus.CORPUS_LOG)), 23)
+        self.assertEqual(len(logs.sessions(_corpus.require())), 23)
         # `conn=` restarts at 1 on every server restart, so the file holds six
         # `conn=2` sessions and scoping by `conn=` alone silently concatenates
         # them.  The line range is what separates the corpus from the rest.
-        same_conn = [x for x in logs.sessions(_corpus.CORPUS_LOG)
+        same_conn = [x for x in logs.sessions(_corpus.require())
                      if x.conn == s.conn and x.kind == s.kind]
         self.assertGreater(len(same_conn), 1)
         self.assertEqual([x for x in same_conn if x.is_corpus], [s])

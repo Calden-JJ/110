@@ -32,8 +32,8 @@ persists, four `(1,36)` writes in between) turns out to be.
 `(1,36)` is never throttled.  It writes the whole location and answers with
 two frames, both pure functions of the request:
 
-    (0,23) 16B  `01 00` town u32le area u32le x u16le y u16le dir 01
-    (0,24) 20B  town u32le area u32le `01 00 01 00` x u16le y u16le dir
+    (0,23) 16B  key u16le town u32le area u32le x u16le y u16le dir 01
+    (0,24) 20B  town u32le area u32le `01 00` key u16le x u16le y u16le dir
                 `01 01 00`
 
 The 11B trailer is logged verbatim and never read.  The corpus's samples all
@@ -45,6 +45,14 @@ the log line is the connection's own state, not the trailer.
 Map data is not consulted: town/area `(0,0)` at `(0,0)` is accepted, and there
 is no range or consistency check anywhere in either handler.
 
+The leading u16 of both frames is the character's slot key, `slot_index + 1`
+-- the same number `TOWN-SPAWN`/`TOWN-AREA-36` print as `key=`.  The M2
+corpus could not tell it from a constant, since it only ever played slot 0
+and every one of its frames opens `01 00`; the 09-28 dungeon session played
+slot 2 and every `(0,23)`/`(0,24)`/`(0,22)` it drew opens `03 00`, with the
+reference's own `SELECTION-4 ... slot=2 key=3` line on the same session
+naming both numbers.  `(0,22)` carries it in those same first two bytes.
+
 Town entry sends the same pair -- frames 20/21 of the `(1,143)` burst, from
 the character row's town/area/position with `town_state` in the direction
 byte -- and a third row-built frame, `(0,22)`, right behind it.  All five
@@ -53,6 +61,18 @@ dir 2, to town/area 0 at (-1,-1) dir 255, to (1,1) at (-32768,1) dir 0), and
 each entry's three frames carried the row's values -- the capture's own
 landing coordinates never reappeared.  `Location.of()` reads the row, and
 `area_pair()` + `spawn_body()` build the frames.
+
+`(1,1418)`, a 13B header and no body, is 赛利亚房间's lower exit: the
+client asks the way back and the server answers it with the same
+`(0,23)`/`(0,24)` pair.  The answer comes from `character_previous_village`,
+and the *room entry* is what writes it: a `(1,36)` whose destination is the
+room saves the source `(town, area)` and the connection's in-memory position
+and facing.  That in-memory position is moved by every `(1,35)`, throttled
+or not -- the 09-30 session's 54.181 entry saved (985,327) dir 5, exactly
+what a *throttled* `(1,35)` at 53.311 had left, and the 55.532 escape
+answered those coordinates back.  A character with no saved row -- one that
+logged in inside the room without ever walking in -- lands at
+`ROOM_TOWN_DOOR` instead.
 """
 from __future__ import annotations
 
@@ -66,6 +86,26 @@ from ...protocol import frame
 MOVE_OPCODE = frame.Opcode(1, 35, frame.OpcodeEncoding.U8_U16LE, True)
 AREA_OPCODE = frame.Opcode(1, 36, frame.OpcodeEncoding.U8_U16LE, True)
 ENTRY_OPCODE = frame.Opcode(1, 143, frame.OpcodeEncoding.U8_U16LE, True)
+
+#: 赛利亚房间, the one room whose lower exit draws the way back: every one of
+#: the reference's 40 `(1,1418)` lines answers from here.
+ROOM = (38, 1)
+PREV_VILLAGE_OPCODE = frame.Opcode(1, 1418, frame.OpcodeEncoding.U8_U16LE, True)
+
+#: The town entry is not one opcode.  The 09-28 dungeon session's client -- a
+#: character with no tutorial flags, so a 1200B `(1,4)` body -- entered through
+#: `(1,666)` and never sent `(1,143)` from `CharacterSelected` at all; char 1 in
+#: the M2 corpus did the opposite.  Whichever arrives first draws the burst, and
+#: either one sent again from `InTown` is a one-frame ack instead, which is what
+#: `ENTRY_FROM` -- the state the burst is sent *from* -- tells apart.
+ENTRY_OPCODES = (ENTRY_OPCODE,
+                 frame.Opcode(1, 666, frame.OpcodeEncoding.U8_U16LE, True))
+
+#: The same two as `(main, sub)`, which is what a dispatch loop compares.
+ENTRY_KEYS = tuple(op.key() for op in ENTRY_OPCODES)
+
+#: The state a client sits in between `(1,4)` and the town entry.
+ENTRY_FROM = "CharacterSelected"
 AREA_ACK_OPCODE = frame.Opcode(0, 23, frame.OpcodeEncoding.U8_U16LE, True)
 AREA_ACK_2_OPCODE = frame.Opcode(0, 24, frame.OpcodeEncoding.U8_U16LE, True)
 SPAWN_OPCODE = frame.Opcode(0, 22, frame.OpcodeEncoding.U8_U16LE, True)
@@ -149,55 +189,73 @@ class Location:
         return f"town={self.town} area={self.area} pos=({self.x},{self.y})"
 
 
-def spawn_body(location: Location) -> bytes:
+#: Where a `(1,1418)` lands when no row was ever saved -- a character that
+#: logged in inside the room without walking in: the room's own town door.
+#: `(38,0)` at `(1677,222)` dir 5 is the position all three of the reference
+#: sessions' room-to-`(38,0)` `(1,36)` lines carry.
+ROOM_TOWN_DOOR = Location(38, 0, 1677, 222, 5)
+
+
+def spawn_body(location: Location, key: int) -> bytes:
     """`(0,22)`: the spawn echo the entry pair is followed by, 16B.
 
-    `01 00`, the position, the direction, then `64` and eight zero bytes.  The
-    tail is constant over all five driven entries -- and those span town/area
-    0 at (-1,-1), dir 255, and x -32768 -- so it is a literal here.  What the
-    `64` means is unknown; nothing has ever sent anything else.
+    The slot key, the position, the direction, then `64` and eight zero bytes.
+    The tail is constant over all five driven entries -- and those span
+    town/area 0 at (-1,-1), dir 255, and x -32768 -- so it is a literal here.
+    What the `64` means is unknown; nothing has ever sent anything else.
     """
-    return (b"\x01\x00" + struct.pack("<hh", location.x, location.y)
+    return (struct.pack("<H", key) + struct.pack("<hh", location.x, location.y)
             + bytes([location.direction]) + b"\x64" + bytes(8))
 
 
-def area_pair(town: int, area: int, x: int, y: int,
+def area_pair(key: int, town: int, area: int, x: int, y: int,
               direction: int) -> list[tuple[frame.Opcode, bytes]]:
     """The `(0,23)` + `(0,24)` pair, in the reference's order.
 
-    Both the `(1,36)` answer and the town-entry push build it from these five
+    Both the `(1,36)` answer and the town-entry push build it from these
     values; the coordinates go back out as the request's raw 16 bits.
     """
     xy = struct.pack("<hh", x, y)
     return [
         (AREA_ACK_OPCODE,
-         b"\x01\x00" + struct.pack("<II", town, area) + xy
+         struct.pack("<H", key) + struct.pack("<II", town, area) + xy
          + bytes([direction]) + b"\x01"),
         (AREA_ACK_2_OPCODE,
-         struct.pack("<II", town, area) + b"\x01\x00\x01\x00" + xy
+         struct.pack("<II", town, area) + b"\x01\x00"
+         + struct.pack("<H", key) + xy
          + bytes([direction]) + b"\x01\x01\x00"),
     ]
 
 
 @dataclass(slots=True)
 class TownSession:
-    """One connection's town state: the AREA line's `from=`, and the move
-    throttle's timer.
+    """One connection's town state: the AREA line's `from=`, the character's
+    in-memory position, and the move throttle's timer.
 
     Seeded at `(1,4)` from the row the reference's own `TOWN-SPAWN` reads, and
-    moved by every `(1,36)`; a `(1,35)` writes the position but never the
-    location, so it leaves both fields alone.
+    moved by every `(1,36)`.  `x`/`y`/`direction` track the *client's* own
+    position the way the reference's does -- every `(1,35)` moves them, even
+    one the throttle swallows -- because a room entry saves them as the way
+    back out.
     """
     character_id: int
     town: int
     area: int
     key: int
+    x: int = 0
+    y: int = 0
+    direction: int = 0
     last_persist: float | None = None
 
     @classmethod
     def of(cls, summary: CharacterSummary) -> "TownSession":
         return cls(character_id=summary.character_id, town=summary.town_id,
-                   area=summary.area_id, key=summary.slot_index + 1)
+                   area=summary.area_id, key=summary.slot_index + 1,
+                   x=summary.position_x, y=summary.position_y,
+                   direction=summary.town_state)
+
+    def location(self) -> Location:
+        return Location(self.town, self.area, self.x, self.y, self.direction)
 
     def persist_due(self, now: float) -> bool:
         return self.last_persist is None or now - self.last_persist >= PERSIST_INTERVAL
@@ -217,6 +275,30 @@ def area_line(session: TownSession, move: AreaMove) -> str:
             f"{move.describe()} persisted; answered with (0,23) + (0,24)")
 
 
+def prev_village_line(session: TownSession, where: Location, origin: str) -> str:
+    """The reference's `PREV-VILLAGE-1418` prose, after the bare `conn=N `.
+
+    `origin` is `saved` for a row the room entry wrote and `default` for the
+    `ROOM_TOWN_DOOR` fallback -- the reference's 40 lines are all `saved`,
+    so the second spelling is ours.  The direction is not printed.
+    """
+    return (f"from=({session.town},{session.area}) "
+            f"to=({where.town},{where.area}) pos=({where.x},{where.y}) "
+            f"origin={origin}; N23+N24")
+
+
+def changed(summary: CharacterSummary, move: Move) -> bool:
+    """Whether a `(1,35)` would change the row at all.
+
+    The oracle skips writes that would be no-ops: at offset 239.765 a move to
+    (191,249) dir=5, exactly what the row already held, left no `TOWN-MOVE-35`
+    line, while at 312.814 a dir-only change (183,249) dir=5 over a dir=4 row
+    did write.  `param` is not stored by `write_move`, so it is not compared.
+    """
+    return (summary.position_x != move.x or summary.position_y != move.y
+            or summary.town_state != move.direction)
+
+
 def write_move(conn: sqlite3.Connection, character_id: int, move: Move, *,
                now: int) -> None:
     """The throttled write: position and facing only.
@@ -234,9 +316,49 @@ def write_move(conn: sqlite3.Connection, character_id: int, move: Move, *,
 def write_area(conn: sqlite3.Connection, character_id: int, move: AreaMove, *,
                now: int) -> None:
     """`(1,36)` writes the whole location, unconditionally."""
+    write_location(conn, character_id,
+                   Location(move.town, move.area, move.x, move.y, move.direction),
+                   now=now)
+
+
+def write_location(conn: sqlite3.Connection, character_id: int, where: Location,
+                   *, now: int) -> None:
+    """The whole row, from a `Location`: `(1,36)`'s write and `(1,1418)`'s."""
     with conn:
         conn.execute("update characters set town_id = ?, area_id = ?, "
                      "position_x = ?, position_y = ?, town_state = ?, "
                      "updated_at = ? where character_id = ?",
-                     (move.town, move.area, move.x, move.y, move.direction,
+                     (where.town, where.area, where.x, where.y, where.direction,
                       now, character_id))
+
+
+def previous_village(conn: sqlite3.Connection, character_id: int) -> Location | None:
+    """`character_previous_village`: the way back a room entry saved.
+
+    Absent for a character that has never walked into the room since the row
+    was invented -- a plain login writes nothing.  The reference's save holds
+    exactly the characters that entered it (two of three).
+    """
+    row = conn.execute(
+        "select town_id, area_id, position_x, position_y, town_state "
+        "from character_previous_village where character_id = ?",
+        (character_id,)).fetchone()
+    return None if row is None else Location(*row)
+
+
+def save_previous_village(conn: sqlite3.Connection, character_id: int,
+                          where: Location) -> None:
+    """The room entry's snapshot: `insert or replace`, one row per character.
+
+    Every entry overwrites -- the 09-30 session saved five different ways
+    back in five minutes, and each escape answered with the newest -- and
+    nothing clears it afterwards: the save still holds the last entry's
+    values after the character has escaped.
+    """
+    with conn:
+        conn.execute(
+            "insert or replace into character_previous_village (character_id, "
+            "town_id, area_id, position_x, position_y, town_state) "
+            "values (?, ?, ?, ?, ?, ?)",
+            (character_id, where.town, where.area, where.x, where.y,
+             where.direction))

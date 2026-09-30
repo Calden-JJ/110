@@ -15,12 +15,35 @@ import re
 import sys
 from pathlib import Path
 
+REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(REPO / "src"))
 from dfocipher import xtea_decrypt, xor32_crypt  # noqa
 import dfo_ciphers as DC  # noqa
 
-BLOB = Path(r"E:\DFO_2.31.1.117\dfo-server\data\crypto\channelinfo_key_blob.bin")
-LOG = Path(r"E:\DFO_2.31.1.117\DFO110-0.3.6\Server\Logs\server-20260926.log")
+from uslocalserver import paths  # noqa: E402
+
+BLOB = REPO / "data" / "crypto" / "channelinfo_key_blob.bin"
+
+
+def corpus_log() -> Path | None:
+    """`DFO_CORPUS_LOG`, else the first declared corpus log that is on disk.
+
+    This used to be one hardcoded 0.3.6 path, so the script went on reporting an
+    empty summary long after that tree was deleted, and ignored
+    `DFO_CORPUS_LOG` even when it was set.
+    """
+    override = paths.corpus_override()
+    if override:
+        return override
+    declared = paths.corpus_logs()
+    return declared[0] if declared else None
+
+
+def _looks_like_a_path(arg: str) -> bool:
+    return arg.endswith(".log") or "/" in arg or "\\" in arg
+
+
 HDR = {"S->C": 16, "C->S": 13}
 RE_CS = re.compile(r"DEBUG PACKET\s+conn=(\d+)\s+([SC])->([SC]) game \((\d+),(\d+)\)"
                    r" wire=(\d+) body=(\d+) state=\S+ hex=([0-9a-f]+)")
@@ -59,8 +82,8 @@ CIPHERS = {
 }
 
 
-def gold_pairs():
-    lines = LOG.read_text(encoding="utf-8", errors="replace").splitlines()
+def gold_pairs(log: Path):
+    lines = log.read_text(encoding="utf-8", errors="replace").splitlines()
     last = None
     out = []
     for line in lines:
@@ -88,11 +111,20 @@ def gold_pairs():
 
 
 def main(argv):
+    argv = list(argv)
+    log = (Path(argv.pop(0)) if argv and _looks_like_a_path(argv[0])
+           else corpus_log())
+    if log is None or not log.exists():
+        print(f"no capture corpus: set {paths.CORPUS_LOG_ENV} to a 0.3.6/0.4.4 "
+              f"log with `hex=` dumps, or pass one as the first argument",
+              file=sys.stderr)
+        return 2
     want = {int(a, 0) for a in argv}
+    print(f"# corpus: {log}")
     blob = BLOB.read_bytes()
     stats = {}
     prim_failed = [False]
-    for sub, ct, pt, trunc in gold_pairs():
+    for sub, ct, pt, trunc in gold_pairs(log):
         ai = sub % 14
         if want and ai not in want:
             continue

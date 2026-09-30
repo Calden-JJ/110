@@ -59,7 +59,7 @@ class Rec(NamedTuple):
 
 @functools.lru_cache(maxsize=1)
 def _session():
-    return logs.corpus_session(_corpus.CORPUS_LOG)
+    return logs.corpus_session(_corpus.require())
 
 
 @functools.lru_cache(maxsize=1)
@@ -86,7 +86,7 @@ def _reference_lines() -> tuple[tuple[str, str], ...]:
     """The session's own `SELECTION-<sub>` notes, `(tag, msg)` in order."""
     s = _session()
     tags = {f"SELECTION-{sub}" for sub in SUBS}
-    return tuple((ln.tag, ln.msg) for ln in logs.stream(_corpus.CORPUS_LOG)
+    return tuple((ln.tag, ln.msg) for ln in logs.stream(_corpus.require())
                  if s.first <= ln.line_no <= s.last and ln.tag in tags)
 
 

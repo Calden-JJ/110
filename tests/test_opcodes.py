@@ -1,7 +1,10 @@
 """The opcode registry: reproducible, and free of the log's opcode-shaped traps.
 
 The counts below are measured from server-2026091{9,25,26}.log.  They are
-pinned so that a widened or narrowed scan cannot pass unnoticed.
+pinned so that a widened or narrowed scan cannot pass unnoticed -- which also
+means the module is unverifiable without that exact capture set, so it skips as
+a whole when the 0.3.6 logs are not on disk rather than re-pinning against a
+different release's log.
 """
 from __future__ import annotations
 
@@ -10,10 +13,13 @@ import re
 import unittest
 
 import _bootstrap  # noqa: F401
+import _corpus
 
 import gen_opcodes
 from uslocalserver import logs, paths
 from uslocalserver.protocol import opcodes
+
+_corpus.require()          # every count here is the 0.3.6 capture's
 
 LOGS = paths.corpus_logs()
 BARE_PAIR = re.compile(r"\((\d+),(\d+)\)")

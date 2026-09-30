@@ -13,19 +13,21 @@ account for them.
 
 Every round starts from the restored baseline save (round 1's own last moves
 restore it; the oracle run kept a backup for the others), so the tool copies
-the save per round rather than mutating one.
+the save per round rather than mutating one.  That backup is the `--save`
+default: the live save moves as the game is played, and a drifted one reports
+false mismatches.
 
-Two deviations are expected and reported, not failed:
+One deviation is expected and reported, not failed: the log truncates the
+giant at 4096B (`packetHexMaxBytes`) while its header still declares the true
+size, so the giant is compared up to the cut *plus* a declared-size equality.
+Its last ~430 bytes -- the tail region -- are pinned by the 101 probe bins
+instead (`_m23/giant_model.py`).
 
-  * the version u16 -- `(0,2)[134:136]`, the giant's `(0,2)[24:26]` and
-    `(0,2265)[4:6]` -- is a stand-in (`refresh.version`), so those bytes are
-    masked before comparing.  The tool instead asserts each side's version is
-    a pure function of the worn record stream (one state, one value) and that
-    a response's three carriers agree;
-  * the log truncates the giant at 4096B (`packetHexMaxBytes`) while its
-    header still declares the true size, so the giant is compared up to the
-    cut *plus* a declared-size equality.  Its last ~430 bytes -- the tail
-    region -- are pinned by the 101 probe bins instead (`_m23/giant_model.py`).
+The version u16 -- `(0,2)[134:136]`, the giant's `(0,2)[24:26]` and
+`(0,2265)[4:6]` -- is the character's fame (`game/item/fame.py`), compared
+byte for byte like everything else; the tool additionally asserts each side's
+version is a pure function of the worn record stream (one state, one value)
+and that a response's three carriers agree.
 
     python tools/diff_item_move.py
     python tools/diff_item_move.py --oracle dfo-server/Logs-m2oracle/server-20260927.log
@@ -56,6 +58,8 @@ from uslocalserver.server import game  # noqa: E402
 from uslocalserver.server.logfile import Log  # noqa: E402
 
 DEFAULT_ORACLE = paths.REPO_ROOT / "Logs-m2oracle" / "server-20260927.log"
+DEFAULT_SAVE = (paths.REPO_ROOT / "_backups"
+                / "uslocalserver-m2oracle-20260927-144607.db")
 PORT = 10013
 ITEM_MOVE = (1, 19)
 #: What may follow the ack on the same connection; anything else ends a group.
@@ -184,18 +188,6 @@ async def replay(save: Path, requests: list[bytes]) -> list[list[Frame]]:
     return groups
 
 
-def masked(f: Frame) -> bytes:
-    """The frame's plaintext with the version stand-in's bytes zeroed."""
-    body = bytearray(f.plain)
-    if f.opcode == (0, 2) and body and body[0] == 0x00:
-        body[refresh.VERSION_AT:refresh.VERSION_AT + 2] = bytes(2)
-    elif f.opcode == (0, 2) and body and body[0] == 0x01:
-        body[giant.VERSION_AT:giant.VERSION_AT + 2] = bytes(2)
-    elif f.opcode == (0, 2265):
-        body[4:6] = bytes(2)
-    return bytes(body)
-
-
 def version_of(f: Frame) -> int | None:
     if f.opcode == (0, 2) and f.plain and f.plain[0] == 0x00:
         return struct.unpack_from("<H", f.plain, refresh.VERSION_AT)[0]
@@ -266,8 +258,8 @@ def compare_side(want: list[Frame], got: list[Frame],
         if a.true_size != b.true_size:
             problems.append(f"frame {i} {a.opcode}: declared {a.true_size}B vs "
                             f"rewrite {b.true_size}B")
-        ref_bytes = masked(a)
-        cut = masked(b)[:len(ref_bytes)]
+        ref_bytes = a.plain
+        cut = b.plain[:len(ref_bytes)]
         if ref_bytes != cut:
             problems.append(f"frame {i} {a.opcode}: {first_diffs(ref_bytes, cut)}")
     # the three version carriers of one response must agree, on each side
@@ -285,7 +277,7 @@ def compare_side(want: list[Frame], got: list[Frame],
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--oracle", type=Path, default=DEFAULT_ORACLE)
-    ap.add_argument("--save", type=Path, default=paths.SAVE_DB,
+    ap.add_argument("--save", type=Path, default=DEFAULT_SAVE,
                     help="baseline save; each round replays on a copy of it")
     args = ap.parse_args(argv)
 

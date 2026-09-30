@@ -28,6 +28,12 @@ Only the reference can generate the fresh one, and it is alive for exactly
 those seconds.  The other two bodies are stable across sessions and come
 along for free.
 
+The probe returns the bodies *sealed*: the two big ones are day-keyed
+(`zlib(AES-128-ECB(plaintext))`, see `server.channel`).  They are unsealed
+here with the day the CONNECT_ACK token names, so the keeper holds plaintext
+and re-seals it against the live clock like every other path -- a takeover
+that straddles midnight keeps working instead of replaying yesterday's key.
+
 Everything slow -- imports, the 143KB reply script, the channel blobs -- is
 loaded before arming, so a takeover is one probe plus one taskkill plus one
 bind, against a client that connects 20s later (START -> client channel
@@ -158,15 +164,20 @@ def _op(main: int, sub: int) -> frame.Opcode:
     return frame.Opcode(main, sub, frame.OpcodeEncoding.U16BE, False)
 
 
-def _plain_len(body: bytes) -> int:
-    """What `ChannelReplies.plain_size` reports: the inflated size for the
-    zlib bodies the reference sends, the body itself for the plain one."""
+def _plain(body: bytes, day: str) -> tuple[bytes, int]:
+    """`(plaintext, reference-style plain size)` for one probed body.
+
+    The two sealed bodies unseal under the day the exchange's CONNECT_ACK
+    names; the padded length is what the rewrite reports -- the reference's own
+    `plain=` is 1..15 bytes shorter and only its log has it.
+    """
     if body[:1] == b"\x78":
         try:
-            return len(zlib.decompress(body))
-        except zlib.error:
+            plain = channel.unseal(body, day)
+            return plain, len(plain)
+        except (zlib.error, ValueError):
             pass
-    return len(body)
+    return body, len(body)
 
 
 async def probe_replies(host: str, port: int, log: Log) -> channel.ChannelReplies | None:
@@ -209,13 +220,16 @@ async def probe_replies(host: str, port: int, log: Log) -> channel.ChannelReplie
         log.warn("SWAP", f"probe: expected {want}, got "
                          f"{[f.opcode.key() for f in got]}")
         return None
+    day = got[0].body[4:12].decode("ascii", "replace")   # CONNECT_ACK's token
     out: dict[int, channel.Reply] = {}
     for f, (req, _reply, name, _body) in zip(got, PROBE):
         key = int.from_bytes(_op(*req).to_bytes(), "big")
+        plain, plain_len = _plain(f.body, day)
         out[key] = channel.Reply(request_raw=key, opcode=f.opcode, name=name,
-                                 body=f.body, plain_len=_plain_len(f.body))
-    log.info("SWAP", f"probe: {host}:{port} handed over "
-                     + ", ".join(f"{r.name} {len(r.body)}B" for r in out.values()))
+                                 plain=plain, plain_len=plain_len,
+                                 sealed=f.body[:1] == b"\x78")
+    log.info("SWAP", f"probe: {host}:{port} handed over day={day} "
+                     + ", ".join(f"{r.name} {len(r.plain)}B" for r in out.values()))
     return channel.ChannelReplies(out, source=f"live probe of {host}:{port}")
 
 
@@ -256,7 +270,8 @@ class Keeper:
                                   "the client will take stale endpoints and stall")
         ports = game.remap_ports(game_ports)
         srv = channel.ChannelServer(host, chan_port, replies, self.log,
-                                    ids=self.ids, write_gap=self.write_gap)
+                                    ids=self.ids, write_gap=self.write_gap,
+                                    advertise=self.advertise)
         gsrv = game.GameServer(host, ports, self.script, self.log, ids=self.ids,
                                write_gap=self.game_write_gap,
                                advertise_host=self.advertise)

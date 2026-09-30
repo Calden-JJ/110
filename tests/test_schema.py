@@ -1,15 +1,24 @@
 """The save's schema, the upgrade layer, and the one typed query M0 ships.
 
-The numbers below were measured off the real save.  The important one is the
-drift baseline: `BootstrapSchema.sql` is a *lie* about the database the server
-runs -- 17 columns and one index short -- and because the script uses
-`CREATE TABLE IF NOT EXISTS` nothing ever raises.  Pinning the 17 keeps a
-narrowed or widened migration layer from passing unnoticed, the same way
-`test_opcodes.py` pins its opcode counts.
+The numbers below were measured off the reference save.  The important one is
+the drift baseline: `BootstrapSchema.sql` is a *lie* about the database the
+server runs -- the server adds columns, an index and triggers on top -- and
+because the script uses `CREATE TABLE IF NOT EXISTS` nothing ever raises.
+
+Two baselines exist because two releases are in play, and the numbers differ a
+lot: 0.3.6's script is 17 columns and one index short of its save, 0.4.4's is
+6 columns and two triggers short of its.  Both are read off the live save at
+import, so running against either tree reports the truth about that tree rather
+than about the one it was written for.
+
+The pinned constants that *are* kept (`EXPECTED_TRIGGERS`, `EXPECTED_INDEXES`,
+the foreign-key and CHECK totals) stay pinned on purpose: a narrowed or widened
+migration layer has to fail here rather than pass unnoticed.
 """
 from __future__ import annotations
 
 import functools
+import re
 import sqlite3
 import tempfile
 import unittest
@@ -19,26 +28,6 @@ import _bootstrap  # noqa: F401
 
 from uslocalserver import paths
 from uslocalserver.persistence import characters, migrations, schema
-
-EXPECTED_TABLES = 54
-EXPECTED_TRIGGERS = 5
-EXPECTED_INDEXES = 12            # real save; the script alone has 11
-BOOTSTRAP_INDEXES = 11
-EXPECTED_FOREIGN_KEYS = 48
-EXPECTED_CHECKS = 62
-
-#: What `migrations.py` adds, and the whole of what it may add.
-ADDED_COLUMNS = {
-    "account_cargo_items": ("expires_at", "custom_option_ids", "growth_experience",
-                            "amplify_type", "amplify_value"),
-    "character_items": ("expires_at", "custom_option_ids", "growth_experience",
-                        "amplify_type", "amplify_value"),
-    "character_quest_progress": ("counter_initialized",),
-    "system_mail": ("custom_option_ids", "growth_experience", "reinforcement",
-                    "refinement", "amplify_type", "amplify_value"),
-}
-ADDED_INDEXES = ("uq_characters_favorite",)
-EXPECTED_ADDED = sum(len(c) for c in ADDED_COLUMNS.values())     # 17
 
 
 @functools.lru_cache(maxsize=1)
@@ -50,6 +39,47 @@ def bootstrap_schema() -> schema.Schema:
     conn = sqlite3.connect(":memory:", isolation_level=None)
     conn.executescript(paths.BOOTSTRAP_SQL.read_text(encoding="utf-8"))
     return schema.Schema.from_connection(conn)
+
+
+@functools.lru_cache(maxsize=1)
+def upgrade_set() -> tuple[migrations.Migration, ...]:
+    """The upgrade layer the active release's own script calls for."""
+    return migrations.for_script(paths.BOOTSTRAP_SQL.read_text(encoding="utf-8"))
+
+
+#: What the active release's upgrade layer adds, and the whole of what it may
+#: add.  Derived, not literal: `migrations.py` is the source of truth and this
+#: test's job is to prove the *save* agrees with it.
+ADDED_COLUMNS = {m.table: m.columns for m in upgrade_set() if m.columns}
+
+
+def _ddl_names(keyword: str) -> tuple[str, ...]:
+    """Object names of `CREATE [UNIQUE] <keyword> <name>` statements.
+
+    The optional `unique` sits *before* the keyword, not after it -- getting
+    that backwards silently yields an empty list, which is how this helper
+    first reported `ADDED_INDEXES == ()` while the DDL plainly named an index.
+    """
+    pattern = re.compile(rf"^\s*create\s+(?:unique\s+)?{keyword}\s+"
+                         rf"[\"'`\[]?(\w+)", re.I)
+    out = []
+    for statement in (d for m in upgrade_set() for d in m.ddl):
+        m = pattern.match(statement)
+        if m:
+            out.append(m.group(1))
+    return tuple(out)
+
+
+ADDED_INDEXES = _ddl_names("index")
+ADDED_TRIGGERS = _ddl_names("trigger")
+EXPECTED_ADDED = sum(len(c) for c in ADDED_COLUMNS.values())
+
+#: Measured whole-schema totals.  These move only when the release does.
+EXPECTED_TRIGGERS = 8
+EXPECTED_INDEXES = 13
+BOOTSTRAP_INDEXES = 12
+EXPECTED_FOREIGN_KEYS = 89
+EXPECTED_CHECKS = 62
 
 
 class Upscaled(unittest.TestCase):
@@ -90,16 +120,20 @@ class Upscaled(unittest.TestCase):
                           "values (?, 0, 0)", (account_id,))
 
 
+#: The script's own totals, so a release bump that adds tables is visible.
+BOOTSTRAP_TABLES = 94
+
+
 class Shape(Upscaled):
     def test_table_trigger_and_index_counts(self):
-        self.assertEqual(len(self.schema.tables), EXPECTED_TABLES)
+        self.assertEqual(len(self.schema.tables), BOOTSTRAP_TABLES)
         self.assertEqual(len(self.schema.triggers), EXPECTED_TRIGGERS)
         self.assertEqual(len(self.schema.indexes), EXPECTED_INDEXES)
 
-    def test_the_script_alone_is_one_index_short(self):
+    def test_the_script_alone_is_short_of_its_save(self):
         boot = bootstrap_schema()
-        self.assertEqual(len(boot.tables), EXPECTED_TABLES)
-        self.assertEqual(len(boot.triggers), EXPECTED_TRIGGERS)
+        self.assertEqual(len(boot.tables), BOOTSTRAP_TABLES)
+        self.assertEqual(len(boot.triggers), EXPECTED_TRIGGERS - len(ADDED_TRIGGERS))
         self.assertEqual(len(boot.indexes), BOOTSTRAP_INDEXES)
 
     def test_triggers_keep_the_semicolons_inside_their_bodies(self):
@@ -120,7 +154,13 @@ class Shape(Upscaled):
 
 
 class Drift(unittest.TestCase):
-    """The baseline: exactly 17 columns and one index separate script from save."""
+    """The baseline: the script is short by exactly what `migrations.py` adds.
+
+    Both sides are derived from the active release, so the test states the
+    invariant ("script + upgrade layer == save") rather than a number that was
+    true of one release.  0.3.6 was 17 columns and an index short; 0.4.4 is 6
+    columns and two triggers short.
+    """
 
     def setUp(self):
         self.report = schema.diff(expected=real_schema(), actual=bootstrap_schema())
@@ -128,17 +168,20 @@ class Drift(unittest.TestCase):
     def test_the_real_save_matches_itself(self):
         self.assertTrue(schema.diff(expected=real_schema(), actual=real_schema()).clean)
 
-    def test_the_script_is_exactly_these_seventeen_columns_and_one_index_short(self):
+    def test_the_script_is_short_by_exactly_the_upgrade_layer(self):
         expected = {(t, c) for t, cols in ADDED_COLUMNS.items() for c in cols}
         self.assertEqual(len(expected), EXPECTED_ADDED)
         self.assertEqual(set(self.report.missing_columns), expected)
         self.assertEqual(self.report.missing_indexes, ADDED_INDEXES)
-        self.assertEqual(self.report.summary(),
-                         f"{EXPECTED_ADDED} missing column(s), 1 missing index(es)")
+        self.assertEqual(
+            self.report.summary(),
+            f"{EXPECTED_ADDED} missing column(s), "
+            f"{len(ADDED_INDEXES)} missing index(es), "
+            f"{len(ADDED_TRIGGERS)} changed trigger(s)")
 
     def test_nothing_else_differs(self):
-        # The 17 are the whole story: same tables, same types, same defaults,
-        # same CHECK clauses, same triggers, same foreign keys both sides.
+        # The upgrade layer is the whole story: same tables, same types, same
+        # defaults, same CHECK clauses, same foreign keys both sides.
         self.assertEqual(self.report.extra_tables, ())
         self.assertEqual(self.report.missing_tables, ())
         self.assertEqual(self.report.extra_columns, ())
@@ -146,16 +189,17 @@ class Drift(unittest.TestCase):
         self.assertEqual(self.report.changed_tables, ())
         self.assertEqual(self.report.extra_indexes, ())
         self.assertEqual(self.report.changed_indexes, ())
-        self.assertEqual(self.report.changed_triggers, ())
         self.assertEqual(self.report.changed_foreign_keys, ())
+        # Every trigger the script lacks is one the upgrade layer creates.
+        self.assertEqual({name for name, _ in self.report.changed_triggers},
+                         set(ADDED_TRIGGERS))
+        self.assertTrue(all(detail == "missing"
+                            for _, detail in self.report.changed_triggers))
 
-    def test_the_affected_tables_are_the_five_the_migrations_name(self):
-        # characters is there for the index alone -- no column of it changed.
+    def test_the_affected_tables_are_the_ones_the_migrations_name(self):
+        # `characters` is there for the index and the explorer triggers alone.
         self.assertEqual(self.report.affected_tables,
-                         ("account_cargo_items", "character_items",
-                          "character_quest_progress", "characters", "system_mail"))
-        self.assertEqual(self.report.affected_tables,
-                         tuple(sorted({m.table for m in migrations.MIGRATIONS})))
+                         tuple(sorted({m.table for m in upgrade_set()})))
 
     def test_a_missing_column_is_reported_with_its_table(self):
         self.assertIn(("character_items", "amplify_value"), self.report.missing_columns)
@@ -165,7 +209,9 @@ class Drift(unittest.TestCase):
         text = str(self.report)
         self.assertIn("character_items.amplify_value", text)
         self.assertIn("index uq_characters_favorite", text)
-        self.assertNotIn("~", text)          # nothing "changed", only added
+        # Nothing "changed", only added and created.
+        self.assertNotIn("~ account", text)
+        self.assertNotIn("~ character_items", text)
 
 
 class Reconstruction(Upscaled):
@@ -174,10 +220,12 @@ class Reconstruction(Upscaled):
         self.assertTrue(report.clean, report)
 
     def test_the_reconstruction_keeps_the_column_order(self):
-        for table, columns in ADDED_COLUMNS.items():
+        # `live[-len(columns):]` only holds where the upgrade layer appends --
+        # 0.3.6 appends all 17, but 0.4.4 inserts two of the seven mid-table.
+        # The whole-list comparison is the invariant that always holds.
+        for table in ADDED_COLUMNS:
             live = real_schema().table(table).column_names
             self.assertEqual(self.schema.table(table).column_names, live)
-            self.assertEqual(live[-len(columns):], columns)
 
     def test_the_added_columns_carry_their_defaults_and_checks(self):
         col = self.schema.table("character_items").column("amplify_type")
@@ -245,6 +293,13 @@ class UpgradeSemantics(Upscaled):
 
 
 class Characters(unittest.TestCase):
+    """The one typed query M0 ships, asked of whatever save is the reference.
+
+    The roster is read live rather than named: it changes as the save is played
+    (0.3.6 ended with four characters, 0.4.4 ships one), and what the query has
+    to get right is the account filter and the slot order.
+    """
+
     @classmethod
     def setUpClass(cls):
         cls.conn = schema.connect(paths.SAVE_DB, readonly=True)
@@ -253,34 +308,42 @@ class Characters(unittest.TestCase):
     def tearDownClass(cls):
         cls.conn.close()
 
-    def test_account_zero_lists_both_characters_in_slot_order(self):
-        # Name and slot are the character's identity on the select screen; the
-        # rest of the row is what playing mutates -- XRenYing's town went
-        # 38 -> 168 in the 2026-09-27 session, on the live save these tests
-        # deliberately read.  The mutable fields are compared against the row
-        # itself in `test_the_summary_exposes_more_than_the_name`.
+    def roster(self) -> list[sqlite3.Row]:
+        return self.conn.execute(
+            "select * from characters where account_id = 0 order by slot_index"
+        ).fetchall()
+
+    def test_account_zero_lists_its_characters_in_slot_order(self):
+        expect = [(row["name"], row["slot_index"]) for row in self.roster()]
         got = [(c.name, c.slot_index) for c in characters.list_characters(self.conn, 0)]
-        self.assertEqual(got, [("XRenYing", 0), ("LRouDao", 1)])
+        self.assertEqual(got, expect)
 
     def test_the_summary_exposes_more_than_the_name(self):
+        first_row = self.roster()[0]
         first = characters.list_characters(self.conn, 0)[0]
-        self.assertEqual(first.character_id, 1)
-        self.assertEqual(first.class_id, 11)
-        self.assertTrue(first.pinned)
-        row = self.conn.execute(
-            "select town_id, area_id, town_state from characters "
-            "where character_id = 1").fetchone()
-        self.assertEqual(first.location, tuple(row))
-        self.assertEqual(str(first), f"XRenYing Lv110 class=11 "
-                                     f"town={row[0]}/{row[1]} slot=0")
+        self.assertEqual(first.character_id, first_row["character_id"])
+        self.assertEqual(first.class_id, first_row["class_id"])
+        self.assertEqual(first.pinned, bool(first_row["favorite_position"]))
+        self.assertEqual(
+            first.location,
+            (first_row["town_id"], first_row["area_id"], first_row["town_state"]))
+        self.assertEqual(
+            str(first),
+            f"{first_row['name']} Lv{first_row['level']} class={first_row['class_id']} "
+            f"town={first_row['town_id']}/{first_row['area_id']} "
+            f"slot={first_row['slot_index']}")
 
     def test_an_account_with_no_characters_is_an_empty_list(self):
         self.assertEqual(characters.list_characters(self.conn, 4242), [])
 
     def test_find_by_name(self):
-        self.assertEqual(characters.find(self.conn, 0, "LRouDao").class_id, 1)
+        row = self.roster()[-1]
+        found = characters.find(self.conn, 0, row["name"])
+        self.assertIsNotNone(found)
+        self.assertEqual(found.class_id, row["class_id"])
         self.assertIsNone(characters.find(self.conn, 0, "Nobody"))
-        self.assertIsNone(characters.find(self.conn, 1, "XRenYing"))
+        # A name that belongs to account 0 is not found under another account.
+        self.assertIsNone(characters.find(self.conn, 4242, row["name"]))
 
     def test_every_column_is_populated_from_the_row(self):
         summary = characters.list_characters(self.conn, 0)[0]

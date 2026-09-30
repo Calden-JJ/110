@@ -58,7 +58,8 @@ async def _main(args: argparse.Namespace) -> None:
     save = None if str(args.save).lower() == "none" else args.save
     srv = channel.ChannelServer(args.host, args.port, replies, log,
                                 ids=ids,
-                                write_gap=args.write_gap_ms / 1000)
+                                write_gap=args.write_gap_ms / 1000,
+                                advertise=advertise)
     gsrv = game.GameServer(args.host, ports, script, log,
                            ids=ids,
                            write_gap=args.game_write_gap_ms / 1000,

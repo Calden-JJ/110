@@ -322,7 +322,7 @@ class SocketTest(unittest.TestCase):
         self.assertIn("ITEM-MOVE-19 conn=1 src=(list=2,slot=5,iv=1047) "
                       "dst=(list=0,slot=83,iv=0) count=1 "
                       "plain=02050017040000010000000053000000000000000000"
-                      "ffffffff000000000000", text)
+                      "FFFFFFFF000000000000", text)
         self.assertIn(f"CARGO-MOVE conn=1 account={self.account} character=1 "
                       f"2/5->0/83 count=1; committed", text)
         self.assertIn("conn=1 (1,19) -> 4 frame(s) 432B", text)

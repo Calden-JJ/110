@@ -13,6 +13,10 @@ mapping is a claim -- and each of these is a way it could be a wrong one:
     for those the order is the only evidence there is.
 
 Each is pinned below.
+
+**0.3.6 only.**  `MANIFEST_REGION` is that image's byte offset; the 0.4.4 exe
+is a different build and does not carry the plaintext table bodies at all, so
+this whole module is unverifiable there and skips.
 """
 from __future__ import annotations
 
@@ -24,6 +28,12 @@ import _bootstrap  # noqa: F401
 
 import map_tables
 from uslocalserver import paths
+
+if paths.REFERENCE != "0.3.6":
+    raise unittest.SkipTest(
+        f"the manifest walk is pinned to the 0.3.6 image's "
+        f"{paths.MANIFEST_REGION[0]:#x}; the active reference is "
+        f"{paths.REFERENCE}, whose exe has no embedded table bodies")
 
 EXPECTED_TABLES = 69
 EXPECTED_DOMAINS = {"characters": 5, "dungeons": 26, "items": 31, "quests": 7}

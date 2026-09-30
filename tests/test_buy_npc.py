@@ -33,6 +33,7 @@ from dataclasses import replace
 from pathlib import Path
 
 import _bootstrap  # noqa: F401
+import _save
 
 from uslocalserver import paths
 from uslocalserver.game.shop import buy
@@ -155,12 +156,9 @@ SLOT_OPCODE = frame.Opcode(0, 14, frame.OpcodeEncoding.U8_U16LE, True)
 
 
 def _save_copy() -> Path:
-    dst = Path(tempfile.mkdtemp(prefix="dfo-buy-npc-")) / "uslocalserver.db"
-    for suffix in ("", "-wal", "-shm"):
-        src = Path(str(paths.SAVE_DB) + suffix)
-        if src.exists():
-            shutil.copy2(src, Path(str(dst) + suffix))
-    return dst
+    # The 0.4.4 save ships one character; the ids this module names
+    # are cloned from it so the foreign keys resolve.
+    return _save.fresh(CHARACTER, 1, 2, 3)
 
 
 def _request(body: bytes) -> buy.BuyRequest:
@@ -249,6 +247,41 @@ def _record(slot: int, item_id: int, value: int, *, durability: int = 0
     from uslocalserver.game.item import refresh
     return refresh.SlotRecord(slot_index=slot, item_id=item_id, value=value,
                               durability=durability)
+
+
+class BagCellTest(unittest.TestCase):
+    """`bag_cell` against a copy of the real save: the band table and the
+    unobserved off-band fallback."""
+
+    def setUp(self):
+        self.save = _save_copy()
+        self.conn = schema.connect(self.save)
+        self.account = accounts.sole_account(self.conn)
+
+    def tearDown(self):
+        self.conn.close()
+        shutil.rmtree(self.save.parent, ignore_errors=True)
+
+    def test_the_band_cells_do_not_move_with_the_bag(self):
+        """The cells the 44 reference `TOWN-ITEMS` lines pin -- including the
+        six large ids the old rank-by-item-id rule placed wrong (369 is
+        10100115's cell, not 10099773's)."""
+        cells = [buy.bag_cell(self.conn, self.account, i)
+                 for i in buy.BAG_ITEMS]
+        self.assertEqual(cells, list(range(363, 375)))
+        self.conn.execute("delete from account_materials where item_id < 4000")
+        self.conn.commit()
+        self.assertEqual(buy.bag_cell(self.conn, self.account, 3034), 364)
+        self.assertEqual(buy.bag_cell(self.conn, self.account, 10158124), 374)
+
+    def test_an_off_band_material_lines_up_behind_the_band(self):
+        """Item 3137 is buyable (`stackable/material/`) but never entered a
+        bag in any log: it takes the first cell behind the band, and the next
+        one after it -- inferred, the captures leave this open."""
+        self.assertEqual(buy.bag_cell(self.conn, self.account, 3137), 375)
+        materials.insert(self.conn, self.account, 3137, 5, 1)
+        self.conn.commit()
+        self.assertEqual(buy.bag_cell(self.conn, self.account, 3141), 376)
 
 
 class SaveTest(unittest.TestCase):
