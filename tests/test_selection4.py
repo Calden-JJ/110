@@ -94,7 +94,7 @@ def _pinned_corpus() -> bool:
     asserted only when the corpus is the pinned one, and the general claim
     (`moved <= WRITTEN`, every dump rebuilt byte for byte) holds always.
     """
-    return paths.corpus_override() is None
+    return _bootstrap.pinned_corpus()
 
 
 _REAL_MONOTONIC = time.monotonic
@@ -154,6 +154,20 @@ def _captured_bodies():
     return tuple(found)
 
 
+def _dumps_or_skip() -> tuple:
+    """`_captured_bodies()`, skipping when the corpus is simply not about `(1,4)`.
+
+    A log can be a perfectly good corpus and hold no `(1,4)` send at all --
+    `Logs-dungeon` is one; it was captured to pin the dungeon channel.  That is
+    a corpus the test does not apply to, not a failure.
+    """
+    dumps = _captured_bodies()
+    if not dumps:
+        names = ", ".join(p.name for p in _line_logs())
+        raise unittest.SkipTest(f"no `(1,4)` dumps in {names}")
+    return dumps
+
+
 def _unix_second(line: logs.LogLine) -> int:
     """The log line's own second, in unix time (the field is whole seconds)."""
     stamp = datetime.datetime.fromisoformat(line.ts.replace(" ", "T") + line.tz)
@@ -176,8 +190,7 @@ class TemplateTest(unittest.TestCase):
         # line numbers, for characters of its own -- but every one of them is
         # still this template outside the written regions, and that is what is
         # asserted either way.
-        dumps = _captured_bodies()
-        self.assertTrue(dumps, "the corpus has no `(1,4)` dumps")
+        dumps = _dumps_or_skip()
         stable = [at for at in range(roleselection.BODY_SIZE) if at not in WRITTEN]
         for name, line_no, _, body in dumps:
             with self.subTest(log=name, line=line_no):
@@ -205,7 +218,7 @@ class TemplateTest(unittest.TestCase):
         are among the ones a given corpus may or may not exercise; they are
         written as u32s either way, which is the body's own convention.
         """
-        bodies = [body for *_, body in _captured_bodies()]
+        bodies = [body for *_, body in _dumps_or_skip()]
         moved = {at for at in range(roleselection.BODY_SIZE)
                  if len({body[at] for body in bodies}) > 1}
         self.assertEqual(moved - WRITTEN, set(),
@@ -230,7 +243,7 @@ class DumpTest(unittest.TestCase):
     """Each dump, rebuilt from its own line and its own log timestamp."""
 
     def test_every_dump_is_rebuilt_byte_for_byte(self):
-        for name, line_no, line, body in _captured_bodies():
+        for name, line_no, line, body in _dumps_or_skip():
             with self.subTest(log=name, line=line_no):
                 m = LINE.fullmatch(line.msg)
                 self.assertIsNotNone(m, line.msg)

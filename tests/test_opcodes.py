@@ -19,7 +19,7 @@ import gen_opcodes
 from uslocalserver import logs, paths
 from uslocalserver.protocol import opcodes
 
-_corpus.require()          # every count here is the 0.3.6 capture's
+_bootstrap.require_pinned_corpus()     # every count here is that capture's
 
 LOGS = paths.corpus_logs()
 BARE_PAIR = re.compile(r"\((\d+),(\d+)\)")

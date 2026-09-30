@@ -9,11 +9,15 @@ stdlib-only and runs with:
 non-importable (no `__init__.py`, and adding one would break the plain
 `import _bootstrap` every test module starts with).
 
-It also carries the two shared skip helpers.  Both exist for the same reason:
+It also carries the shared skip helpers.  They exist for the same reason:
 `DFO110-0.3.6` -- the tree every packet-level fixture was measured against --
 was deleted, so the captured `server-202609*.log` corpus is not on disk.  A
 module that cannot run without it should say so once, loudly, instead of
 reporting a fixture gap as a code defect.
+
+`require_corpus` asks for *a* corpus (and `DFO_CORPUS_LOG` can supply one);
+`require_pinned_corpus` asks for the 0.3.6 set specifically, for the tests
+whose numbers are records of it rather than uses of it.
 """
 from __future__ import annotations
 
@@ -79,6 +83,34 @@ def require_corpus():
             f"{CORPUS_CANDIDATES[0]}); the DFO110-0.3.6 reference tree that "
             f"held it is not on disk{hint}. Set DFO_CORPUS_LOG to override.")
     return path
+
+
+def pinned_corpus() -> bool:
+    """True when the pinned 0.3.6 capture set is what is being read.
+
+    Two kinds of corpus-dependent test exist, and they fail differently.
+    One *uses* the corpus -- parses its dumps, rebuilds its frames -- and
+    works against any log that carries the same shape, so `DFO_CORPUS_LOG`
+    makes it run again.  The other *measured* the corpus: its counts, its line
+    numbers, its per-log tallies are records of those exact files.  Reading a
+    substituted capture and holding it to another build's counts reports a
+    re-pin as a defect, so those tests ask this first.
+    """
+    from uslocalserver import paths                       # noqa: PLC0415
+    return paths.corpus_override() is None and bool(paths.corpus_logs())
+
+
+def require_pinned_corpus() -> None:
+    """`SkipTest` unless the pinned capture set is the corpus being read."""
+    if pinned_corpus():
+        return
+    from uslocalserver import paths                       # noqa: PLC0415
+    override = paths.corpus_override()
+    if override is not None:
+        raise unittest.SkipTest(
+            f"measured against the pinned 0.3.6 capture set, not "
+            f"{override.name} (DFO_CORPUS_LOG)")
+    require_corpus()
 
 
 def skip_without_corpus(func):

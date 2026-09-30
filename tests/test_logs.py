@@ -82,10 +82,22 @@ class TheColumnLayout(unittest.TestCase):
 
 class HexFieldShapes(unittest.TestCase):
     def test_the_three_shapes_are_parseable_and_distinguished(self):
+        """Every dump in the corpus falls into one of exactly three shapes.
+
+        The pinned corpus' tally -- 1522 full, 70 truncated, 69 length across
+        its three logs -- is a record of those files.  A substituted capture
+        has a mixture of its own and may not exercise all three (a shorter run
+        hits the 4096-byte cut less often); what it must have is `full`, or
+        there is no tally to speak of.
+        """
         counts = {"full": 0, "truncated": 0, "length": 0}
-        for _key, _raw, shape in fields():
+        for key, _raw, shape in fields():
+            self.assertIn(shape, counts, f"{key}= has an undefined shape")
             counts[shape] += 1
-        self.assertEqual(counts, {"full": 1522, "truncated": 70, "length": 69})
+        if _bootstrap.pinned_corpus():
+            self.assertEqual(counts, {"full": 1522, "truncated": 70, "length": 69})
+        else:
+            self.assertGreater(counts["full"], 0)
 
     def test_the_punctuation_after_a_dump_is_not_part_of_it(self):
         # The token runs to the next space, so it swallows whatever closes
@@ -123,27 +135,40 @@ class HexFieldShapes(unittest.TestCase):
 
     def test_every_dump_in_every_log_parses(self):
         # The count above is the measurement; this is the no-survivors check
-        # behind it, and it is what was false before the fix.
-        self.assertGreater(len(fields()), 1500)
+        # behind it, and it is what was false before the fix.  Both halves read
+        # the same set -- the corpus -- because the point is that *these*
+        # dumps parse, and this loop used to walk `server_logs()` while
+        # `fields()` walked the corpus, so a substituted corpus left the
+        # 1500-byte floor measuring one set of files and the parse check
+        # another.
+        if _bootstrap.pinned_corpus():
+            self.assertGreater(len(fields()), 1500)
+        self.assertTrue(fields(), "the corpus has no hex=/plain= fields at all")
         for key in ("hex", "plain"):
-            for path in paths.server_logs():
+            for path in paths.corpus_logs():
                 for ln in logs.stream(path):
                     if f"{key}=" not in ln.msg:
                         continue
-                    with self.subTest(line=ln.line_no):
+                    with self.subTest(log=path.name, line=ln.line_no):
                         self.assertIsNotNone(logs.find_hex_field(ln.msg, key))
 
     def test_the_corpus_log_is_the_only_one_with_hex_dumps(self):
         # So a test that needs a whole frame has exactly one log to read.
         # Later logs are not part of the corpus and do carry dumps -- that is
         # the point of pinning the corpus rather than globbing the directory.
+        # Which log that is, and how many dumps it holds, is a record of the
+        # 0.3.6 set; a substituted one only has to actually carry dumps.
         _corpus.require()
         per_log = {}
         for path in paths.corpus_logs():
             per_log[path.name] = sum(
                 1 for ln in logs.stream(path) if "hex=" in ln.msg)
-        self.assertEqual({k: v for k, v in per_log.items() if v},
-                         {"server-20260926.log": 288})
+        carrying = {k: v for k, v in per_log.items() if v}
+        if _bootstrap.pinned_corpus():
+            self.assertEqual(carrying, {"server-20260926.log": 288})
+        else:
+            self.assertTrue(carrying,
+                            "DFO_CORPUS_LOG names a log with no `hex=` dumps")
 
 
 class OpcodeHelpers(unittest.TestCase):
